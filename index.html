@@ -4,266 +4,569 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="color-scheme" content="light"/>
-<title>@ymholic Instagram Analytics</title>
+<title>@ymholic Performance Studio</title>
 <style>
 :root{
- --bg:#f4f7fb;--card:#ffffff;--ink:#102033;--muted:#6b7a90;--line:#dfe7f1;
- --navy:#0b1f33;--blue:#2563eb;--cyan:#0891b2;--teal:#0f766e;--purple:#7c3aed;
- --amber:#b45309;--red:#b91c1c;--green:#15803d;--shadow:0 12px 36px rgba(15,23,42,.08);
+  --bg:#f3f6fa; --card:#fff; --ink:#122033; --muted:#6e7d91; --line:#dde5ef;
+  --navy:#0a1d31; --navy2:#153d61; --blue:#2563eb; --cyan:#0891b2;
+  --green:#16803d; --amber:#b26a00; --red:#b42318; --purple:#6d3df0;
+  --shadow:0 8px 26px rgba(15,31,52,.07);
+  --shadow2:0 16px 44px rgba(15,31,52,.14);
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
-button,select,input{font:inherit}
-.app{max-width:1480px;margin:auto;padding:22px}
-.hero{padding:28px;border-radius:24px;background:linear-gradient(135deg,#081b2d 0%,#143c60 60%,#0c6a80 100%);color:white;box-shadow:var(--shadow)}
-.heroTop{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;flex-wrap:wrap}
-.hero h1{margin:0;font-size:30px;letter-spacing:-.4px} .hero p{margin:7px 0 0;color:#ced9e7}
-.badge{display:inline-flex;gap:7px;align-items:center;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.12);font-size:12px}
-.filters{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
-.filters button,.filters select,.search{border:1px solid rgba(255,255,255,.23);color:white;background:rgba(255,255,255,.09);border-radius:11px;padding:9px 12px;outline:none}
-.filters option{color:#111;background:white} .filters button.active{background:white;color:var(--navy);font-weight:800}
-.search{min-width:220px}
-.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin:18px 0}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:17px;box-shadow:0 5px 18px rgba(15,23,42,.045)}
-.kpi small{display:block;color:var(--muted);font-weight:700;font-size:11px;margin-bottom:7px}
-.kpi b{display:block;font-size:25px;letter-spacing:-.5px} .kpi span{display:block;color:var(--muted);font-size:11px;margin-top:5px}
-.section{margin-top:24px} .sectionHead{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:12px}
-.sectionHead h2{margin:0;font-size:19px} .sectionHead p{margin:0;color:var(--muted);font-size:12px}
-.featured{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-.embedCard,.panel,.contentCard{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:0 5px 18px rgba(15,23,42,.045);overflow:hidden}
-.embedWrap{height:510px;background:#eef2f7} .embedWrap iframe{width:100%;height:100%;border:0}
-.embedMeta{padding:14px} .embedMeta strong{display:block;line-height:1.35;margin-bottom:9px}
-.statline{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.mini{background:#f7f9fc;padding:8px;border-radius:10px;text-align:center} .mini b{display:block;font-size:14px} .mini span{font-size:10px;color:var(--muted)}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.panel{padding:18px} .panel h3{margin:0 0 13px;font-size:15px}
-.barrow{display:grid;grid-template-columns:minmax(100px,200px) 1fr 58px;align-items:center;gap:9px;margin:10px 0}
-.barlabel{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px}
-.track{height:11px;border-radius:99px;background:#edf2f7;overflow:hidden} .bar{height:100%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#0891b2)}
-.barvalue{font-size:11px;text-align:right;font-variant-numeric:tabular-nums}
-.contentGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.contentCard{display:flex;flex-direction:column} .contentFrame{height:420px;background:#eef2f7} .contentFrame iframe{width:100%;height:100%;border:0}
-.contentBody{padding:12px;display:flex;flex-direction:column;gap:9px;flex:1}
-.row{display:flex;justify-content:space-between;gap:8px;align-items:center} .pill{font-size:10px;font-weight:800;padding:4px 8px;border-radius:999px;background:#eaf2ff;color:#1d4ed8}
-.pill.reel{background:#f3e8ff;color:#7e22ce} .muted{color:var(--muted);font-size:11px}
-.title{font-size:13px;font-weight:800;line-height:1.35;min-height:35px}
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px} .metric{border:1px solid #edf2f7;border-radius:9px;padding:7px;text-align:center}
-.metric b{display:block;font-size:13px} .metric span{font-size:9px;color:var(--muted)}
-.pager{display:flex;justify-content:center;align-items:center;gap:8px;margin:16px 0} .pager button{padding:7px 11px;border:1px solid var(--line);background:white;border-radius:9px;cursor:pointer}
-.auditTable{overflow:auto;border:1px solid var(--line);border-radius:14px;background:white;max-height:580px}
-table{border-collapse:collapse;width:100%;font-size:11px} th{position:sticky;top:0;background:var(--navy);color:white;padding:9px;text-align:left;z-index:2}
-td{padding:8px 9px;border-bottom:1px solid #eef2f7;vertical-align:middle} tr:hover td{background:#f8fafc}
-.manual{width:95px;padding:6px;border:1px solid #f3c678;border-radius:8px;background:#fffbeb}
-.statusBad{color:var(--red);font-weight:800} .statusGood{color:var(--green);font-weight:700}
-.note{margin-top:18px;padding:14px 15px;background:#fff7ed;border:1px solid #fed7aa;border-radius:13px;color:#9a3412;font-size:11px;line-height:1.6}
-.footer{color:var(--muted);font-size:11px;padding:24px 2px 10px}
-a{color:#2563eb;text-decoration:none}
-@media(max-width:1180px){.kpis{grid-template-columns:repeat(3,1fr)}.featured{grid-template-columns:1fr 1fr}.contentGrid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:850px){.grid2{grid-template-columns:1fr}.featured{grid-template-columns:1fr}.contentGrid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.app{padding:11px}.kpis{grid-template-columns:repeat(2,1fr)}.contentGrid{grid-template-columns:1fr}.embedWrap{height:470px}.contentFrame{height:450px}}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:var(--blue);text-decoration:none}
+.shell{width:min(1640px,calc(100% - 34px));margin:0 auto;padding:18px 0 44px}
+
+/* top */
+.hero{
+  position:relative;overflow:hidden;color:#fff;border-radius:22px;
+  background:linear-gradient(125deg,#081a2d 0%,#12385c 56%,#0a7185 100%);
+  padding:24px 26px 20px;box-shadow:var(--shadow2)
+}
+.hero:after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;right:-110px;top:-180px;background:rgba(255,255,255,.07)}
+.heroRow{position:relative;z-index:2;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.eyebrow{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:#a9d8e4;font-weight:800}
+.hero h1{margin:5px 0 4px;font-size:29px;letter-spacing:-.5px}
+.hero p{margin:0;color:#ccdae8;font-size:12px}
+.heroMeta{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.metaChip{font-size:10px;font-weight:700;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);padding:7px 9px;border-radius:999px}
+.toolbar{position:relative;z-index:2;display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:17px}
+.period{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;border-radius:9px;padding:8px 10px;font-size:11px}
+.period.active{background:#fff;color:var(--navy);font-weight:800}
+.toolbar select,.toolbar input{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.09);color:white;border-radius:9px;padding:8px 10px;font-size:11px;outline:none}
+.toolbar select option{background:#fff;color:#111}
+.toolbar input{min-width:210px}
+.toolbar input::placeholder{color:#bed0dd}
+
+/* kpi */
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px 15px;box-shadow:0 3px 13px rgba(15,31,52,.04);min-height:92px}
+.kpiTop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.kpiLabel{font-size:10px;color:var(--muted);font-weight:800}
+.kpiIcon{width:25px;height:25px;border-radius:8px;background:#eef4ff;color:#315bbb;display:grid;place-items:center;font-size:12px}
+.kpiValue{font-size:25px;font-weight:850;letter-spacing:-.5px;margin-top:7px;line-height:1}
+.kpiSub{font-size:9.5px;color:var(--muted);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* section */
+.section{margin-top:18px}
+.sectionHead{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:9px}
+.sectionHead h2{margin:0;font-size:17px;letter-spacing:-.2px}
+.sectionHead p{margin:3px 0 0;color:var(--muted);font-size:10.5px}
+.sectionActions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.lightBtn,.sectionActions select{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:7px 9px;font-size:10.5px}
+.lightBtn:hover{border-color:#b7c5d8;background:#f9fbfd}
+
+/* insights */
+.insights{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.insight{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 14px;box-shadow:0 3px 13px rgba(15,31,52,.035)}
+.insightBadge{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:850;padding:4px 7px;border-radius:999px;background:#edf4ff;color:#315bbb}
+.insight strong{display:block;font-size:13px;line-height:1.4;margin-top:8px}
+.insight p{font-size:10px;line-height:1.5;color:var(--muted);margin:5px 0 0}
+
+/* feature cards */
+.featureGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.contentCard{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:.18s ease;cursor:pointer;min-width:0}
+.contentCard:hover{transform:translateY(-2px);box-shadow:var(--shadow2);border-color:#cbd7e6}
+.preview{position:relative;aspect-ratio:16/10;background:#dfe7ef;overflow:hidden}
+.preview iframe{position:absolute;top:-53px;left:0;width:calc(100% + 22px);height:660px;border:0;pointer-events:none;background:#eef2f6}
+.previewOverlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(4,17,31,.56));pointer-events:none}
+.previewTop{position:absolute;left:9px;right:9px;top:9px;display:flex;justify-content:space-between;gap:7px;pointer-events:none}
+.roleTag,.typeTag,.topicTag,.manualTag{display:inline-flex;align-items:center;font-size:9px;font-weight:850;border-radius:999px;padding:5px 7px;backdrop-filter:blur(8px)}
+.roleTag{background:rgba(10,29,49,.86);color:white}
+.typeTag{background:rgba(255,255,255,.92);color:#25405f}
+.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:43px;height:43px;border-radius:50%;background:rgba(255,255,255,.93);display:grid;place-items:center;color:#172a42;font-size:17px;box-shadow:0 5px 18px rgba(0,0,0,.18);pointer-events:none}
+.previewFoot{position:absolute;left:10px;right:10px;bottom:8px;color:#fff;font-size:9px;font-weight:750;display:flex;justify-content:space-between;gap:7px;pointer-events:none}
+.cardBody{padding:11px 12px 12px}
+.cardTitle{font-size:12.5px;font-weight:850;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cardMeta{display:flex;justify-content:space-between;gap:7px;margin-top:5px;color:var(--muted);font-size:9px}
+.metricRow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.metric{border:1px solid #edf1f6;background:#fafbfd;border-radius:9px;padding:7px 5px;text-align:center;min-width:0}
+.metric b{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.metric span{display:block;color:var(--muted);font-size:8.5px;margin-top:2px}
+.cardBottom{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-top:9px}
+.topicTag{background:#eef2ff;color:#5360a9;padding:4px 6px}
+.manualTag{background:#fff5dc;color:#956000;padding:4px 6px}
+
+/* charts */
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.chartCard{background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px 14px;box-shadow:0 3px 13px rgba(15,31,52,.035)}
+.chartHead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:9px}
+.chartHead strong{font-size:12.5px}.chartHead span{font-size:9px;color:var(--muted)}
+.barrow{display:grid;grid-template-columns:minmax(90px,170px) minmax(80px,1fr) 48px;align-items:center;gap:8px;margin:7px 0}
+.barlabel{font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track{height:8px;background:#edf2f6;border-radius:999px;overflow:hidden}
+.bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#2b62e8,#0995ab)}
+.bar.alt{background:linear-gradient(90deg,#6f4ce8,#2f7fe8)}
+.barvalue{text-align:right;font-size:9px;font-weight:800;color:#35465a}
+.chartNote{margin-top:9px;padding-top:8px;border-top:1px solid #edf1f5;font-size:9px;line-height:1.45;color:var(--muted)}
+
+/* gallery */
+.galleryGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.galleryGrid .preview{aspect-ratio:16/9}
+.galleryGrid .contentCard{box-shadow:0 4px 16px rgba(15,31,52,.05)}
+.empty{grid-column:1/-1;background:#fff;border:1px dashed #cbd5e1;border-radius:14px;padding:38px;text-align:center;color:var(--muted);font-size:12px}
+.pager{display:flex;justify-content:center;align-items:center;gap:7px;margin:13px 0 0}
+.pager button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;font-size:10px}
+.pager button:disabled{opacity:.45;cursor:default}
+.pager span{font-size:10px;color:var(--muted)}
+
+/* audit */
+.auditWrap{background:#fff;border:1px solid var(--line);border-radius:15px;overflow:hidden}
+.auditSummary{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+.auditSum{padding:11px 13px;border-right:1px solid var(--line)}
+.auditSum:last-child{border-right:0}.auditSum small{display:block;font-size:9px;color:var(--muted);font-weight:700}.auditSum b{display:block;font-size:15px;margin-top:4px}
+.auditTable{max-height:470px;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:9.5px}
+th{position:sticky;top:0;background:var(--navy);color:#fff;text-align:left;padding:9px 8px;z-index:2}
+td{padding:8px;border-bottom:1px solid #edf1f5;vertical-align:middle}
+tr:hover td{background:#fafcfe}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.status{display:inline-flex;padding:4px 6px;border-radius:999px;font-size:8.5px;font-weight:850}
+.status.good{background:#eaf7ee;color:#17733a}.status.warn{background:#fff4df;color:#946200}.status.bad{background:#ffefee;color:#ae2b22}
+.manualInput{width:85px;border:1px solid #e9bc62;background:#fffaf0;border-radius:7px;padding:5px 6px;font-size:9px}
+.auditLink{font-weight:750;font-size:9px}
+details.auditDetails>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;font-size:11px;font-weight:800;background:#fff}
+details.auditDetails>summary::-webkit-details-marker{display:none}
+.chev{transition:.18s}details[open] .chev{transform:rotate(180deg)}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:1000;background:rgba(4,15,27,.68);display:none;align-items:center;justify-content:center;padding:22px}
+.modal.open{display:flex}
+.modalBox{width:min(1120px,96vw);max-height:92vh;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 28px 80px rgba(0,0,0,.34);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,.7fr)}
+.modalMedia{background:#eff3f7;min-height:640px;position:relative}
+.modalMedia iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.modalSide{padding:20px;overflow:auto}
+.closeBtn{float:right;border:1px solid var(--line);background:#fff;border-radius:9px;width:32px;height:32px;font-size:17px}
+.modalRole{font-size:10px;color:var(--muted);font-weight:800;margin-top:3px}
+.modalTitle{font-size:20px;line-height:1.35;font-weight:880;margin:13px 0 6px}
+.modalMeta{font-size:10px;color:var(--muted)}
+.modalMetrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:16px}
+.modalMetric{border:1px solid var(--line);border-radius:11px;padding:11px}.modalMetric small{display:block;color:var(--muted);font-size:9px}.modalMetric b{display:block;font-size:18px;margin-top:4px}
+.caption{margin-top:15px;padding-top:14px;border-top:1px solid var(--line);font-size:10.5px;line-height:1.55;color:#4b5b6d;white-space:pre-wrap;max-height:190px;overflow:auto}
+.modalButtons{display:flex;gap:7px;margin-top:15px}.primaryBtn{border:0;background:var(--blue);color:#fff;border-radius:9px;padding:9px 12px;font-size:10px;font-weight:800}
+.secondaryBtn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 12px;font-size:10px;font-weight:800;color:var(--ink)}
+
+/* footer */
+.note{margin-top:13px;background:#fff8eb;border:1px solid #f5d7a1;color:#8d5b08;padding:11px 13px;border-radius:11px;font-size:9.5px;line-height:1.5}
+.footer{font-size:9px;color:var(--muted);text-align:right;margin-top:10px}
+
+@media(max-width:1250px){
+  .kpis{grid-template-columns:repeat(3,1fr)} .insights{grid-template-columns:repeat(2,1fr)}
+  .featureGrid,.galleryGrid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:900px){
+  .charts{grid-template-columns:1fr}.featureGrid,.galleryGrid{grid-template-columns:repeat(2,1fr)}
+  .modalBox{grid-template-columns:1fr}.modalMedia{min-height:520px}.modalSide{max-height:38vh}
+}
+@media(max-width:640px){
+  .shell{width:min(100% - 18px,1640px)}.hero{padding:20px 16px}.hero h1{font-size:24px}
+  .kpis{grid-template-columns:repeat(2,1fr)}.insights{grid-template-columns:1fr}
+  .featureGrid,.galleryGrid{grid-template-columns:1fr}.toolbar input{min-width:100%;width:100%}
+  .barrow{grid-template-columns:105px 1fr 42px}.auditSummary{grid-template-columns:1fr}.auditSum{border-right:0;border-bottom:1px solid var(--line)}
+}
 </style>
 </head>
 <body>
-<div class="app">
+<div class="shell">
   <header class="hero">
-    <div class="heroTop">
-      <div><h1>@ymholic Instagram Analytics</h1><p>콘텐츠 성과 · 릴스 감사 · 실제 Instagram 게시물 미리보기</p></div>
-      <div class="badge">업데이트 2026-09-30 · 팔로워 624명 · 미디어 65개</div>
+    <div class="heroRow">
+      <div>
+        <div class="eyebrow">Personal Content BI</div>
+        <h1>@ymholic Performance Studio</h1>
+        <p>콘텐츠 성과 · 릴스 조회수 보정 · 주제별 인사이트 · 게시물 상세 분석</p>
+      </div>
+      <div class="heroMeta">
+        <span class="metaChip">Instagram Insights API</span>
+        <span class="metaChip">KST 기준</span>
+        <span class="metaChip">업데이트 2026-09-30</span>
+      </div>
     </div>
-    <div class="filters">
-      <button data-period="all" class="active">전체</button>
-      <button data-period="30">최근 30일</button>
-      <button data-period="90">최근 90일</button>
-      <button data-period="365">최근 1년</button>
-      <select id="yearFilter"><option value="">전체 연도</option><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option></select>
-      <select id="typeFilter"><option value="">전체 유형</option><option value="릴스">릴스</option><option value="캐러셀">캐러셀</option><option value="이미지">이미지</option></select>
-      <select id="catFilter"><option value="">전체 주제</option><option>골프</option><option>프로스포츠/스포츠마케팅</option><option>피트니스/농구</option><option>업무/마케팅</option><option>일상/여행/기타</option></select>
-      <input class="search" id="search" placeholder="캡션 검색"/>
+    <div class="toolbar">
+      <button class="period active" data-period="all">전체</button>
+      <button class="period" data-period="30">최근 30일</button>
+      <button class="period" data-period="90">최근 90일</button>
+      <button class="period" data-period="365">최근 1년</button>
+      <select id="yearFilter"><option value="">전체 연도</option></select>
+      <select id="typeFilter"><option value="">전체 유형</option></select>
+      <select id="catFilter"><option value="">전체 주제</option></select>
+      <input id="search" placeholder="캡션 검색"/>
     </div>
   </header>
 
   <div class="kpis" id="kpis"></div>
 
   <section class="section">
-    <div class="sectionHead"><div><h2>대표 콘텐츠 · 실제 게시물 미리보기</h2><p>Instagram 공식 embed를 사용하므로 CDN 썸네일 만료 문제를 피합니다.</p></div></div>
-    <div class="featured" id="featured"></div>
-  </section>
-
-  <section class="section grid2">
-    <div class="panel"><h3>도달 Top 10</h3><div id="reachBars"></div></div>
-    <div class="panel"><h3>릴스 분석 조회수 Top 10</h3><div id="viewBars"></div></div>
-  </section>
-
-  <section class="section grid2">
-    <div class="panel"><h3>콘텐츠 주제별 평균 도달</h3><div id="themeBars"></div></div>
-    <div class="panel"><h3>연도별 평균 도달</h3><div id="yearBars"></div></div>
+    <div class="sectionHead">
+      <div><h2>핵심 인사이트</h2><p>현재 필터 기준으로 자동 계산됩니다.</p></div>
+    </div>
+    <div class="insights" id="insights"></div>
   </section>
 
   <section class="section">
-    <div class="sectionHead"><div><h2>게시물 갤러리</h2><p>필터 결과를 8개씩 로드합니다. 실제 Instagram embed라서 게시물 자체를 바로 확인할 수 있습니다.</p></div><div class="muted" id="resultCount"></div></div>
-    <div class="contentGrid" id="contentGrid"></div>
-    <div class="pager"><button id="prevBtn">이전</button><span id="pageLabel"></span><button id="nextBtn">다음</button></div>
+    <div class="sectionHead">
+      <div><h2>핵심 콘텐츠</h2><p>도달 · 조회 · 상호작용 · 최신 게시물을 대표 카드로 봅니다.</p></div>
+    </div>
+    <div class="featureGrid" id="featureGrid"></div>
   </section>
 
   <section class="section">
-    <div class="sectionHead"><div><h2>릴스 31개 전체 감사</h2><p>앱에서 확인한 누적 재생수를 직접 입력하면 브라우저에 저장되고 순위에 즉시 반영됩니다.</p></div></div>
-    <div class="auditTable">
-      <table>
-        <thead><tr><th>날짜</th><th>릴스</th><th>도달</th><th>API 조회</th><th>앱 누적 재생수</th><th>분석 조회수</th><th>반응</th><th>상태</th><th>링크</th></tr></thead>
-        <tbody id="auditBody"></tbody>
-      </table>
+    <div class="sectionHead">
+      <div><h2>성과 분포</h2><p>절대 성과와 콘텐츠 구조를 함께 비교합니다.</p></div>
+    </div>
+    <div class="charts">
+      <div class="chartCard"><div class="chartHead"><strong>도달 Top 10</strong><span>Reach</span></div><div id="reachBars"></div><div class="chartNote" id="reachNote"></div></div>
+      <div class="chartCard"><div class="chartHead"><strong>릴스 조회수 Top 10</strong><span>앱 실측 우선 · API 보조</span></div><div id="viewBars"></div><div class="chartNote" id="viewNote"></div></div>
+      <div class="chartCard"><div class="chartHead"><strong>주제별 평균 도달</strong><span>Average Reach</span></div><div id="themeBars"></div><div class="chartNote" id="themeNote"></div></div>
+      <div class="chartCard"><div class="chartHead"><strong>연도별 평균 도달</strong><span>Average Reach</span></div><div id="yearBars"></div><div class="chartNote" id="yearNote"></div></div>
     </div>
   </section>
 
-  <div class="note">
-    <b>조회수 해석 주의:</b> 과거 Instagram 릴스는 현재 API의 Views와 앱 화면의 누적 재생수가 다를 수 있습니다.
-    특히 2022-03-06 <b>Leg&Hip Day</b> 릴스는 게시물 자체는 정상적으로 읽혔지만 현재 API에서 도달·조회·상호작용 상세값이 비어 있습니다.
-    그래서 이 대시보드는 사용자가 앱에서 확인한 조회수를 직접 입력해 보정할 수 있게 만들었습니다.
+  <section class="section">
+    <div class="sectionHead">
+      <div><h2>전체 게시물</h2><p>미디어 영역만 미리보기로 표시합니다. 카드를 클릭하면 상세 분석이 열립니다.</p></div>
+      <div class="sectionActions">
+        <select id="sortFilter">
+          <option value="latest">최신순</option>
+          <option value="reach">도달순</option>
+          <option value="views">조회순</option>
+          <option value="engagement">상호작용순</option>
+        </select>
+        <button class="lightBtn" id="csvBtn">CSV 내보내기</button>
+      </div>
+    </div>
+    <div class="galleryGrid" id="galleryGrid"></div>
+    <div class="pager">
+      <button id="prevBtn">이전</button><span id="pageLabel"></span><button id="nextBtn">다음</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <details class="auditDetails">
+      <summary>
+        <span>릴스 검증 테이블 · 31개 전체 확인</span><span class="chev">⌄</span>
+      </summary>
+      <div class="auditWrap">
+        <div class="auditSummary" id="auditSummary"></div>
+        <div class="auditTable">
+          <table>
+            <thead><tr>
+              <th>날짜</th><th>릴스</th><th class="num">도달</th><th class="num">API 조회</th>
+              <th>앱 실제 조회수</th><th class="num">분석 조회</th><th class="num">상호작용</th><th>상태</th><th>원본</th>
+            </tr></thead>
+            <tbody id="auditBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+    <div class="note">
+      과거 릴스의 앱 누적 재생수와 현재 API Views는 다를 수 있습니다. 앱에서 확인한 수치를 입력하면 같은 브라우저에 저장되며,
+      <b>분석용 조회수는 앱 실측값을 우선</b>하고 값이 없을 때 API 조회수를 사용합니다. 2022-03-06 <b>Leg&Hip Day</b>는 앱 실측 5,230회를 반영했습니다.
+    </div>
+  </section>
+  <div class="footer">v3 · @ymholic Performance Studio</div>
+</div>
+
+<div class="modal" id="detailModal">
+  <div class="modalBox">
+    <div class="modalMedia"><iframe id="modalIframe" loading="lazy"></iframe></div>
+    <div class="modalSide">
+      <button class="closeBtn" id="closeModal">×</button>
+      <div class="modalRole" id="modalRole"></div>
+      <div class="modalTitle" id="modalTitle"></div>
+      <div class="modalMeta" id="modalMeta"></div>
+      <div class="modalMetrics" id="modalMetrics"></div>
+      <div class="caption" id="modalCaption"></div>
+      <div class="modalButtons">
+        <a class="primaryBtn" id="modalLink" target="_blank">Instagram에서 보기 ↗</a>
+        <button class="secondaryBtn" id="modalClose2">닫기</button>
+      </div>
+    </div>
   </div>
-  <div class="footer">이 파일은 정적 HTML입니다. 데이터는 파일 안에 포함되어 있으며, Instagram 미리보기만 인터넷 연결이 필요합니다.</div>
 </div>
 
 <script>
-const DATA={"account": "ymholic", "followers": 624, "totalPosts": 65, "totalReels": 31, "reelsWithDetail": 30, "rows": [{"id": "18489300184106376", "date": "2026-09-28", "dateTime": "2026-09-28 23:23", "year": 2026, "type": "릴스", "isReel": true, "category": "골프", "caption": "🏌️‍♂️⛳️\n#실크밸리cc #골프 #드라이버 #스윙 #티샷", "title": "🏌️‍♂️⛳️", "url": "https://www.instagram.com/reel/Dd1YQLYp8wS/", "embed": "https://www.instagram.com/reel/Dd1YQLYp8wS/embed/", "likes": 7, "comments": 0, "reach": 270, "apiViews": 295, "engagement": 7, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17869029651538817", "date": "2026-01-25", "dateTime": "2026-01-25 02:03", "year": 2026, "type": "캐러셀", "isReel": false, "category": "프로스포츠/스포츠마케팅", "caption": "25-26시즌 V리그 \n수원 한국전력빅스톰 프로배구단 스포츠마케팅 MOU\n#한국전력빅스톰 #신영석 #서재덕 #스포츠마케팅", "title": "25-26시즌 V리그 ", "url": "https://www.instagram.com/p/DT5q_FGidNH/", "embed": "https://www.instagram.com/p/DT5q_FGidNH/embed/", "likes": 13, "comments": 0, "reach": 154, "apiViews": 398, "engagement": 13, "saves": 0, "shares": 0, "profileVisits": 14, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "18072886739117736", "date": "2025-09-10", "dateTime": "2025-09-10 23:47", "year": 2025, "type": "이미지", "isReel": false, "category": "업무/마케팅", "caption": "제주도 MOU\n#제주도지사 #한국인터넷진흥원장 #제주전통시장 \n#탄소중립 #전자영수증", "title": "제주도 MOU", "url": "https://www.instagram.com/p/DObPVN1iTpK/", "embed": "https://www.instagram.com/p/DObPVN1iTpK/embed/", "likes": 9, "comments": 0, "reach": 223, "apiViews": 1188, "engagement": 9, "saves": 0, "shares": 0, "profileVisits": 1, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "18308441797173565", "date": "2025-08-16", "dateTime": "2025-08-16 23:56", "year": 2025, "type": "릴스", "isReel": true, "category": "골프", "caption": "여름골프, 태양을 피하고 싶다\n#푸른솔cc #구십돌이 #백돌이 그 사이 어딘가", "title": "여름골프, 태양을 피하고 싶다", "url": "https://www.instagram.com/reel/DNa4BLupGGb/", "embed": "https://www.instagram.com/reel/DNa4BLupGGb/embed/", "likes": 14, "comments": 0, "reach": 314, "apiViews": 600, "engagement": 14, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18066163640023574", "date": "2025-07-01", "dateTime": "2025-07-01 00:13", "year": 2025, "type": "이미지", "isReel": false, "category": "업무/마케팅", "caption": "서울시 & KISA MOU\n#탄소중립 #전자영수증", "title": "서울시 & KISA MOU", "url": "https://www.instagram.com/p/DLh5F8ept2O/", "embed": "https://www.instagram.com/p/DLh5F8ept2O/embed/", "likes": 12, "comments": 0, "reach": 273, "apiViews": 1530, "engagement": 12, "saves": 0, "shares": 0, "profileVisits": 5, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "18066357710291097", "date": "2025-06-03", "dateTime": "2025-06-03 15:41", "year": 2025, "type": "릴스", "isReel": true, "category": "골프", "caption": "이영mint 민트\n#오너스GC #드라이버 #구십돌이 #백돌이 그 사이 어딘가", "title": "이영mint 민트", "url": "https://www.instagram.com/reel/DKbcq4UuOaI/", "embed": "https://www.instagram.com/reel/DKbcq4UuOaI/embed/", "likes": 15, "comments": 0, "reach": 429, "apiViews": 726, "engagement": 16, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18068028247950969", "date": "2025-05-24", "dateTime": "2025-05-24 22:38", "year": 2025, "type": "캐러셀", "isReel": false, "category": "업무/마케팅", "caption": "한국은행 MOU \"프로젝트 한강\"\n#디지털화폐 #CBDC #한강", "title": "한국은행 MOU \"프로젝트 한강\"", "url": "https://www.instagram.com/p/DKCcxGZJ40J/", "embed": "https://www.instagram.com/p/DKCcxGZJ40J/embed/", "likes": 19, "comments": 2, "reach": 273, "apiViews": 1192, "engagement": 21, "saves": 0, "shares": 0, "profileVisits": 4, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "18068900029787874", "date": "2025-05-03", "dateTime": "2025-05-03 23:53", "year": 2025, "type": "릴스", "isReel": true, "category": "골프", "caption": "봄 골프\n#포천힐스 #아이언 #90돌이 #백돌이 그 사이 어딘가", "title": "봄 골프", "url": "https://www.instagram.com/reel/DJMgYE-zQVl/", "embed": "https://www.instagram.com/reel/DJMgYE-zQVl/embed/", "likes": 17, "comments": 0, "reach": 445, "apiViews": 610, "engagement": 17, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18080026123590850", "date": "2025-03-23", "dateTime": "2025-03-23 23:10", "year": 2025, "type": "릴스", "isReel": true, "category": "골프", "caption": "봄골프\n#더크로스비cc  #드라이버 #90돌이 #백돌이 그 어디쯤", "title": "봄골프", "url": "https://www.instagram.com/reel/DHi3AIDTViZ/", "embed": "https://www.instagram.com/reel/DHi3AIDTViZ/embed/", "likes": 12, "comments": 0, "reach": 384, "apiViews": 549, "engagement": 12, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17937669863955608", "date": "2025-01-07", "dateTime": "2025-01-07 22:44", "year": 2025, "type": "캐러셀", "isReel": false, "category": "프로스포츠/스포츠마케팅", "caption": "24-25시즌 V리그 AI페퍼스 프로배구단 MOU\n#스포츠마케팅 #AI페퍼스 #박정아 #이한비 #장위 #테일러프리카노", "title": "24-25시즌 V리그 AI페퍼스 프로배구단 MOU", "url": "https://www.instagram.com/p/DEhsjOBzS8-/", "embed": "https://www.instagram.com/p/DEhsjOBzS8-/embed/", "likes": 21, "comments": 0, "reach": 526, "apiViews": 1352, "engagement": 21, "saves": 0, "shares": 0, "profileVisits": 12, "follows": 1, "detailStatus": "상세값 확보"}, {"id": "18365248696141855", "date": "2024-11-16", "dateTime": "2024-11-16 03:00", "year": 2024, "type": "캐러셀", "isReel": false, "category": "프로스포츠/스포츠마케팅", "caption": "24-25시즌 V리그 한국전력빅스톰 프로배구단 MOU\n#스포츠마케팅 #임성진 #신영석 #구교혁 #luiselianestrada", "title": "24-25시즌 V리그 한국전력빅스톰 프로배구단 MOU", "url": "https://www.instagram.com/p/DCZrxBuTPwY/", "embed": "https://www.instagram.com/p/DCZrxBuTPwY/embed/", "likes": 35, "comments": 0, "reach": 806, "apiViews": 2062, "engagement": 39, "saves": 3, "shares": 1, "profileVisits": 33, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "18049559290976749", "date": "2024-11-10", "dateTime": "2024-11-10 01:04", "year": 2024, "type": "릴스", "isReel": true, "category": "골프", "caption": "가을골프 🍂🍁\n#해솔리아cc", "title": "가을골프 🍂🍁", "url": "https://www.instagram.com/reel/DCKBbqLKINY/", "embed": "https://www.instagram.com/reel/DCKBbqLKINY/embed/", "likes": 12, "comments": 0, "reach": 488, "apiViews": 613, "engagement": 13, "saves": 0, "shares": 1, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17970596168659941", "date": "2024-10-27", "dateTime": "2024-10-27 12:48", "year": 2024, "type": "릴스", "isReel": true, "category": "골프", "caption": "OOTD 그레이&카키 ⛳️🏌️‍♂️\n#라데나cc #드라이버 #백돌이", "title": "OOTD 그레이&카키 ⛳️🏌️‍♂️", "url": "https://www.instagram.com/reel/DBnOzpzquFZ/", "embed": "https://www.instagram.com/reel/DBnOzpzquFZ/embed/", "likes": 22, "comments": 2, "reach": 413, "apiViews": 513, "engagement": 24, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17944063673836423", "date": "2024-08-03", "dateTime": "2024-08-03 23:46", "year": 2024, "type": "릴스", "isReel": true, "category": "골프", "caption": "OOTD 그린&그레이\n#더반cc #드라이버 #골프", "title": "OOTD 그린&그레이", "url": "https://www.instagram.com/reel/C-NiuqvqJ59/", "embed": "https://www.instagram.com/reel/C-NiuqvqJ59/embed/", "likes": 20, "comments": 0, "reach": 174, "apiViews": 579, "engagement": 20, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18018666701170133", "date": "2024-07-31", "dateTime": "2024-07-31 01:33", "year": 2024, "type": "릴스", "isReel": true, "category": "골프", "caption": "OOTD 화이트&그레이 l 컨트롤샷\n#리베라cc", "title": "OOTD 화이트&그레이 l 컨트롤샷", "url": "https://www.instagram.com/reel/C-DaoshqQQv/", "embed": "https://www.instagram.com/reel/C-DaoshqQQv/embed/", "likes": 18, "comments": 0, "reach": 124, "apiViews": 578, "engagement": 18, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18019186133127225", "date": "2024-07-21", "dateTime": "2024-07-21 01:59", "year": 2024, "type": "릴스", "isReel": true, "category": "골프", "caption": "OOTD 올블랙\n#오렌지듄스 #라베", "title": "OOTD 올블랙", "url": "https://www.instagram.com/reel/C9pugKwy8oq/", "embed": "https://www.instagram.com/reel/C9pugKwy8oq/embed/", "likes": 26, "comments": 0, "reach": 115, "apiViews": 523, "engagement": 26, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18025618124232514", "date": "2024-06-29", "dateTime": "2024-06-29 22:38", "year": 2024, "type": "릴스", "isReel": true, "category": "골프", "caption": "푸릇푸릇\n#비에이비스타cc #드라이버 #라베", "title": "푸릇푸릇", "url": "https://www.instagram.com/reel/C8zS-C3yIJz/", "embed": "https://www.instagram.com/reel/C8zS-C3yIJz/embed/", "likes": 16, "comments": 0, "reach": 116, "apiViews": 430, "engagement": 16, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18008399168432363", "date": "2024-05-19", "dateTime": "2024-05-19 21:07", "year": 2024, "type": "릴스", "isReel": true, "category": "골프", "caption": "시원해 봄골프🏌️‍♀️⛳️\n#베어즈베스트청라 #드라이버", "title": "시원해 봄골프🏌️‍♀️⛳️", "url": "https://www.instagram.com/reel/C7JkEudS2Nq/", "embed": "https://www.instagram.com/reel/C7JkEudS2Nq/embed/", "likes": 22, "comments": 0, "reach": 123, "apiViews": 541, "engagement": 22, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17856840171139590", "date": "2024-04-06", "dateTime": "2024-04-06 01:09", "year": 2024, "type": "릴스", "isReel": true, "category": "골프", "caption": "봄골프, 오잘공, 성악발성\n#한라봉골프티덕분이야 #골프 #드라이버 #세현cc", "title": "봄골프, 오잘공, 성악발성", "url": "https://www.instagram.com/reel/C5YsZjmyfgW/", "embed": "https://www.instagram.com/reel/C5YsZjmyfgW/embed/", "likes": 16, "comments": 0, "reach": 160, "apiViews": 652, "engagement": 16, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18327752278104310", "date": "2024-01-06", "dateTime": "2024-01-06 22:18", "year": 2024, "type": "캐러셀", "isReel": false, "category": "업무/마케팅", "caption": "잘했어!!🙋‍♂️\n#스마트앱어워드 대상 #ICT어워드 대상\n#이디야멤버스APP", "title": "잘했어!!🙋‍♂️", "url": "https://www.instagram.com/p/C1wp0ceLWKf/", "embed": "https://www.instagram.com/p/C1wp0ceLWKf/embed/", "likes": 27, "comments": 0, "reach": 160, "apiViews": 0, "engagement": 27, "saves": 0, "shares": 0, "profileVisits": 1, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17860003410036916", "date": "2023-12-17", "dateTime": "2023-12-17 21:28", "year": 2023, "type": "릴스", "isReel": true, "category": "골프", "caption": "캐디님이 다했따 ㅋㅋ\n#레이크사이드cc #골프 #드라이버", "title": "캐디님이 다했따 ㅋㅋ", "url": "https://www.instagram.com/reel/C09EGeZLQJZ/", "embed": "https://www.instagram.com/reel/C09EGeZLQJZ/embed/", "likes": 27, "comments": 1, "reach": 162, "apiViews": 727, "engagement": 28, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17974366280469001", "date": "2023-11-11", "dateTime": "2023-11-11 22:57", "year": 2023, "type": "릴스", "isReel": true, "category": "피트니스/농구", "caption": "농구는 엉덩이 Power\n#농구 #슬램덩크 #조던", "title": "농구는 엉덩이 Power", "url": "https://www.instagram.com/reel/CzghuR7vftG/", "embed": "https://www.instagram.com/reel/CzghuR7vftG/embed/", "likes": 25, "comments": 0, "reach": 79, "apiViews": 883, "engagement": 25, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18014133106747477", "date": "2023-10-15", "dateTime": "2023-10-15 03:05", "year": 2023, "type": "릴스", "isReel": true, "category": "골프", "caption": "새소리 풀소리 벌레소리 좋았다\n바지 터지기 일보 직전\n#가을골프 #드라이버 #깨백 #신라cc", "title": "새소리 풀소리 벌레소리 좋았다", "url": "https://www.instagram.com/reel/CyY3h5kSBoP/", "embed": "https://www.instagram.com/reel/CyY3h5kSBoP/embed/", "likes": 28, "comments": 0, "reach": 72, "apiViews": 678, "engagement": 28, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18200245708282917", "date": "2023-10-01", "dateTime": "2023-10-01 23:38", "year": 2023, "type": "릴스", "isReel": true, "category": "골프", "caption": "남자는 핑쿠🍑\n날씨가 다했따\n181cm 85kg\n#골린이 #백돌이 #드라이버 #신라cc", "title": "남자는 핑쿠🍑", "url": "https://www.instagram.com/reel/Cx3BmB8vB1d/", "embed": "https://www.instagram.com/reel/Cx3BmB8vB1d/embed/", "likes": 32, "comments": 2, "reach": 263, "apiViews": 626, "engagement": 34, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17898547208857456", "date": "2023-09-19", "dateTime": "2023-09-19 23:56", "year": 2023, "type": "릴스", "isReel": true, "category": "골프", "caption": "민초파\n#골프 #드라이버 #백돌이 #깨백 #가평베네스트", "title": "민초파", "url": "https://www.instagram.com/reel/CxYKAAjS36k/", "embed": "https://www.instagram.com/reel/CxYKAAjS36k/embed/", "likes": 33, "comments": 0, "reach": 302, "apiViews": 1636, "engagement": 34, "saves": 1, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17992273796486733", "date": "2023-09-03", "dateTime": "2023-09-03 19:36", "year": 2023, "type": "릴스", "isReel": true, "category": "골프", "caption": "씰룩 엉덩이, 촤라락 잔디, 시원한 구름\n#Хорошо #милый #백돌이 #골린이 #한림광릉", "title": "씰룩 엉덩이, 촤라락 잔디, 시원한 구름", "url": "https://www.instagram.com/reel/Cwuf5ZrLuEt/", "embed": "https://www.instagram.com/reel/Cwuf5ZrLuEt/embed/", "likes": 25, "comments": 0, "reach": 75, "apiViews": 371, "engagement": 25, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17986907633239647", "date": "2023-07-23", "dateTime": "2023-07-23 22:40", "year": 2023, "type": "캐러셀", "isReel": false, "category": "피트니스/농구", "caption": "B컷, 쇼파\n#라이크미 #바프 #B컷", "title": "B컷, 쇼파", "url": "https://www.instagram.com/p/CvCrmWkPJBQ/", "embed": "https://www.instagram.com/p/CvCrmWkPJBQ/embed/", "likes": 33, "comments": 0, "reach": 412, "apiViews": 0, "engagement": 33, "saves": 0, "shares": 0, "profileVisits": 2, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17884119683887797", "date": "2023-07-07", "dateTime": "2023-07-07 22:27", "year": 2023, "type": "릴스", "isReel": true, "category": "골프", "caption": "안정적인 백돌이\n날씨 무엇\n안성베네스트GC\n#골린이 #골프 #드라이브 #베네스트GC", "title": "안정적인 백돌이", "url": "https://www.instagram.com/reel/CuZc4QdMXRf/", "embed": "https://www.instagram.com/reel/CuZc4QdMXRf/embed/", "likes": 31, "comments": 0, "reach": 120, "apiViews": 2070, "engagement": 32, "saves": 0, "shares": 1, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18021258799527632", "date": "2023-07-04", "dateTime": "2023-07-04 01:00", "year": 2023, "type": "릴스", "isReel": true, "category": "골프", "caption": "달밤 드라이버\n#백돌이 #골프 #오운완 #드라이버", "title": "달밤 드라이버", "url": "https://www.instagram.com/reel/CuPbW_OMkhS/", "embed": "https://www.instagram.com/reel/CuPbW_OMkhS/embed/", "likes": 22, "comments": 0, "reach": 83, "apiViews": 492, "engagement": 22, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17986849934159266", "date": "2023-06-28", "dateTime": "2023-06-28 01:00", "year": 2023, "type": "릴스", "isReel": true, "category": "골프", "caption": "안정적인 백돌이\n짜세 잡혀간다\n#골린이 #백돌이 #골프 # 오운완 #나이키 #한성cc", "title": "안정적인 백돌이", "url": "https://www.instagram.com/reel/Ct_-6WBtIQ5/", "embed": "https://www.instagram.com/reel/Ct_-6WBtIQ5/embed/", "likes": 20, "comments": 0, "reach": 71, "apiViews": 279, "engagement": 20, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18000886069878837", "date": "2023-06-08", "dateTime": "2023-06-08 21:54", "year": 2023, "type": "릴스", "isReel": true, "category": "피트니스/농구", "caption": "내 앞에서 안돼!\n나와라 가제트 팔\n#오운완 #농구 #강철체력", "title": "내 앞에서 안돼!", "url": "https://www.instagram.com/reel/CtOuGJuA1tg/", "embed": "https://www.instagram.com/reel/CtOuGJuA1tg/embed/", "likes": 19, "comments": 0, "reach": 279, "apiViews": 1388, "engagement": 19, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18066645355384754", "date": "2023-06-01", "dateTime": "2023-06-01 00:02", "year": 2023, "type": "캐러셀", "isReel": false, "category": "피트니스/농구", "caption": "D-24\n체지방율 11%\n백인이라 태닝 시작\n어깨좀 키워죠\n#8kg감량 #오운완 #배고팡", "title": "D-24", "url": "https://www.instagram.com/p/Cs6W5tsvbAs/", "embed": "https://www.instagram.com/p/Cs6W5tsvbAs/embed/", "likes": 23, "comments": 0, "reach": 384, "apiViews": 0, "engagement": 24, "saves": 0, "shares": 1, "profileVisits": 1, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17967047846253874", "date": "2023-05-20", "dateTime": "2023-05-20 17:12", "year": 2023, "type": "캐러셀", "isReel": false, "category": "업무/마케팅", "caption": "팀 영민, 나의 에너지\n결국 무엇이든 잘 해내는 최고들\n#성장 #태도 #배려 #겸손 #진심 #감사", "title": "팀 영민, 나의 에너지", "url": "https://www.instagram.com/p/CsdTMOLOITY/", "embed": "https://www.instagram.com/p/CsdTMOLOITY/embed/", "likes": 23, "comments": 4, "reach": 385, "apiViews": 0, "engagement": 27, "saves": 0, "shares": 0, "profileVisits": 1, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17864958902927187", "date": "2023-05-14", "dateTime": "2023-05-14 04:03", "year": 2023, "type": "릴스", "isReel": true, "category": "피트니스/농구", "caption": "52주만에 하는 농구\n마음은 조던\n#농구 #슬램덩크 #NBA #KBL #오운완 #십자인대완파환자", "title": "52주만에 하는 농구", "url": "https://www.instagram.com/reel/CsMbbxJN5Z5/", "embed": "https://www.instagram.com/reel/CsMbbxJN5Z5/embed/", "likes": 16, "comments": 0, "reach": 237, "apiViews": 558, "engagement": 17, "saves": 1, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18005803789710084", "date": "2023-05-07", "dateTime": "2023-05-07 02:04", "year": 2023, "type": "릴스", "isReel": true, "category": "골프", "caption": "23년 첫 라운딩\n라베했지만 백돌이\n한림광릉cc\n#골린이 #백돌이 #골프 #나이키 #한링광릉cc", "title": "23년 첫 라운딩", "url": "https://www.instagram.com/reel/Cr6Mm7yuFfH/", "embed": "https://www.instagram.com/reel/Cr6Mm7yuFfH/embed/", "likes": 24, "comments": 0, "reach": 108, "apiViews": 984, "engagement": 24, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18007729393716653", "date": "2023-05-01", "dateTime": "2023-05-01 01:13", "year": 2023, "type": "캐러셀", "isReel": false, "category": "업무/마케팅", "caption": "서로 찍는 생파\n서로 아껴주는 팀원들\n고마워잉\n2024년 사업계획 준비하자\n#생파", "title": "서로 찍는 생파", "url": "https://www.instagram.com/p/CrqqSaaPYft/", "embed": "https://www.instagram.com/p/CrqqSaaPYft/embed/", "likes": 19, "comments": 0, "reach": 111, "apiViews": 0, "engagement": 19, "saves": 0, "shares": 0, "profileVisits": 1, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17926315625678468", "date": "2023-04-20", "dateTime": "2023-04-20 01:31", "year": 2023, "type": "캐러셀", "isReel": false, "category": "업무/마케팅", "caption": "승진했어요, 이차장\n#승진 #보너스 #감사합니다", "title": "승진했어요, 이차장", "url": "https://www.instagram.com/p/CrOXrrPvgfb/", "embed": "https://www.instagram.com/p/CrOXrrPvgfb/embed/", "likes": 24, "comments": 0, "reach": 145, "apiViews": 0, "engagement": 24, "saves": 0, "shares": 0, "profileVisits": 3, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17993078710857452", "date": "2023-04-10", "dateTime": "2023-04-10 22:35", "year": 2023, "type": "캐러셀", "isReel": false, "category": "업무/마케팅", "caption": "콜라보 팝업스토어 4.8~5.7\n오픈 첫날 3천명 방문\n부산 폭발, 경찰 출동\n많은 기획을 했지만\n잊지못할 콜라보.\n#부산 #부산달맞이 #이디야 #콜라보 #모코코 #로스트아크 #팝업스토어", "title": "콜라보 팝업스토어 4.8~5.7", "url": "https://www.instagram.com/p/Cq24aQjPab9/", "embed": "https://www.instagram.com/p/Cq24aQjPab9/embed/", "likes": 19, "comments": 4, "reach": 263, "apiViews": 0, "engagement": 24, "saves": 1, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17939797868504113", "date": "2023-03-16", "dateTime": "2023-03-16 00:35", "year": 2023, "type": "이미지", "isReel": false, "category": "피트니스/농구", "caption": "여름 온당  D-94\n#1일1운동 #오운완 #바프", "title": "여름 온당  D-94", "url": "https://www.instagram.com/p/Cp0Jc5PPGza/", "embed": "https://www.instagram.com/p/Cp0Jc5PPGza/embed/", "likes": 25, "comments": 3, "reach": 268, "apiViews": 0, "engagement": 28, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17945896517352572", "date": "2023-02-03", "dateTime": "2023-02-03 18:20", "year": 2023, "type": "이미지", "isReel": false, "category": "업무/마케팅", "caption": "메타버스 업무 협약\n#이디야 #제프 #mou", "title": "메타버스 업무 협약", "url": "https://www.instagram.com/p/CoMesb7PVVk/", "embed": "https://www.instagram.com/p/CoMesb7PVVk/embed/", "likes": 5, "comments": 0, "reach": 239, "apiViews": 0, "engagement": 6, "saves": 1, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "18048953977369015", "date": "2023-01-28", "dateTime": "2023-01-28 23:59", "year": 2023, "type": "캐러셀", "isReel": false, "category": "일상/여행/기타", "caption": "오사카 고베\n#일본 #오사카 #워크샵", "title": "오사카 고베", "url": "https://www.instagram.com/p/Cn9oxYov9wV/", "embed": "https://www.instagram.com/p/Cn9oxYov9wV/embed/", "likes": 8, "comments": 0, "reach": 140, "apiViews": 0, "engagement": 8, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17968621094116398", "date": "2023-01-17", "dateTime": "2023-01-17 23:19", "year": 2023, "type": "캐러셀", "isReel": false, "category": "피트니스/농구", "caption": "무조건 봐야되는 슬덩\n농구하구 싶다 내 무릎아\n#슬램덩크", "title": "무조건 봐야되는 슬덩", "url": "https://www.instagram.com/p/CnhPYXIPi_f/", "embed": "https://www.instagram.com/p/CnhPYXIPi_f/embed/", "likes": 9, "comments": 0, "reach": 76, "apiViews": 0, "engagement": 9, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17939580149582233", "date": "2023-01-09", "dateTime": "2023-01-09 13:50", "year": 2023, "type": "캐러셀", "isReel": false, "category": "골프", "caption": "2년간 기획한 \n이디야 전용 신용카드가 출시 되었습니다!\n#이디야 #이디야커피 #plcc #신용카드", "title": "2년간 기획한 ", "url": "https://www.instagram.com/p/CnLn7OiPeif/", "embed": "https://www.instagram.com/p/CnLn7OiPeif/embed/", "likes": 10, "comments": 1, "reach": 64, "apiViews": 0, "engagement": 11, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "18231396061084053", "date": "2023-01-09", "dateTime": "2023-01-09 13:31", "year": 2023, "type": "릴스", "isReel": true, "category": "업무/마케팅", "caption": "2년간 기획한 \n이디야 전용 신용카드가 출시되었습니다!", "title": "2년간 기획한 ", "url": "https://www.instagram.com/reel/CnLllk9Knur/", "embed": "https://www.instagram.com/reel/CnLllk9Knur/embed/", "likes": 2, "comments": 0, "reach": 58, "apiViews": 374, "engagement": 2, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17970938708072119", "date": "2023-01-04", "dateTime": "2023-01-04 18:24", "year": 2023, "type": "릴스", "isReel": true, "category": "일상/여행/기타", "caption": "정동진 일출\n#정동진 #일출 #해돋이 #겨울바다 #힐링", "title": "정동진 일출", "url": "https://www.instagram.com/reel/Cm_PKuBKaMs/", "embed": "https://www.instagram.com/reel/Cm_PKuBKaMs/embed/", "likes": 7, "comments": 0, "reach": 100, "apiViews": 535, "engagement": 7, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17980020994742261", "date": "2023-01-02", "dateTime": "2023-01-02 01:26", "year": 2023, "type": "이미지", "isReel": false, "category": "업무/마케팅", "caption": "플랫폼사업팀\n#인생네컷 #고생했어2022 #잘해보자2023", "title": "플랫폼사업팀", "url": "https://www.instagram.com/p/Cm4RNrnP4YQ/", "embed": "https://www.instagram.com/p/Cm4RNrnP4YQ/embed/", "likes": 8, "comments": 0, "reach": 119, "apiViews": 0, "engagement": 8, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17953829855482971", "date": "2022-12-10", "dateTime": "2022-12-10 00:28", "year": 2022, "type": "이미지", "isReel": false, "category": "피트니스/농구", "caption": "오운완\n#오운완 #스쾃 #웨이트", "title": "오운완", "url": "https://www.instagram.com/p/Cl88RX-PelI/", "embed": "https://www.instagram.com/p/Cl88RX-PelI/embed/", "likes": 15, "comments": 0, "reach": 151, "apiViews": 0, "engagement": 15, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17953524374132002", "date": "2022-12-07", "dateTime": "2022-12-07 19:09", "year": 2022, "type": "캐러셀", "isReel": false, "category": "일상/여행/기타", "caption": "삼성산 등산&하이킹\n#삼성산 #등산 #하이킹", "title": "삼성산 등산&하이킹", "url": "https://www.instagram.com/p/Cl3OOnZvqwx/", "embed": "https://www.instagram.com/p/Cl3OOnZvqwx/embed/", "likes": 13, "comments": 1, "reach": 122, "apiViews": 0, "engagement": 14, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17987204296641285", "date": "2022-11-19", "dateTime": "2022-11-19 20:24", "year": 2022, "type": "캐러셀", "isReel": false, "category": "골프", "caption": "오골완\n#드라이버 #아이언 #연습", "title": "오골완", "url": "https://www.instagram.com/p/ClJAcQXPMZI/", "embed": "https://www.instagram.com/p/ClJAcQXPMZI/embed/", "likes": 7, "comments": 0, "reach": 114, "apiViews": 0, "engagement": 7, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17951173199115965", "date": "2022-11-12", "dateTime": "2022-11-12 23:26", "year": 2022, "type": "캐러셀", "isReel": false, "category": "일상/여행/기타", "caption": "제 1회 산악회 관악산\n#관악산 #가을산 #가을냄새 #내무릎", "title": "제 1회 산악회 관악산", "url": "https://www.instagram.com/p/Ck3Ts7EP1C5/", "embed": "https://www.instagram.com/p/Ck3Ts7EP1C5/embed/", "likes": 7, "comments": 0, "reach": 51, "apiViews": 0, "engagement": 7, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17924384228607328", "date": "2022-10-28", "dateTime": "2022-10-28 00:15", "year": 2022, "type": "릴스", "isReel": true, "category": "골프", "caption": "피융\n#가을골프 #드라이버 #큐로CC", "title": "피융", "url": "https://www.instagram.com/reel/CkOMg2sDolC/", "embed": "https://www.instagram.com/reel/CkOMg2sDolC/embed/", "likes": 13, "comments": 0, "reach": 58, "apiViews": 190, "engagement": 13, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17959163117021733", "date": "2022-09-30", "dateTime": "2022-09-30 00:26", "year": 2022, "type": "이미지", "isReel": false, "category": "골프", "caption": "2년동안 기획한 PLCC가 곧 나옵니당\n#하나카드 #PLCC #MOU", "title": "2년동안 기획한 PLCC가 곧 나옵니당", "url": "https://www.instagram.com/p/CjGHnC3PcU-/", "embed": "https://www.instagram.com/p/CjGHnC3PcU-/embed/", "likes": 6, "comments": 0, "reach": 91, "apiViews": 0, "engagement": 7, "saves": 1, "shares": 0, "profileVisits": 2, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17924417489452151", "date": "2022-06-22", "dateTime": "2022-06-22 08:24", "year": 2022, "type": "캐러셀", "isReel": false, "category": "골프", "caption": "BC카드 부서장 워크샵\n#한림용인cc #BC카드", "title": "BC카드 부서장 워크샵", "url": "https://www.instagram.com/p/CfFe2XUPJnf/", "embed": "https://www.instagram.com/p/CfFe2XUPJnf/embed/", "likes": 7, "comments": 0, "reach": 115, "apiViews": 0, "engagement": 7, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17967371614716880", "date": "2022-06-10", "dateTime": "2022-06-10 17:29", "year": 2022, "type": "이미지", "isReel": false, "category": "업무/마케팅", "caption": "이디야-티몬 마케팅 MOU\n#이디야 #티몬", "title": "이디야-티몬 마케팅 MOU", "url": "https://www.instagram.com/p/Cenjtg3vJST/", "embed": "https://www.instagram.com/p/Cenjtg3vJST/embed/", "likes": 7, "comments": 0, "reach": 89, "apiViews": 0, "engagement": 8, "saves": 1, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17842834481794505", "date": "2022-06-08", "dateTime": "2022-06-08 21:57", "year": 2022, "type": "캐러셀", "isReel": false, "category": "업무/마케팅", "caption": "마케팅 기획 특강\n#알럽마케팅", "title": "마케팅 기획 특강", "url": "https://www.instagram.com/p/Cei4w0Yvpf7/", "embed": "https://www.instagram.com/p/Cei4w0Yvpf7/embed/", "likes": 5, "comments": 0, "reach": 71, "apiViews": 0, "engagement": 5, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17984749663476737", "date": "2022-06-05", "dateTime": "2022-06-05 02:54", "year": 2022, "type": "릴스", "isReel": true, "category": "골프", "caption": "드라이버\n#골반아돌아라", "title": "드라이버", "url": "https://www.instagram.com/reel/CeZHjPVjL6f/", "embed": "https://www.instagram.com/reel/CeZHjPVjL6f/embed/", "likes": 8, "comments": 1, "reach": 52, "apiViews": 221, "engagement": 9, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17972267218597035", "date": "2022-06-05", "dateTime": "2022-06-05 01:24", "year": 2022, "type": "캐러셀", "isReel": false, "category": "골프", "caption": "골프존안성W 야간라운딩\n#조던1 #스누피", "title": "골프존안성W 야간라운딩", "url": "https://www.instagram.com/p/CeY9Q-1Pxju/", "embed": "https://www.instagram.com/p/CeY9Q-1Pxju/embed/", "likes": 11, "comments": 0, "reach": 45, "apiViews": 0, "engagement": 11, "saves": 0, "shares": 0, "profileVisits": 0, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17932710452236834", "date": "2022-05-26", "dateTime": "2022-05-26 00:47", "year": 2022, "type": "릴스", "isReel": true, "category": "피트니스/농구", "caption": "내 앞에서 안돼\n#새벽농구 \n#조던과함께라면\n#십자인대없어요", "title": "내 앞에서 안돼", "url": "https://www.instagram.com/reel/Cd_I_UVjfv3/", "embed": "https://www.instagram.com/reel/Cd_I_UVjfv3/embed/", "likes": 6, "comments": 1, "reach": 61, "apiViews": 329, "engagement": 7, "saves": 0, "shares": 0, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "18058341583312048", "date": "2022-05-12", "dateTime": "2022-05-12 19:26", "year": 2022, "type": "이미지", "isReel": false, "category": "업무/마케팅", "caption": "마케팅 기획 특강 TOP10 선정\n#멘토링 #강연 #마케팅", "title": "마케팅 기획 특강 TOP10 선정", "url": "https://www.instagram.com/p/CddGDHgvxn_/", "embed": "https://www.instagram.com/p/CddGDHgvxn_/embed/", "likes": 5, "comments": 2, "reach": 58, "apiViews": 0, "engagement": 7, "saves": 0, "shares": 0, "profileVisits": 2, "follows": 0, "detailStatus": "상세값 확보"}, {"id": "17933328479143260", "date": "2022-04-30", "dateTime": "2022-04-30 21:55", "year": 2022, "type": "캐러셀", "isReel": false, "category": "골프", "caption": "베뉴지cc 화창해\nWITH JORDAN\n#베뉴지 #드라이버 #골프 #조던", "title": "베뉴지cc 화창해", "url": "https://www.instagram.com/p/Cc-dfoEPYyV/", "embed": "https://www.instagram.com/p/Cc-dfoEPYyV/embed/", "likes": 12, "comments": 0, "reach": null, "apiViews": null, "engagement": null, "saves": null, "shares": null, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17953272961745083", "date": "2022-04-17", "dateTime": "2022-04-17 01:45", "year": 2022, "type": "이미지", "isReel": false, "category": "업무/마케팅", "caption": "다날 MOU", "title": "다날 MOU", "url": "https://www.instagram.com/p/Cca0vbEP7i5/", "embed": "https://www.instagram.com/p/Cca0vbEP7i5/embed/", "likes": 4, "comments": 1, "reach": null, "apiViews": null, "engagement": null, "saves": null, "shares": null, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17923869446207720", "date": "2022-03-18", "dateTime": "2022-03-18 01:18", "year": 2022, "type": "이미지", "isReel": false, "category": "일상/여행/기타", "caption": "상\n#상", "title": "상", "url": "https://www.instagram.com/p/CbNh1ixvj78/", "embed": "https://www.instagram.com/p/CbNh1ixvj78/embed/", "likes": 4, "comments": 2, "reach": null, "apiViews": null, "engagement": null, "saves": null, "shares": null, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17914321826507461", "date": "2022-03-06", "dateTime": "2022-03-06 18:49", "year": 2022, "type": "릴스", "isReel": true, "category": "피트니스/농구", "caption": "Leg&Hip Day\n\n#십자인대없어요 #하체는반스 #반스\n#1일1운동", "title": "Leg&Hip Day", "url": "https://www.instagram.com/reel/CawgEEIjRsa/", "embed": "https://www.instagram.com/reel/CawgEEIjRsa/embed/", "likes": 56, "comments": 2, "reach": null, "apiViews": null, "engagement": null, "saves": null, "shares": null, "profileVisits": null, "follows": null, "detailStatus": "과거 상세 인사이트 미반환"}, {"id": "17924355890064366", "date": "2022-03-05", "dateTime": "2022-03-05 20:45", "year": 2022, "type": "이미지", "isReel": false, "category": "업무/마케팅", "caption": "삼성카드 MOU\n\n#삼성카드 #내가젤어려요", "title": "삼성카드 MOU", "url": "https://www.instagram.com/p/CauI9apv7k1/", "embed": "https://www.instagram.com/p/CauI9apv7k1/embed/", "likes": 3, "comments": 0, "reach": null, "apiViews": null, "engagement": null, "saves": null, "shares": null, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}, {"id": "17922075398223119", "date": "2022-02-28", "dateTime": "2022-02-28 23:36", "year": 2022, "type": "이미지", "isReel": false, "category": "피트니스/농구", "caption": "#1일1운동 #바디프로필 #바프", "title": "#1일1운동 #바디프로필 #바프", "url": "https://www.instagram.com/p/Cahkj7wPFuR/", "embed": "https://www.instagram.com/p/Cahkj7wPFuR/embed/", "likes": 18, "comments": 2, "reach": null, "apiViews": null, "engagement": null, "saves": null, "shares": null, "profileVisits": null, "follows": null, "detailStatus": "상세값 확보"}], "updated": "2026-09-30"};
-const today=new Date("2026-09-30T23:59:59+09:00");
-let currentPeriod="all", page=1, pageSize=8;
+const DATA={"account":"ymholic","followers":624,"totalPosts":65,"totalReels":31,"reelsWithDetail":30,"rows":[{"id":"18489300184106376","date":"2026-09-28","dateTime":"2026-09-28 23:23","year":2026,"type":"릴스","isReel":true,"category":"골프","caption":"🏌️‍♂️⛳️\n#실크밸리cc #골프 #드라이버 #스윙 #티샷","title":"🏌️‍♂️⛳️","url":"https://www.instagram.com/reel/Dd1YQLYp8wS/","embed":"https://www.instagram.com/reel/Dd1YQLYp8wS/embed/","likes":7,"comments":0,"reach":270,"apiViews":295,"engagement":7,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17869029651538817","date":"2026-01-25","dateTime":"2026-01-25 02:03","year":2026,"type":"캐러셀","isReel":false,"category":"프로스포츠/스포츠마케팅","caption":"25-26시즌 V리그 \n수원 한국전력빅스톰 프로배구단 스포츠마케팅 MOU\n#한국전력빅스톰 #신영석 #서재덕 #스포츠마케팅","title":"25-26시즌 V리그 ","url":"https://www.instagram.com/p/DT5q_FGidNH/","embed":"https://www.instagram.com/p/DT5q_FGidNH/embed/","likes":13,"comments":0,"reach":154,"apiViews":398,"engagement":13,"saves":0,"shares":0,"profileVisits":14,"follows":0,"detailStatus":"상세값 확보"},{"id":"18072886739117736","date":"2025-09-10","dateTime":"2025-09-10 23:47","year":2025,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"제주도 MOU\n#제주도지사 #한국인터넷진흥원장 #제주전통시장 \n#탄소중립 #전자영수증","title":"제주도 MOU","url":"https://www.instagram.com/p/DObPVN1iTpK/","embed":"https://www.instagram.com/p/DObPVN1iTpK/embed/","likes":9,"comments":0,"reach":223,"apiViews":1188,"engagement":9,"saves":0,"shares":0,"profileVisits":1,"follows":0,"detailStatus":"상세값 확보"},{"id":"18308441797173565","date":"2025-08-16","dateTime":"2025-08-16 23:56","year":2025,"type":"릴스","isReel":true,"category":"골프","caption":"여름골프, 태양을 피하고 싶다\n#푸른솔cc #구십돌이 #백돌이 그 사이 어딘가","title":"여름골프, 태양을 피하고 싶다","url":"https://www.instagram.com/reel/DNa4BLupGGb/","embed":"https://www.instagram.com/reel/DNa4BLupGGb/embed/","likes":14,"comments":0,"reach":314,"apiViews":600,"engagement":14,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18066163640023574","date":"2025-07-01","dateTime":"2025-07-01 00:13","year":2025,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"서울시 & KISA MOU\n#탄소중립 #전자영수증","title":"서울시 & KISA MOU","url":"https://www.instagram.com/p/DLh5F8ept2O/","embed":"https://www.instagram.com/p/DLh5F8ept2O/embed/","likes":12,"comments":0,"reach":273,"apiViews":1530,"engagement":12,"saves":0,"shares":0,"profileVisits":5,"follows":0,"detailStatus":"상세값 확보"},{"id":"18066357710291097","date":"2025-06-03","dateTime":"2025-06-03 15:41","year":2025,"type":"릴스","isReel":true,"category":"골프","caption":"이영mint 민트\n#오너스GC #드라이버 #구십돌이 #백돌이 그 사이 어딘가","title":"이영mint 민트","url":"https://www.instagram.com/reel/DKbcq4UuOaI/","embed":"https://www.instagram.com/reel/DKbcq4UuOaI/embed/","likes":15,"comments":0,"reach":429,"apiViews":726,"engagement":16,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18068028247950969","date":"2025-05-24","dateTime":"2025-05-24 22:38","year":2025,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"한국은행 MOU \"프로젝트 한강\"\n#디지털화폐 #CBDC #한강","title":"한국은행 MOU \"프로젝트 한강\"","url":"https://www.instagram.com/p/DKCcxGZJ40J/","embed":"https://www.instagram.com/p/DKCcxGZJ40J/embed/","likes":19,"comments":2,"reach":273,"apiViews":1192,"engagement":21,"saves":0,"shares":0,"profileVisits":4,"follows":0,"detailStatus":"상세값 확보"},{"id":"18068900029787874","date":"2025-05-03","dateTime":"2025-05-03 23:53","year":2025,"type":"릴스","isReel":true,"category":"골프","caption":"봄 골프\n#포천힐스 #아이언 #90돌이 #백돌이 그 사이 어딘가","title":"봄 골프","url":"https://www.instagram.com/reel/DJMgYE-zQVl/","embed":"https://www.instagram.com/reel/DJMgYE-zQVl/embed/","likes":17,"comments":0,"reach":445,"apiViews":610,"engagement":17,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18080026123590850","date":"2025-03-23","dateTime":"2025-03-23 23:10","year":2025,"type":"릴스","isReel":true,"category":"골프","caption":"봄골프\n#더크로스비cc  #드라이버 #90돌이 #백돌이 그 어디쯤","title":"봄골프","url":"https://www.instagram.com/reel/DHi3AIDTViZ/","embed":"https://www.instagram.com/reel/DHi3AIDTViZ/embed/","likes":12,"comments":0,"reach":384,"apiViews":549,"engagement":12,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17937669863955608","date":"2025-01-07","dateTime":"2025-01-07 22:44","year":2025,"type":"캐러셀","isReel":false,"category":"프로스포츠/스포츠마케팅","caption":"24-25시즌 V리그 AI페퍼스 프로배구단 MOU\n#스포츠마케팅 #AI페퍼스 #박정아 #이한비 #장위 #테일러프리카노","title":"24-25시즌 V리그 AI페퍼스 프로배구단 MOU","url":"https://www.instagram.com/p/DEhsjOBzS8-/","embed":"https://www.instagram.com/p/DEhsjOBzS8-/embed/","likes":21,"comments":0,"reach":526,"apiViews":1352,"engagement":21,"saves":0,"shares":0,"profileVisits":12,"follows":1,"detailStatus":"상세값 확보"},{"id":"18365248696141855","date":"2024-11-16","dateTime":"2024-11-16 03:00","year":2024,"type":"캐러셀","isReel":false,"category":"프로스포츠/스포츠마케팅","caption":"24-25시즌 V리그 한국전력빅스톰 프로배구단 MOU\n#스포츠마케팅 #임성진 #신영석 #구교혁 #luiselianestrada","title":"24-25시즌 V리그 한국전력빅스톰 프로배구단 MOU","url":"https://www.instagram.com/p/DCZrxBuTPwY/","embed":"https://www.instagram.com/p/DCZrxBuTPwY/embed/","likes":35,"comments":0,"reach":806,"apiViews":2062,"engagement":39,"saves":3,"shares":1,"profileVisits":33,"follows":0,"detailStatus":"상세값 확보"},{"id":"18049559290976749","date":"2024-11-10","dateTime":"2024-11-10 01:04","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"가을골프 🍂🍁\n#해솔리아cc","title":"가을골프 🍂🍁","url":"https://www.instagram.com/reel/DCKBbqLKINY/","embed":"https://www.instagram.com/reel/DCKBbqLKINY/embed/","likes":12,"comments":0,"reach":488,"apiViews":613,"engagement":13,"saves":0,"shares":1,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17970596168659941","date":"2024-10-27","dateTime":"2024-10-27 12:48","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"OOTD 그레이&카키 ⛳️🏌️‍♂️\n#라데나cc #드라이버 #백돌이","title":"OOTD 그레이&카키 ⛳️🏌️‍♂️","url":"https://www.instagram.com/reel/DBnOzpzquFZ/","embed":"https://www.instagram.com/reel/DBnOzpzquFZ/embed/","likes":22,"comments":2,"reach":413,"apiViews":513,"engagement":24,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17944063673836423","date":"2024-08-03","dateTime":"2024-08-03 23:46","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"OOTD 그린&그레이\n#더반cc #드라이버 #골프","title":"OOTD 그린&그레이","url":"https://www.instagram.com/reel/C-NiuqvqJ59/","embed":"https://www.instagram.com/reel/C-NiuqvqJ59/embed/","likes":20,"comments":0,"reach":174,"apiViews":579,"engagement":20,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18018666701170133","date":"2024-07-31","dateTime":"2024-07-31 01:33","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"OOTD 화이트&그레이 l 컨트롤샷\n#리베라cc","title":"OOTD 화이트&그레이 l 컨트롤샷","url":"https://www.instagram.com/reel/C-DaoshqQQv/","embed":"https://www.instagram.com/reel/C-DaoshqQQv/embed/","likes":18,"comments":0,"reach":124,"apiViews":578,"engagement":18,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18019186133127225","date":"2024-07-21","dateTime":"2024-07-21 01:59","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"OOTD 올블랙\n#오렌지듄스 #라베","title":"OOTD 올블랙","url":"https://www.instagram.com/reel/C9pugKwy8oq/","embed":"https://www.instagram.com/reel/C9pugKwy8oq/embed/","likes":26,"comments":0,"reach":115,"apiViews":523,"engagement":26,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18025618124232514","date":"2024-06-29","dateTime":"2024-06-29 22:38","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"푸릇푸릇\n#비에이비스타cc #드라이버 #라베","title":"푸릇푸릇","url":"https://www.instagram.com/reel/C8zS-C3yIJz/","embed":"https://www.instagram.com/reel/C8zS-C3yIJz/embed/","likes":16,"comments":0,"reach":116,"apiViews":430,"engagement":16,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18008399168432363","date":"2024-05-19","dateTime":"2024-05-19 21:07","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"시원해 봄골프🏌️‍♀️⛳️\n#베어즈베스트청라 #드라이버","title":"시원해 봄골프🏌️‍♀️⛳️","url":"https://www.instagram.com/reel/C7JkEudS2Nq/","embed":"https://www.instagram.com/reel/C7JkEudS2Nq/embed/","likes":22,"comments":0,"reach":123,"apiViews":541,"engagement":22,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17856840171139590","date":"2024-04-06","dateTime":"2024-04-06 01:09","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"봄골프, 오잘공, 성악발성\n#한라봉골프티덕분이야 #골프 #드라이버 #세현cc","title":"봄골프, 오잘공, 성악발성","url":"https://www.instagram.com/reel/C5YsZjmyfgW/","embed":"https://www.instagram.com/reel/C5YsZjmyfgW/embed/","likes":16,"comments":0,"reach":160,"apiViews":652,"engagement":16,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18327752278104310","date":"2024-01-06","dateTime":"2024-01-06 22:18","year":2024,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"잘했어!!🙋‍♂️\n#스마트앱어워드 대상 #ICT어워드 대상\n#이디야멤버스APP","title":"잘했어!!🙋‍♂️","url":"https://www.instagram.com/p/C1wp0ceLWKf/","embed":"https://www.instagram.com/p/C1wp0ceLWKf/embed/","likes":27,"comments":0,"reach":160,"apiViews":0,"engagement":27,"saves":0,"shares":0,"profileVisits":1,"follows":0,"detailStatus":"상세값 확보"},{"id":"17860003410036916","date":"2023-12-17","dateTime":"2023-12-17 21:28","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"캐디님이 다했따 ㅋㅋ\n#레이크사이드cc #골프 #드라이버","title":"캐디님이 다했따 ㅋㅋ","url":"https://www.instagram.com/reel/C09EGeZLQJZ/","embed":"https://www.instagram.com/reel/C09EGeZLQJZ/embed/","likes":27,"comments":1,"reach":162,"apiViews":727,"engagement":28,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17974366280469001","date":"2023-11-11","dateTime":"2023-11-11 22:57","year":2023,"type":"릴스","isReel":true,"category":"피트니스/농구","caption":"농구는 엉덩이 Power\n#농구 #슬램덩크 #조던","title":"농구는 엉덩이 Power","url":"https://www.instagram.com/reel/CzghuR7vftG/","embed":"https://www.instagram.com/reel/CzghuR7vftG/embed/","likes":25,"comments":0,"reach":79,"apiViews":883,"engagement":25,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18014133106747477","date":"2023-10-15","dateTime":"2023-10-15 03:05","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"새소리 풀소리 벌레소리 좋았다\n바지 터지기 일보 직전\n#가을골프 #드라이버 #깨백 #신라cc","title":"새소리 풀소리 벌레소리 좋았다","url":"https://www.instagram.com/reel/CyY3h5kSBoP/","embed":"https://www.instagram.com/reel/CyY3h5kSBoP/embed/","likes":28,"comments":0,"reach":72,"apiViews":678,"engagement":28,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18200245708282917","date":"2023-10-01","dateTime":"2023-10-01 23:38","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"남자는 핑쿠🍑\n날씨가 다했따\n181cm 85kg\n#골린이 #백돌이 #드라이버 #신라cc","title":"남자는 핑쿠🍑","url":"https://www.instagram.com/reel/Cx3BmB8vB1d/","embed":"https://www.instagram.com/reel/Cx3BmB8vB1d/embed/","likes":32,"comments":2,"reach":263,"apiViews":626,"engagement":34,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17898547208857456","date":"2023-09-19","dateTime":"2023-09-19 23:56","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"민초파\n#골프 #드라이버 #백돌이 #깨백 #가평베네스트","title":"민초파","url":"https://www.instagram.com/reel/CxYKAAjS36k/","embed":"https://www.instagram.com/reel/CxYKAAjS36k/embed/","likes":33,"comments":0,"reach":302,"apiViews":1636,"engagement":34,"saves":1,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17992273796486733","date":"2023-09-03","dateTime":"2023-09-03 19:36","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"씰룩 엉덩이, 촤라락 잔디, 시원한 구름\n#Хорошо #милый #백돌이 #골린이 #한림광릉","title":"씰룩 엉덩이, 촤라락 잔디, 시원한 구름","url":"https://www.instagram.com/reel/Cwuf5ZrLuEt/","embed":"https://www.instagram.com/reel/Cwuf5ZrLuEt/embed/","likes":25,"comments":0,"reach":75,"apiViews":371,"engagement":25,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17986907633239647","date":"2023-07-23","dateTime":"2023-07-23 22:40","year":2023,"type":"캐러셀","isReel":false,"category":"피트니스/농구","caption":"B컷, 쇼파\n#라이크미 #바프 #B컷","title":"B컷, 쇼파","url":"https://www.instagram.com/p/CvCrmWkPJBQ/","embed":"https://www.instagram.com/p/CvCrmWkPJBQ/embed/","likes":33,"comments":0,"reach":412,"apiViews":0,"engagement":33,"saves":0,"shares":0,"profileVisits":2,"follows":0,"detailStatus":"상세값 확보"},{"id":"17884119683887797","date":"2023-07-07","dateTime":"2023-07-07 22:27","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"안정적인 백돌이\n날씨 무엇\n안성베네스트GC\n#골린이 #골프 #드라이브 #베네스트GC","title":"안정적인 백돌이","url":"https://www.instagram.com/reel/CuZc4QdMXRf/","embed":"https://www.instagram.com/reel/CuZc4QdMXRf/embed/","likes":31,"comments":0,"reach":120,"apiViews":2070,"engagement":32,"saves":0,"shares":1,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18021258799527632","date":"2023-07-04","dateTime":"2023-07-04 01:00","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"달밤 드라이버\n#백돌이 #골프 #오운완 #드라이버","title":"달밤 드라이버","url":"https://www.instagram.com/reel/CuPbW_OMkhS/","embed":"https://www.instagram.com/reel/CuPbW_OMkhS/embed/","likes":22,"comments":0,"reach":83,"apiViews":492,"engagement":22,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17986849934159266","date":"2023-06-28","dateTime":"2023-06-28 01:00","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"안정적인 백돌이\n짜세 잡혀간다\n#골린이 #백돌이 #골프 # 오운완 #나이키 #한성cc","title":"안정적인 백돌이","url":"https://www.instagram.com/reel/Ct_-6WBtIQ5/","embed":"https://www.instagram.com/reel/Ct_-6WBtIQ5/embed/","likes":20,"comments":0,"reach":71,"apiViews":279,"engagement":20,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18000886069878837","date":"2023-06-08","dateTime":"2023-06-08 21:54","year":2023,"type":"릴스","isReel":true,"category":"피트니스/농구","caption":"내 앞에서 안돼!\n나와라 가제트 팔\n#오운완 #농구 #강철체력","title":"내 앞에서 안돼!","url":"https://www.instagram.com/reel/CtOuGJuA1tg/","embed":"https://www.instagram.com/reel/CtOuGJuA1tg/embed/","likes":19,"comments":0,"reach":279,"apiViews":1388,"engagement":19,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18066645355384754","date":"2023-06-01","dateTime":"2023-06-01 00:02","year":2023,"type":"캐러셀","isReel":false,"category":"피트니스/농구","caption":"D-24\n체지방율 11%\n백인이라 태닝 시작\n어깨좀 키워죠\n#8kg감량 #오운완 #배고팡","title":"D-24","url":"https://www.instagram.com/p/Cs6W5tsvbAs/","embed":"https://www.instagram.com/p/Cs6W5tsvbAs/embed/","likes":23,"comments":0,"reach":384,"apiViews":0,"engagement":24,"saves":0,"shares":1,"profileVisits":1,"follows":0,"detailStatus":"상세값 확보"},{"id":"17967047846253874","date":"2023-05-20","dateTime":"2023-05-20 17:12","year":2023,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"팀 영민, 나의 에너지\n결국 무엇이든 잘 해내는 최고들\n#성장 #태도 #배려 #겸손 #진심 #감사","title":"팀 영민, 나의 에너지","url":"https://www.instagram.com/p/CsdTMOLOITY/","embed":"https://www.instagram.com/p/CsdTMOLOITY/embed/","likes":23,"comments":4,"reach":385,"apiViews":0,"engagement":27,"saves":0,"shares":0,"profileVisits":1,"follows":0,"detailStatus":"상세값 확보"},{"id":"17864958902927187","date":"2023-05-14","dateTime":"2023-05-14 04:03","year":2023,"type":"릴스","isReel":true,"category":"피트니스/농구","caption":"52주만에 하는 농구\n마음은 조던\n#농구 #슬램덩크 #NBA #KBL #오운완 #십자인대완파환자","title":"52주만에 하는 농구","url":"https://www.instagram.com/reel/CsMbbxJN5Z5/","embed":"https://www.instagram.com/reel/CsMbbxJN5Z5/embed/","likes":16,"comments":0,"reach":237,"apiViews":558,"engagement":17,"saves":1,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18005803789710084","date":"2023-05-07","dateTime":"2023-05-07 02:04","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"23년 첫 라운딩\n라베했지만 백돌이\n한림광릉cc\n#골린이 #백돌이 #골프 #나이키 #한링광릉cc","title":"23년 첫 라운딩","url":"https://www.instagram.com/reel/Cr6Mm7yuFfH/","embed":"https://www.instagram.com/reel/Cr6Mm7yuFfH/embed/","likes":24,"comments":0,"reach":108,"apiViews":984,"engagement":24,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18007729393716653","date":"2023-05-01","dateTime":"2023-05-01 01:13","year":2023,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"서로 찍는 생파\n서로 아껴주는 팀원들\n고마워잉\n2024년 사업계획 준비하자\n#생파","title":"서로 찍는 생파","url":"https://www.instagram.com/p/CrqqSaaPYft/","embed":"https://www.instagram.com/p/CrqqSaaPYft/embed/","likes":19,"comments":0,"reach":111,"apiViews":0,"engagement":19,"saves":0,"shares":0,"profileVisits":1,"follows":0,"detailStatus":"상세값 확보"},{"id":"17926315625678468","date":"2023-04-20","dateTime":"2023-04-20 01:31","year":2023,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"승진했어요, 이차장\n#승진 #보너스 #감사합니다","title":"승진했어요, 이차장","url":"https://www.instagram.com/p/CrOXrrPvgfb/","embed":"https://www.instagram.com/p/CrOXrrPvgfb/embed/","likes":24,"comments":0,"reach":145,"apiViews":0,"engagement":24,"saves":0,"shares":0,"profileVisits":3,"follows":0,"detailStatus":"상세값 확보"},{"id":"17993078710857452","date":"2023-04-10","dateTime":"2023-04-10 22:35","year":2023,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"콜라보 팝업스토어 4.8~5.7\n오픈 첫날 3천명 방문\n부산 폭발, 경찰 출동\n많은 기획을 했지만\n잊지못할 콜라보.\n#부산 #부산달맞이 #이디야 #콜라보 #모코코 #로스트아크 #팝업스토어","title":"콜라보 팝업스토어 4.8~5.7","url":"https://www.instagram.com/p/Cq24aQjPab9/","embed":"https://www.instagram.com/p/Cq24aQjPab9/embed/","likes":19,"comments":4,"reach":263,"apiViews":0,"engagement":24,"saves":1,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17939797868504113","date":"2023-03-16","dateTime":"2023-03-16 00:35","year":2023,"type":"이미지","isReel":false,"category":"피트니스/농구","caption":"여름 온당  D-94\n#1일1운동 #오운완 #바프","title":"여름 온당  D-94","url":"https://www.instagram.com/p/Cp0Jc5PPGza/","embed":"https://www.instagram.com/p/Cp0Jc5PPGza/embed/","likes":25,"comments":3,"reach":268,"apiViews":0,"engagement":28,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17945896517352572","date":"2023-02-03","dateTime":"2023-02-03 18:20","year":2023,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"메타버스 업무 협약\n#이디야 #제프 #mou","title":"메타버스 업무 협약","url":"https://www.instagram.com/p/CoMesb7PVVk/","embed":"https://www.instagram.com/p/CoMesb7PVVk/embed/","likes":5,"comments":0,"reach":239,"apiViews":0,"engagement":6,"saves":1,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"18048953977369015","date":"2023-01-28","dateTime":"2023-01-28 23:59","year":2023,"type":"캐러셀","isReel":false,"category":"일상/여행/기타","caption":"오사카 고베\n#일본 #오사카 #워크샵","title":"오사카 고베","url":"https://www.instagram.com/p/Cn9oxYov9wV/","embed":"https://www.instagram.com/p/Cn9oxYov9wV/embed/","likes":8,"comments":0,"reach":140,"apiViews":0,"engagement":8,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17968621094116398","date":"2023-01-17","dateTime":"2023-01-17 23:19","year":2023,"type":"캐러셀","isReel":false,"category":"피트니스/농구","caption":"무조건 봐야되는 슬덩\n농구하구 싶다 내 무릎아\n#슬램덩크","title":"무조건 봐야되는 슬덩","url":"https://www.instagram.com/p/CnhPYXIPi_f/","embed":"https://www.instagram.com/p/CnhPYXIPi_f/embed/","likes":9,"comments":0,"reach":76,"apiViews":0,"engagement":9,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17939580149582233","date":"2023-01-09","dateTime":"2023-01-09 13:50","year":2023,"type":"캐러셀","isReel":false,"category":"골프","caption":"2년간 기획한 \n이디야 전용 신용카드가 출시 되었습니다!\n#이디야 #이디야커피 #plcc #신용카드","title":"2년간 기획한 ","url":"https://www.instagram.com/p/CnLn7OiPeif/","embed":"https://www.instagram.com/p/CnLn7OiPeif/embed/","likes":10,"comments":1,"reach":64,"apiViews":0,"engagement":11,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"18231396061084053","date":"2023-01-09","dateTime":"2023-01-09 13:31","year":2023,"type":"릴스","isReel":true,"category":"업무/마케팅","caption":"2년간 기획한 \n이디야 전용 신용카드가 출시되었습니다!","title":"2년간 기획한 ","url":"https://www.instagram.com/reel/CnLllk9Knur/","embed":"https://www.instagram.com/reel/CnLllk9Knur/embed/","likes":2,"comments":0,"reach":58,"apiViews":374,"engagement":2,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17970938708072119","date":"2023-01-04","dateTime":"2023-01-04 18:24","year":2023,"type":"릴스","isReel":true,"category":"일상/여행/기타","caption":"정동진 일출\n#정동진 #일출 #해돋이 #겨울바다 #힐링","title":"정동진 일출","url":"https://www.instagram.com/reel/Cm_PKuBKaMs/","embed":"https://www.instagram.com/reel/Cm_PKuBKaMs/embed/","likes":7,"comments":0,"reach":100,"apiViews":535,"engagement":7,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17980020994742261","date":"2023-01-02","dateTime":"2023-01-02 01:26","year":2023,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"플랫폼사업팀\n#인생네컷 #고생했어2022 #잘해보자2023","title":"플랫폼사업팀","url":"https://www.instagram.com/p/Cm4RNrnP4YQ/","embed":"https://www.instagram.com/p/Cm4RNrnP4YQ/embed/","likes":8,"comments":0,"reach":119,"apiViews":0,"engagement":8,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17953829855482971","date":"2022-12-10","dateTime":"2022-12-10 00:28","year":2022,"type":"이미지","isReel":false,"category":"피트니스/농구","caption":"오운완\n#오운완 #스쾃 #웨이트","title":"오운완","url":"https://www.instagram.com/p/Cl88RX-PelI/","embed":"https://www.instagram.com/p/Cl88RX-PelI/embed/","likes":15,"comments":0,"reach":151,"apiViews":0,"engagement":15,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17953524374132002","date":"2022-12-07","dateTime":"2022-12-07 19:09","year":2022,"type":"캐러셀","isReel":false,"category":"일상/여행/기타","caption":"삼성산 등산&하이킹\n#삼성산 #등산 #하이킹","title":"삼성산 등산&하이킹","url":"https://www.instagram.com/p/Cl3OOnZvqwx/","embed":"https://www.instagram.com/p/Cl3OOnZvqwx/embed/","likes":13,"comments":1,"reach":122,"apiViews":0,"engagement":14,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17987204296641285","date":"2022-11-19","dateTime":"2022-11-19 20:24","year":2022,"type":"캐러셀","isReel":false,"category":"골프","caption":"오골완\n#드라이버 #아이언 #연습","title":"오골완","url":"https://www.instagram.com/p/ClJAcQXPMZI/","embed":"https://www.instagram.com/p/ClJAcQXPMZI/embed/","likes":7,"comments":0,"reach":114,"apiViews":0,"engagement":7,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17951173199115965","date":"2022-11-12","dateTime":"2022-11-12 23:26","year":2022,"type":"캐러셀","isReel":false,"category":"일상/여행/기타","caption":"제 1회 산악회 관악산\n#관악산 #가을산 #가을냄새 #내무릎","title":"제 1회 산악회 관악산","url":"https://www.instagram.com/p/Ck3Ts7EP1C5/","embed":"https://www.instagram.com/p/Ck3Ts7EP1C5/embed/","likes":7,"comments":0,"reach":51,"apiViews":0,"engagement":7,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17924384228607328","date":"2022-10-28","dateTime":"2022-10-28 00:15","year":2022,"type":"릴스","isReel":true,"category":"골프","caption":"피융\n#가을골프 #드라이버 #큐로CC","title":"피융","url":"https://www.instagram.com/reel/CkOMg2sDolC/","embed":"https://www.instagram.com/reel/CkOMg2sDolC/embed/","likes":13,"comments":0,"reach":58,"apiViews":190,"engagement":13,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17959163117021733","date":"2022-09-30","dateTime":"2022-09-30 00:26","year":2022,"type":"이미지","isReel":false,"category":"골프","caption":"2년동안 기획한 PLCC가 곧 나옵니당\n#하나카드 #PLCC #MOU","title":"2년동안 기획한 PLCC가 곧 나옵니당","url":"https://www.instagram.com/p/CjGHnC3PcU-/","embed":"https://www.instagram.com/p/CjGHnC3PcU-/embed/","likes":6,"comments":0,"reach":91,"apiViews":0,"engagement":7,"saves":1,"shares":0,"profileVisits":2,"follows":0,"detailStatus":"상세값 확보"},{"id":"17924417489452151","date":"2022-06-22","dateTime":"2022-06-22 08:24","year":2022,"type":"캐러셀","isReel":false,"category":"골프","caption":"BC카드 부서장 워크샵\n#한림용인cc #BC카드","title":"BC카드 부서장 워크샵","url":"https://www.instagram.com/p/CfFe2XUPJnf/","embed":"https://www.instagram.com/p/CfFe2XUPJnf/embed/","likes":7,"comments":0,"reach":115,"apiViews":0,"engagement":7,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17967371614716880","date":"2022-06-10","dateTime":"2022-06-10 17:29","year":2022,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"이디야-티몬 마케팅 MOU\n#이디야 #티몬","title":"이디야-티몬 마케팅 MOU","url":"https://www.instagram.com/p/Cenjtg3vJST/","embed":"https://www.instagram.com/p/Cenjtg3vJST/embed/","likes":7,"comments":0,"reach":89,"apiViews":0,"engagement":8,"saves":1,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17842834481794505","date":"2022-06-08","dateTime":"2022-06-08 21:57","year":2022,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"마케팅 기획 특강\n#알럽마케팅","title":"마케팅 기획 특강","url":"https://www.instagram.com/p/Cei4w0Yvpf7/","embed":"https://www.instagram.com/p/Cei4w0Yvpf7/embed/","likes":5,"comments":0,"reach":71,"apiViews":0,"engagement":5,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17984749663476737","date":"2022-06-05","dateTime":"2022-06-05 02:54","year":2022,"type":"릴스","isReel":true,"category":"골프","caption":"드라이버\n#골반아돌아라","title":"드라이버","url":"https://www.instagram.com/reel/CeZHjPVjL6f/","embed":"https://www.instagram.com/reel/CeZHjPVjL6f/embed/","likes":8,"comments":1,"reach":52,"apiViews":221,"engagement":9,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17972267218597035","date":"2022-06-05","dateTime":"2022-06-05 01:24","year":2022,"type":"캐러셀","isReel":false,"category":"골프","caption":"골프존안성W 야간라운딩\n#조던1 #스누피","title":"골프존안성W 야간라운딩","url":"https://www.instagram.com/p/CeY9Q-1Pxju/","embed":"https://www.instagram.com/p/CeY9Q-1Pxju/embed/","likes":11,"comments":0,"reach":45,"apiViews":0,"engagement":11,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17932710452236834","date":"2022-05-26","dateTime":"2022-05-26 00:47","year":2022,"type":"릴스","isReel":true,"category":"피트니스/농구","caption":"내 앞에서 안돼\n#새벽농구 \n#조던과함께라면\n#십자인대없어요","title":"내 앞에서 안돼","url":"https://www.instagram.com/reel/Cd_I_UVjfv3/","embed":"https://www.instagram.com/reel/Cd_I_UVjfv3/embed/","likes":6,"comments":1,"reach":61,"apiViews":329,"engagement":7,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18058341583312048","date":"2022-05-12","dateTime":"2022-05-12 19:26","year":2022,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"마케팅 기획 특강 TOP10 선정\n#멘토링 #강연 #마케팅","title":"마케팅 기획 특강 TOP10 선정","url":"https://www.instagram.com/p/CddGDHgvxn_/","embed":"https://www.instagram.com/p/CddGDHgvxn_/embed/","likes":5,"comments":2,"reach":58,"apiViews":0,"engagement":7,"saves":0,"shares":0,"profileVisits":2,"follows":0,"detailStatus":"상세값 확보"},{"id":"17933328479143260","date":"2022-04-30","dateTime":"2022-04-30 21:55","year":2022,"type":"캐러셀","isReel":false,"category":"골프","caption":"베뉴지cc 화창해\nWITH JORDAN\n#베뉴지 #드라이버 #골프 #조던","title":"베뉴지cc 화창해","url":"https://www.instagram.com/p/Cc-dfoEPYyV/","embed":"https://www.instagram.com/p/Cc-dfoEPYyV/embed/","likes":12,"comments":0,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17953272961745083","date":"2022-04-17","dateTime":"2022-04-17 01:45","year":2022,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"다날 MOU","title":"다날 MOU","url":"https://www.instagram.com/p/Cca0vbEP7i5/","embed":"https://www.instagram.com/p/Cca0vbEP7i5/embed/","likes":4,"comments":1,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17923869446207720","date":"2022-03-18","dateTime":"2022-03-18 01:18","year":2022,"type":"이미지","isReel":false,"category":"일상/여행/기타","caption":"상\n#상","title":"상","url":"https://www.instagram.com/p/CbNh1ixvj78/","embed":"https://www.instagram.com/p/CbNh1ixvj78/embed/","likes":4,"comments":2,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17914321826507461","date":"2022-03-06","dateTime":"2022-03-06 18:49","year":2022,"type":"릴스","isReel":true,"category":"피트니스/농구","caption":"Leg&Hip Day\n\n#십자인대없어요 #하체는반스 #반스\n#1일1운동","title":"Leg&Hip Day","url":"https://www.instagram.com/reel/CawgEEIjRsa/","embed":"https://www.instagram.com/reel/CawgEEIjRsa/embed/","likes":56,"comments":2,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"과거 상세 인사이트 미반환"},{"id":"17924355890064366","date":"2022-03-05","dateTime":"2022-03-05 20:45","year":2022,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"삼성카드 MOU\n\n#삼성카드 #내가젤어려요","title":"삼성카드 MOU","url":"https://www.instagram.com/p/CauI9apv7k1/","embed":"https://www.instagram.com/p/CauI9apv7k1/embed/","likes":3,"comments":0,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17922075398223119","date":"2022-02-28","dateTime":"2022-02-28 23:36","year":2022,"type":"이미지","isReel":false,"category":"피트니스/농구","caption":"#1일1운동 #바디프로필 #바프","title":"#1일1운동 #바디프로필 #바프","url":"https://www.instagram.com/p/Cahkj7wPFuR/","embed":"https://www.instagram.com/p/Cahkj7wPFuR/embed/","likes":18,"comments":2,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"}],"updated":"2026-09-30"};
+const SEEDED_MANUAL={"17914321826507461": 5230};
+const TODAY=new Date("2026-09-30T23:59:59+09:00");
+let currentPeriod="all", page=1;
+const PAGE_SIZE=12;
 
 const fmt=v=>v===null||v===undefined||v===""?"-":Math.round(Number(v)).toLocaleString("ko-KR");
+const avg=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:0;
 const manualKey=id=>"ymholic_manual_views_"+id;
-const manualViews=id=>{ const v=localStorage.getItem(manualKey(id)); return v!==null&&v!==""?Number(v):null; };
-const effectiveViews=x=>{ const m=manualViews(x.id); return m!==null?m:(x.apiViews??0); };
 
-function filteredRows(){
-  const y=document.getElementById("yearFilter").value;
-  const t=document.getElementById("typeFilter").value;
-  const c=document.getElementById("catFilter").value;
-  const q=document.getElementById("search").value.trim().toLowerCase();
-  return DATA.rows.filter(x=>{
-    const d=new Date(x.date+"T00:00:00+09:00");
-    if(currentPeriod!=="all"){
-      const days=Number(currentPeriod), cutoff=new Date(today.getTime()-days*86400000);
-      if(d<cutoff) return false;
-    }
-    if(y && String(x.year)!==y) return false;
-    if(t && x.type!==t) return false;
-    if(c && x.category!==c) return false;
-    if(q && !(x.caption||"").toLowerCase().includes(q)) return false;
-    return true;
-  });
+function getManual(id){
+  const saved=localStorage.getItem(manualKey(id));
+  if(saved!==null&&saved!=="") return Number(saved);
+  return Object.prototype.hasOwnProperty.call(SEEDED_MANUAL,id)?Number(SEEDED_MANUAL[id]):null;
+}
+function effectiveViews(x){const m=getManual(x.id); return m!==null?m:(x.apiViews??0)}
+function hasManual(x){return getManual(x.id)!==null}
+function detailOkay(x){return x.reach!==null&&x.apiViews!==null&&x.engagement!==null}
+
+function initOptions(){
+  const years=[...new Set(DATA.rows.map(x=>x.year))].sort((a,b)=>b-a);
+  yearFilter.innerHTML='<option value="">전체 연도</option>'+years.map(x=>`<option>${x}</option>`).join("");
+  const types=[...new Set(DATA.rows.map(x=>x.type))];
+  typeFilter.innerHTML='<option value="">전체 유형</option>'+types.map(x=>`<option>${x}</option>`).join("");
+  const cats=[...new Set(DATA.rows.map(x=>x.category))];
+  catFilter.innerHTML='<option value="">전체 주제</option>'+cats.map(x=>`<option>${x}</option>`).join("");
 }
 
-function metricCard(label,value,sub=""){return `<div class="kpi"><small>${label}</small><b>${value}</b><span>${sub}</span></div>`}
+function filtered(){
+  const y=yearFilter.value,t=typeFilter.value,c=catFilter.value,q=search.value.trim().toLowerCase();
+  let r=DATA.rows.filter(x=>{
+    if(currentPeriod!=="all"){
+      const cutoff=new Date(TODAY.getTime()-Number(currentPeriod)*86400000);
+      if(new Date(x.date+"T00:00:00+09:00")<cutoff) return false;
+    }
+    if(y&&String(x.year)!==y) return false;
+    if(t&&x.type!==t) return false;
+    if(c&&x.category!==c) return false;
+    if(q&&!(x.caption||"").toLowerCase().includes(q)) return false;
+    return true;
+  });
+  switch(sortFilter.value){
+    case "reach": r.sort((a,b)=>(b.reach??-1)-(a.reach??-1)); break;
+    case "views": r.sort((a,b)=>effectiveViews(b)-effectiveViews(a)); break;
+    case "engagement": r.sort((a,b)=>(b.engagement??-1)-(a.engagement??-1)); break;
+    default: r.sort((a,b)=>b.dateTime.localeCompare(a.dateTime));
+  }
+  return r;
+}
+
+function kpiCard(label,value,sub,icon){
+  return `<div class="kpi"><div class="kpiTop"><div class="kpiLabel">${label}</div><div class="kpiIcon">${icon}</div></div><div class="kpiValue">${value}</div><div class="kpiSub">${sub}</div></div>`;
+}
 function renderKPIs(){
-  const r=filteredRows();
-  const reach=r.filter(x=>x.reach!=null), reels=r.filter(x=>x.isReel);
-  const avgReach=reach.length?reach.reduce((s,x)=>s+x.reach,0)/reach.length:0;
-  const topReach=reach.length?[...reach].sort((a,b)=>b.reach-a.reach)[0]:null;
-  const topView=reels.length?[...reels].sort((a,b)=>effectiveViews(b)-effectiveViews(a))[0]:null;
-  const completeReels=reels.filter(x=>x.detailStatus==="상세값 확보").length;
-  document.getElementById("kpis").innerHTML=[
-    metricCard("필터 게시물",fmt(r.length),`전체 ${DATA.totalPosts}개`),
-    metricCard("릴스",fmt(reels.length),`전체 ${DATA.totalReels}개`),
-    metricCard("평균 도달",fmt(avgReach),`${reach.length}개 기준`),
-    metricCard("도달 1위",topReach?fmt(topReach.reach):"-",topReach?topReach.title:""),
-    metricCard("릴스 분석 조회 1위",topView?fmt(effectiveViews(topView)):"-",topView?topView.title:""),
-    metricCard("릴스 상세값",`${completeReels}/${reels.length||0}`,reels.length?`${reels.length-completeReels}개 미반환`:"")
+  const r=filtered(), reach=r.filter(x=>x.reach!==null), reels=r.filter(x=>x.isReel);
+  const topReach=[...reach].sort((a,b)=>b.reach-a.reach)[0];
+  const topView=[...reels].sort((a,b)=>effectiveViews(b)-effectiveViews(a))[0];
+  const complete=reels.filter(detailOkay).length;
+  kpis.innerHTML=[
+    kpiCard("게시물",fmt(r.length),`전체 ${DATA.totalPosts}개`,"▦"),
+    kpiCard("릴스",fmt(reels.length),`전체 ${DATA.totalReels}개`,"▶"),
+    kpiCard("평균 도달",fmt(avg(reach.map(x=>x.reach))),`${reach.length}개 게시물 기준`,"◎"),
+    kpiCard("도달 1위",topReach?fmt(topReach.reach):"-",topReach?topReach.title:"","↑"),
+    kpiCard("릴스 조회수 1위",topView?fmt(effectiveViews(topView)):"-",topView?topView.title:"","◉"),
+    kpiCard("인사이트 확보율",reels.length?`${complete}/${reels.length}`:"-",reels.length?`${reels.length-complete}개 상세값 미반환`:"","✓")
   ].join("");
 }
 
-function makeEmbedCard(x){
-  return `<div class="embedCard"><div class="embedWrap"><iframe loading="lazy" src="${x.embed}" allowtransparency="true"></iframe></div>
-  <div class="embedMeta"><strong>${x.title}</strong><div class="statline">
-  <div class="mini"><b>${fmt(x.reach)}</b><span>도달</span></div>
-  <div class="mini"><b>${fmt(effectiveViews(x))}</b><span>분석 조회</span></div>
-  <div class="mini"><b>${fmt(x.engagement)}</b><span>상호작용</span></div>
-  <div class="mini"><b>${fmt(x.likes)}</b><span>좋아요</span></div>
-  </div></div></div>`;
+function renderInsights(){
+  const r=filtered(), reach=r.filter(x=>x.reach!==null), reels=r.filter(x=>x.isReel);
+  const cats=[...new Set(reach.map(x=>x.category))].map(name=>{
+    const a=reach.filter(x=>x.category===name);
+    return {name,n:a.length,val:avg(a.map(x=>x.reach))};
+  }).filter(x=>x.n>0).sort((a,b)=>b.val-a.val);
+  const years=[...new Set(reach.map(x=>x.year))].map(year=>{
+    const a=reach.filter(x=>x.year===year);
+    return {year,n:a.length,val:avg(a.map(x=>x.reach))};
+  }).sort((a,b)=>b.val-a.val);
+  const bestCat=cats[0],bestYear=years[0],topReel=[...reels].sort((a,b)=>effectiveViews(b)-effectiveViews(a))[0];
+  const manualCount=reels.filter(hasManual).length;
+  insights.innerHTML=[
+    `<div class="insight"><span class="insightBadge">주제 효율</span><strong>${bestCat?bestCat.name:"-"}</strong><p>${bestCat?`평균 도달 ${fmt(bestCat.val)} · 표본 ${bestCat.n}개`:"도달 데이터 없음"}</p></div>`,
+    `<div class="insight"><span class="insightBadge">연도 추세</span><strong>${bestYear?bestYear.year+"년 평균 도달 최고":"-"}</strong><p>${bestYear?`평균 ${fmt(bestYear.val)} · 표본 ${bestYear.n}개`:"도달 데이터 없음"}</p></div>`,
+    `<div class="insight"><span class="insightBadge">릴스 히트</span><strong>${topReel?topReel.title:"-"}</strong><p>${topReel?`분석 조회 ${fmt(effectiveViews(topReel))}${hasManual(topReel)?" · 앱 실측 반영":""}`:"릴스 없음"}</p></div>`,
+    `<div class="insight"><span class="insightBadge">데이터 품질</span><strong>릴스 ${reels.filter(detailOkay).length}/${reels.length} 상세 인사이트 확보</strong><p>앱 실측값 ${manualCount}개 보정 · 미반환 항목은 별도 표시</p></div>`
+  ].join("");
 }
 
-function renderFeatured(){
-  const r=filteredRows();
-  if(!r.length){document.getElementById("featured").innerHTML="<div class='panel'>필터 결과가 없습니다.</div>";return;}
-  const reach=[...r].filter(x=>x.reach!=null).sort((a,b)=>b.reach-a.reach)[0];
-  const reel=[...r].filter(x=>x.isReel).sort((a,b)=>effectiveViews(b)-effectiveViews(a))[0];
-  const latest=[...r].sort((a,b)=>b.date.localeCompare(a.date))[0];
-  const selected=[reach,reel,latest].filter(Boolean).filter((x,i,a)=>a.findIndex(y=>y.id===x.id)===i);
-  document.getElementById("featured").innerHTML=selected.map(makeEmbedCard).join("");
+function uniqueFeatures(r){
+  const reach=[...r].filter(x=>x.reach!==null).sort((a,b)=>b.reach-a.reach)[0];
+  const view=[...r].filter(x=>x.isReel).sort((a,b)=>effectiveViews(b)-effectiveViews(a))[0];
+  const engagement=[...r].filter(x=>x.engagement!==null).sort((a,b)=>b.engagement-a.engagement)[0];
+  const latest=[...r].sort((a,b)=>b.dateTime.localeCompare(a.dateTime))[0];
+  const roles=[[reach,"도달 1위"],[view,"릴스 조회 1위"],[engagement,"상호작용 1위"],[latest,"최신 게시물"]];
+  const out=[];
+  for(const [x,role] of roles){
+    if(!x) continue;
+    const found=out.find(o=>o.item.id===x.id);
+    if(found) found.role+=" · "+role;
+    else out.push({item:x,role});
+  }
+  return out.slice(0,4);
 }
 
-function bars(el, arr, key, labelFn){
-  const max=Math.max(...arr.map(x=>Number(key(x)||0)),1);
-  document.getElementById(el).innerHTML=arr.map(x=>`<div class="barrow"><div class="barlabel">${labelFn(x)}</div><div class="track"><div class="bar" style="width:${Math.max(2,key(x)/max*100)}%"></div></div><div class="barvalue">${fmt(key(x))}</div></div>`).join("");
+function previewCard(x,role="",gallery=false){
+  const manual=hasManual(x);
+  return `<article class="contentCard" data-id="${x.id}">
+    <div class="preview">
+      <iframe loading="lazy" src="${x.embed}" tabindex="-1" aria-hidden="true"></iframe>
+      <div class="previewOverlay"></div>
+      <div class="previewTop">
+        <span class="roleTag">${role||x.category}</span>
+        <span class="typeTag">${x.type}</span>
+      </div>
+      ${x.isReel?'<div class="play">▶</div>':""}
+      <div class="previewFoot"><span>${x.date}</span><span>클릭 상세보기</span></div>
+    </div>
+    <div class="cardBody">
+      <div class="cardTitle">${escapeHtml(x.title)}</div>
+      <div class="cardMeta"><span>${x.category}</span><span>${x.type}</span></div>
+      <div class="metricRow">
+        <div class="metric"><b>${fmt(x.reach)}</b><span>도달</span></div>
+        <div class="metric"><b>${fmt(effectiveViews(x))}</b><span>${x.isReel?"조회수":"API 조회"}</span></div>
+        <div class="metric"><b>${fmt(x.engagement)}</b><span>상호작용</span></div>
+      </div>
+      <div class="cardBottom">
+        <span class="topicTag">${x.category}</span>
+        ${manual?`<span class="manualTag">앱 실측 ${fmt(getManual(x.id))}</span>`:`<span class="muted">${fmt(x.likes)} 좋아요</span>`}
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderFeatures(){
+  const r=filtered();
+  featureGrid.innerHTML=uniqueFeatures(r).map(o=>previewCard(o.item,o.role)).join("") || '<div class="empty">표시할 콘텐츠가 없습니다.</div>';
+  bindCards(featureGrid);
+}
+
+function bars(el,arr,get,label,alt=false){
+  const max=Math.max(...arr.map(x=>Number(get(x)||0)),1);
+  document.getElementById(el).innerHTML=arr.map(x=>
+    `<div class="barrow"><div class="barlabel" title="${escapeAttr(label(x))}">${escapeHtml(label(x))}</div>
+    <div class="track"><div class="bar ${alt?"alt":""}" style="width:${Math.max(2,Number(get(x)||0)/max*100).toFixed(1)}%"></div></div>
+    <div class="barvalue">${fmt(get(x))}</div></div>`
+  ).join("");
 }
 
 function renderCharts(){
-  const r=filteredRows();
-  const reach=[...r].filter(x=>x.reach!=null).sort((a,b)=>b.reach-a.reach).slice(0,10);
+  const r=filtered();
+  const reach=[...r].filter(x=>x.reach!==null).sort((a,b)=>b.reach-a.reach).slice(0,10);
   const reels=[...r].filter(x=>x.isReel).sort((a,b)=>effectiveViews(b)-effectiveViews(a)).slice(0,10);
   bars("reachBars",reach,x=>x.reach,x=>x.title);
-  bars("viewBars",reels,x=>effectiveViews(x),x=>x.title);
+  bars("viewBars",reels,x=>effectiveViews(x),x=>x.title,true);
 
   const cats=[...new Set(r.map(x=>x.category))].map(name=>{
-    const a=r.filter(x=>x.category===name&&x.reach!=null);
-    return {name,avg:a.length?a.reduce((s,x)=>s+x.reach,0)/a.length:0,n:a.length};
-  }).sort((a,b)=>b.avg-a.avg);
-  bars("themeBars",cats,x=>x.avg,x=>`${x.name} (n=${x.n})`);
+    const a=r.filter(x=>x.category===name&&x.reach!==null);
+    return {name,n:a.length,val:avg(a.map(x=>x.reach))};
+  }).filter(x=>x.n).sort((a,b)=>b.val-a.val);
+  bars("themeBars",cats,x=>x.val,x=>`${x.name} (n=${x.n})`);
 
-  const ys=[...new Set(r.map(x=>x.year))].sort();
-  const yd=ys.map(year=>{const a=r.filter(x=>x.year===year&&x.reach!=null);return {year,avg:a.length?a.reduce((s,x)=>s+x.reach,0)/a.length:0,n:a.length}});
-  bars("yearBars",yd,x=>x.avg,x=>`${x.year} (n=${x.n})`);
+  const yrs=[...new Set(r.map(x=>x.year))].sort();
+  const yd=yrs.map(year=>{
+    const a=r.filter(x=>x.year===year&&x.reach!==null);
+    return {year,n:a.length,val:avg(a.map(x=>x.reach))};
+  }).filter(x=>x.n);
+  bars("yearBars",yd,x=>x.val,x=>`${x.year} (n=${x.n})`,true);
+
+  reachNote.textContent=reach[0]?`도달 1위는 ${reach[0].title} · ${fmt(reach[0].reach)}입니다.`:"도달 데이터가 없습니다.";
+  viewNote.textContent=reels[0]?`${reels[0].title}가 분석 조회 ${fmt(effectiveViews(reels[0]))}로 1위입니다.${hasManual(reels[0])?" 앱 실측값을 반영했습니다.":""}`:"릴스가 없습니다.";
+  themeNote.textContent=cats[0]?`${cats[0].name}의 평균 도달이 ${fmt(cats[0].val)}로 가장 높습니다. 표본 ${cats[0].n}개 기준입니다.`:"주제 데이터가 없습니다.";
+  const bestYear=[...yd].sort((a,b)=>b.val-a.val)[0];
+  yearNote.textContent=bestYear?`${bestYear.year}년 평균 도달 ${fmt(bestYear.val)} · 표본 ${bestYear.n}개로 필터 구간 내 최고입니다.`:"연도 데이터가 없습니다.";
 }
 
 function renderGallery(){
-  const r=filteredRows();
-  const pages=Math.max(1,Math.ceil(r.length/pageSize)); if(page>pages) page=pages;
-  const start=(page-1)*pageSize, pageRows=r.slice(start,start+pageSize);
-  document.getElementById("resultCount").textContent=`${r.length}개`;
-  document.getElementById("pageLabel").textContent=`${page} / ${pages}`;
-  document.getElementById("prevBtn").disabled=page<=1; document.getElementById("nextBtn").disabled=page>=pages;
-  document.getElementById("contentGrid").innerHTML=pageRows.map(x=>`
-    <div class="contentCard">
-      <div class="contentFrame"><iframe loading="lazy" src="${x.embed}" allowtransparency="true"></iframe></div>
-      <div class="contentBody">
-        <div class="row"><span class="pill ${x.isReel?"reel":""}">${x.type}</span><span class="muted">${x.date}</span></div>
-        <div class="title">${x.title}</div>
-        <div class="metrics">
-          <div class="metric"><b>${fmt(x.reach)}</b><span>도달</span></div>
-          <div class="metric"><b>${fmt(effectiveViews(x))}</b><span>분석 조회</span></div>
-          <div class="metric"><b>${fmt(x.engagement)}</b><span>반응</span></div>
-        </div>
-        <div class="row"><span class="muted">${x.category}</span><a href="${x.url}" target="_blank">Instagram ↗</a></div>
-      </div>
-    </div>`).join("");
+  const r=filtered();
+  const pages=Math.max(1,Math.ceil(r.length/PAGE_SIZE));
+  if(page>pages) page=pages;
+  const chunk=r.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+  galleryGrid.innerHTML=chunk.length?chunk.map(x=>previewCard(x,"",true)).join(""):'<div class="empty">필터 조건에 맞는 게시물이 없습니다.</div>';
+  pageLabel.textContent=`${page} / ${pages} · ${r.length}개`;
+  prevBtn.disabled=page<=1; nextBtn.disabled=page>=pages;
+  bindCards(galleryGrid);
 }
 
 function renderAudit(){
-  const reels=DATA.rows.filter(x=>x.isReel).sort((a,b)=>b.date.localeCompare(a.date));
-  document.getElementById("auditBody").innerHTML=reels.map(x=>{
-    const m=manualViews(x.id);
+  const reels=DATA.rows.filter(x=>x.isReel).sort((a,b)=>b.dateTime.localeCompare(a.dateTime));
+  const complete=reels.filter(detailOkay).length;
+  const manualCount=reels.filter(hasManual).length;
+  const missing=reels.length-complete;
+  auditSummary.innerHTML=[
+    `<div class="auditSum"><small>릴스 전체</small><b>${reels.length}개</b></div>`,
+    `<div class="auditSum"><small>상세 인사이트 확보</small><b>${complete}/${reels.length}</b></div>`,
+    `<div class="auditSum"><small>앱 실측 보정</small><b>${manualCount}개 · 미반환 ${missing}개</b></div>`
+  ].join("");
+  auditBody.innerHTML=reels.map(x=>{
+    const m=getManual(x.id), ok=detailOkay(x);
+    const status=m!==null?"앱 실측 보정":ok?"인사이트 확보":"상세값 미반환";
+    const cls=m!==null?"warn":ok?"good":"bad";
     return `<tr>
-      <td>${x.date}</td><td>${x.title}</td><td>${fmt(x.reach)}</td><td>${fmt(x.apiViews)}</td>
-      <td><input class="manual" type="number" min="0" placeholder="직접 입력" value="${m??""}" data-id="${x.id}"/></td>
-      <td><b>${fmt(effectiveViews(x))}</b></td><td>${fmt(x.engagement)}</td>
-      <td class="${x.detailStatus==="상세값 확보"?"statusGood":"statusBad"}">${x.detailStatus}</td>
-      <td><a target="_blank" href="${x.url}">열기 ↗</a></td>
+      <td>${x.date}</td>
+      <td title="${escapeAttr(x.title)}">${escapeHtml(x.title)}</td>
+      <td class="num">${fmt(x.reach)}</td>
+      <td class="num">${fmt(x.apiViews)}</td>
+      <td><input class="manualInput" data-id="${x.id}" type="number" min="0" value="${m??""}" placeholder="직접 입력"></td>
+      <td class="num"><b>${fmt(effectiveViews(x))}</b></td>
+      <td class="num">${fmt(x.engagement)}</td>
+      <td><span class="status ${cls}">${status}</span></td>
+      <td><a class="auditLink" target="_blank" href="${x.url}">열기 ↗</a></td>
     </tr>`;
   }).join("");
-  document.querySelectorAll(".manual").forEach(inp=>inp.addEventListener("change",e=>{
-    const id=e.target.dataset.id, v=e.target.value.trim();
-    if(v==="") localStorage.removeItem(manualKey(id)); else localStorage.setItem(manualKey(id),String(Number(v)));
+  document.querySelectorAll(".manualInput").forEach(inp=>inp.addEventListener("change",e=>{
+    const id=e.target.dataset.id,v=e.target.value.trim();
+    if(v===""){
+      localStorage.removeItem(manualKey(id));
+    }else{
+      localStorage.setItem(manualKey(id),String(Number(v)));
+    }
     page=1; renderAll();
   }));
 }
 
-function renderAll(){renderKPIs();renderFeatured();renderCharts();renderGallery();renderAudit();}
-document.querySelectorAll("[data-period]").forEach(btn=>btn.addEventListener("click",()=>{
-  document.querySelectorAll("[data-period]").forEach(b=>b.classList.remove("active")); btn.classList.add("active");
-  currentPeriod=btn.dataset.period; page=1; renderAll();
+function bindCards(root){
+  root.querySelectorAll(".contentCard").forEach(card=>card.addEventListener("click",()=>{
+    const x=DATA.rows.find(r=>r.id===card.dataset.id); if(x) openModal(x);
+  }));
+}
+function openModal(x){
+  modalIframe.src=x.embed;
+  modalRole.textContent=`${x.type} · ${x.category}${hasManual(x)?" · 앱 실측 조회수 반영":""}`;
+  modalTitle.textContent=x.title;
+  modalMeta.textContent=`${x.date} · ${detailOkay(x)?"상세 인사이트 확보":"일부 상세값 미반환"}`;
+  modalMetrics.innerHTML=[
+    ["도달",fmt(x.reach)],["분석 조회수",fmt(effectiveViews(x))],
+    ["상호작용",fmt(x.engagement)],["좋아요",fmt(x.likes)],
+    ["댓글",fmt(x.comments)],["저장",fmt(x.saves)]
+  ].map(([l,v])=>`<div class="modalMetric"><small>${l}</small><b>${v}</b></div>`).join("");
+  modalCaption.textContent=x.caption||"";
+  modalLink.href=x.url;
+  detailModal.classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function closeModalFn(){
+  detailModal.classList.remove("open");
+  modalIframe.src="about:blank";
+  document.body.style.overflow="";
+}
+
+function exportCSV(){
+  const rows=filtered();
+  const headers=["date","type","category","title","reach","analysis_views","api_views","engagement","likes","comments","saves","shares","instagram_url"];
+  const q=v=>`"${String(v??"").replaceAll('"','""')}"`;
+  const csv=[headers.join(","),...rows.map(x=>[
+    x.date,x.type,x.category,x.title,x.reach,effectiveViews(x),x.apiViews,x.engagement,x.likes,x.comments,x.saves,x.shares,x.url
+  ].map(q).join(","))].join("\n");
+  const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ymholic_instagram_filtered.csv";a.click();URL.revokeObjectURL(a.href);
+}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function escapeAttr(s){return escapeHtml(s)}
+
+function renderAll(){renderKPIs();renderInsights();renderFeatures();renderCharts();renderGallery();renderAudit()}
+
+document.querySelectorAll("[data-period]").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("[data-period]").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");currentPeriod=b.dataset.period;page=1;renderAll();
 }));
-["yearFilter","typeFilter","catFilter","search"].forEach(id=>document.getElementById(id).addEventListener("input",()=>{page=1;renderAll();}));
-document.getElementById("prevBtn").addEventListener("click",()=>{if(page>1){page--;renderGallery();}});
-document.getElementById("nextBtn").addEventListener("click",()=>{page++;renderGallery();});
-renderAll();
+[yearFilter,typeFilter,catFilter,search,sortFilter].forEach(x=>x.addEventListener("input",()=>{page=1;renderAll()}));
+prevBtn.addEventListener("click",()=>{if(page>1){page--;renderGallery()}});
+nextBtn.addEventListener("click",()=>{page++;renderGallery()});
+csvBtn.addEventListener("click",exportCSV);
+closeModal.addEventListener("click",closeModalFn);
+modalClose2.addEventListener("click",closeModalFn);
+detailModal.addEventListener("click",e=>{if(e.target===detailModal)closeModalFn()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModalFn()});
+
+initOptions();renderAll();
 </script>
 </body>
 </html>
