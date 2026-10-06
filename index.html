@@ -7,7 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
-<title>@ymholic Performance Studio v5</title>
+<title>@ymholic Performance Studio v6</title>
 <style>
 :root{
   --bg:#f3f6fa; --card:#fff; --ink:#122033; --muted:#6e7d91; --line:#dde5ef;
@@ -231,6 +231,23 @@ details.auditDetails>summary::-webkit-details-marker{display:none}
 @media(max-width:1100px){.monitorCard{grid-template-columns:150px 1fr}.execGrid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.monitorGrid{grid-template-columns:1fr}.monitorCard{grid-template-columns:120px 1fr}.monitorMedia{min-height:220px}.metricStrip{grid-template-columns:repeat(2,1fr)}.execGrid{grid-template-columns:1fr}.scoreRow{grid-template-columns:22px minmax(120px,1fr) 62px 62px}.scoreRow>*:nth-child(5),.scoreRow>*:nth-child(6){display:none}}
 
+
+/* v6 explanation layer */
+.explain{margin-top:9px;padding:9px 10px;border:1px solid #e5ebf2;background:#f8fafc;border-radius:10px}
+.explain strong{display:block;font-size:9.5px;color:#26384d;margin-bottom:4px}
+.explain p{margin:2px 0;font-size:8.8px;line-height:1.5;color:#65758a}
+.explain b{color:#33475e}
+.helpTag{display:inline-flex;align-items:center;gap:4px;border:1px solid #dce5ef;background:#fff;color:#5b6b80;border-radius:999px;padding:3px 6px;font-size:8px;font-weight:800;margin-left:6px}
+.glossaryGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.glossaryCard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+.glossaryCard strong{display:block;font-size:10.5px}
+.glossaryCard span{display:block;font-size:8.8px;color:var(--muted);margin-top:3px}
+.glossaryCard p{font-size:9px;line-height:1.48;color:#536477;margin:7px 0 0}
+.usageBox{margin-top:10px;padding:10px 12px;border-radius:11px;background:#eef6ff;border:1px solid #d7e8fb}
+.usageBox strong{font-size:9.5px}.usageBox p{margin:4px 0 0;font-size:9px;line-height:1.5;color:#526579}
+@media(max-width:900px){.glossaryGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.glossaryGrid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -239,10 +256,10 @@ details.auditDetails>summary::-webkit-details-marker{display:none}
     <div class="heroRow">
       <div>
         <div class="eyebrow">Personal Content BI</div>
-        <h1>@ymholic Performance Studio v5</h1>
+        <h1>@ymholic Performance Studio v6</h1>
         <p>콘텐츠 성과 · 릴스 조회수 보정 · 주제별 인사이트 · 게시물 상세 분석</p>
       </div>
-      <div class="heroMeta"><span class="versionFlag">v5 LIVE</span>
+      <div class="heroMeta"><span class="versionFlag">v6 GUIDE</span>
         <span class="metaChip">Instagram Insights API</span>
         <span class="metaChip">KST 기준</span>
         <span class="metaChip">업데이트 2026-10-06</span>
@@ -292,25 +309,32 @@ details.auditDetails>summary::-webkit-details-marker{display:none}
       <div><h2>성과 분포</h2><p>절대 성과와 콘텐츠 구조를 함께 비교합니다.</p></div>
     </div>
     <div class="charts">
-      <div class="chartCard"><div class="chartHead"><strong>도달 Top 10</strong><span>Reach</span></div><div id="reachBars"></div><div class="chartNote" id="reachNote"></div></div>
-      <div class="chartCard"><div class="chartHead"><strong>릴스 조회수 Top 10</strong><span>앱 실측 우선 · API 보조</span></div><div id="viewBars"></div><div class="chartNote" id="viewNote"></div></div>
-      <div class="chartCard"><div class="chartHead"><strong>주제별 평균 도달</strong><span>Average Reach</span></div><div id="themeBars"></div><div class="chartNote" id="themeNote"></div></div>
-      <div class="chartCard"><div class="chartHead"><strong>연도별 평균 도달</strong><span>Average Reach</span></div><div id="yearBars"></div><div class="chartNote" id="yearNote"></div></div>
+      <div class="chartCard"><div class="chartHead"><strong>도달 Top 10 <span class="helpTag">규모</span></strong><span>Reach</span></div><div id="reachBars"></div><div class="chartNote" id="reachNote"></div><div class="explain"><p><b>도달(Reach)</b>은 해당 콘텐츠를 본 고유 계정 수입니다. “얼마나 넓게 퍼졌는가”를 보는 지표이며, 팔로워 밖으로 확장되는 콘텐츠를 찾는 데 유용합니다.</p></div></div>
+      <div class="chartCard"><div class="chartHead"><strong>릴스 조회수 Top 10 <span class="helpTag">소비량</span></strong><span>앱 실측 우선 · API 보조</span></div><div id="viewBars"></div><div class="chartNote" id="viewNote"></div><div class="explain"><p><b>조회수(Views)</b>는 재생·노출된 횟수입니다. 도달보다 조회가 훨씬 높으면 같은 사람이 반복해서 보거나 재생이 많이 발생한 콘텐츠일 가능성이 있습니다.</p></div></div>
+      <div class="chartCard"><div class="chartHead"><strong>주제별 평균 도달 <span class="helpTag">주제 선택</span></strong><span>Average Reach</span></div><div id="themeBars"></div><div class="chartNote" id="themeNote"></div><div class="explain"><p>골프·피트니스·스포츠마케팅 등 <b>어떤 주제가 평균적으로 더 넓게 퍼지는지</b> 비교합니다. 단, 표본 수(n)가 적은 주제는 과대평가될 수 있어 함께 봐야 합니다.</p></div></div>
+      <div class="chartCard"><div class="chartHead"><strong>연도별 평균 도달 <span class="helpTag">계정 추세</span></strong><span>Average Reach</span></div><div id="yearBars"></div><div class="chartNote" id="yearNote"></div><div class="explain"><p>연도별 콘텐츠 성과의 기본 체력이 어떻게 변했는지 봅니다. 콘텐츠 주제 변화나 업로드 빈도 차이의 영향을 받으므로 절대적인 성장률로만 해석하지 않습니다.</p></div></div>
     </div>
   </section>
 
   <section class="section">
     <div class="sectionHead">
-      <div><h2>심층 분석</h2><p>최근 흐름 · 확산 구조 · 반응 효율 · 릴스 시청 품질을 함께 봅니다.</p></div>
+      <div><h2>심층 분석</h2><p>각 차트 아래의 설명을 통해 “무엇을 보는지 · 어떻게 해석하는지 · 어디에 쓰는지”까지 확인할 수 있습니다.</p></div>
     </div>
     <div class="deepGrid">
-      <div class="deepCard"><div class="deepHead"><strong>최근 게시물 성과 추이</strong><span>최근 12개 · 도달 vs 분석 조회</span></div><div id="recentTrend"></div></div>
-      <div class="deepCard"><div class="deepHead"><strong>도달 × 상호작용률 매트릭스</strong><span>게시물 포지셔닝</span></div><div id="performanceMatrix"></div></div>
-      <div class="deepCard"><div class="deepHead"><strong>상호작용 구성</strong><span>상위 8개 · 좋아요/댓글/저장/공유</span></div><div id="interactionMix"></div></div>
-      <div class="deepCard"><div class="deepHead"><strong>콘텐츠 유형별 효율</strong><span>평균·중앙값 비교</span></div><div id="typeEfficiency"></div></div>
-      <div class="deepCard wide"><div class="deepHead"><strong>최신 릴스 품질 벤치마크</strong><span>시청시간 · 3초 이탈 · 공유 · 도달</span></div><div id="reelBenchmark"></div></div>
-      <div class="deepCard"><div class="deepHead"><strong>주제 × 연도 히트맵</strong><span>평균 도달</span></div><div id="themeYearHeatmap"></div></div>
-      <div class="deepCard"><div class="deepHead"><strong>콘텐츠 효율 리더보드</strong><span>도달 · 조회 · 상호작용률</span></div><div id="efficiencyBoard"></div></div>
+      <div class="deepCard"><div class="deepHead"><strong>최근 게시물 성과 추이 <span class="helpTag">왜 보나?</span></strong><span>최근 12개 · 도달 vs 분석 조회</span></div><div id="recentTrend"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p><b>도달</b>은 몇 명에게 닿았는지, <b>조회수</b>는 몇 번 소비됐는지를 시간 순서로 비교합니다.</p><p><b>효용:</b> 최근 콘텐츠 성과가 올라가는지 내려가는지, 조회는 늘지만 신규 도달은 정체되는지 같은 흐름을 파악할 수 있습니다.</p><p><b>활용:</b> 다음 게시물의 포맷·주제·업로드 시점을 결정할 때 최근 3~5개 흐름을 기준으로 판단합니다.</p></div></div>
+      <div class="deepCard"><div class="deepHead"><strong>도달 × 상호작용률 매트릭스 <span class="helpTag">핵심</span></strong><span>게시물 포지셔닝</span></div><div id="performanceMatrix"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p><b>가로축=도달</b>, <b>세로축=상호작용률</b>입니다. 각 점은 게시물 하나를 뜻합니다.</p><p><b>효용:</b> 단순히 많이 본 게시물과, 적게 봤어도 강하게 반응한 게시물을 구분할 수 있습니다.</p><p><b>활용:</b> 오른쪽 위 콘텐츠는 <b>확장할 핵심 포맷</b>, 왼쪽 위는 <b>도달만 키우면 잠재력이 큰 콘텐츠</b>, 오른쪽 아래는 <b>노출은 강하지만 내용 반응 개선이 필요한 콘텐츠</b>로 봅니다.</p></div></div>
+      <div class="deepCard"><div class="deepHead"><strong>상호작용 구성 <span class="helpTag">반응의 질</span></strong><span>상위 8개 · 좋아요/댓글/저장/공유</span></div><div id="interactionMix"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p>총 반응을 <b>좋아요·댓글·저장·공유</b>로 나눠 어떤 행동이 성과를 만들었는지 봅니다.</p><p><b>효용:</b> 좋아요 중심 콘텐츠인지, 저장 가치가 높은 정보형인지, 공유가 강한 확산형인지 구분할 수 있습니다.</p><p><b>활용:</b> 공유가 강하면 확산형 후킹을, 저장이 강하면 정보·체크리스트형 콘텐츠를 확대하는 식으로 다음 기획에 반영합니다.</p></div></div>
+      <div class="deepCard"><div class="deepHead"><strong>콘텐츠 유형별 효율 <span class="helpTag">포맷 선택</span></strong><span>평균·중앙값 비교</span></div><div id="typeEfficiency"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p>릴스·캐러셀·이미지 같은 <b>포맷별 평균 도달, 중앙값, 평균 반응, 평균 조회</b>를 비교합니다.</p><p><b>효용:</b> 어떤 포맷이 계정에서 실제로 효율적인지 판단할 수 있습니다.</p><p><b>활용:</b> 평균만 높고 중앙값이 낮으면 일부 대박 콘텐츠에 의존한 것이므로, <b>중앙값이 높은 포맷을 기본 포맷</b>으로 보는 것이 안전합니다.</p></div></div>
+      <div class="deepCard wide"><div class="deepHead"><strong>최신 릴스 품질 벤치마크 <span class="helpTag">릴스 품질</span></strong><span>시청시간 · 3초 이탈 · 공유 · 도달</span></div><div id="reelBenchmark"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p><b>평균 시청시간</b>은 얼마나 오래 봤는지, <b>3초 이탈률</b>은 초반에 얼마나 많이 떠났는지, <b>공유</b>는 확산 의도를 보여줍니다.</p><p><b>효용:</b> 조회수만으로는 알 수 없는 “영상 자체의 품질”을 비교할 수 있습니다.</p><p><b>활용:</b> 초반 이탈이 높으면 첫 1~3초 후킹을 개선하고, 시청시간은 긴데 도달이 약하면 썸네일·첫 장면·캡션을 개선합니다.</p></div></div>
+      <div class="deepCard"><div class="deepHead"><strong>주제 × 연도 히트맵 <span class="helpTag">장기 패턴</span></strong><span>평균 도달</span></div><div id="themeYearHeatmap"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p>가로는 <b>연도</b>, 세로는 <b>콘텐츠 주제</b>이고, 색이 진할수록 해당 조합의 평균 도달이 높습니다.</p><p><b>효용:</b> “어떤 주제가 언제 강했는지”를 장기적으로 볼 수 있어 일시적인 히트와 지속 가능한 주제를 구분할 수 있습니다.</p><p><b>활용:</b> 여러 해 반복해서 강한 주제는 핵심 축으로, 특정 해만 강한 주제는 시즌성·이슈성 콘텐츠로 관리합니다.</p></div></div>
+      <div class="deepCard"><div class="deepHead"><strong>콘텐츠 효율 리더보드 <span class="helpTag">종합 성과</span></strong><span>도달 · 조회 · 상호작용률</span></div><div id="efficiencyBoard"></div>
+<div class="explain"><strong>무엇을 보는 표인가</strong><p>도달, 조회/도달 비율, 상호작용률을 함께 고려해 <b>종합적으로 효율이 좋은 콘텐츠</b>를 위에 배치합니다.</p><p><b>효용:</b> 조회수 하나만으로 순위를 정했을 때 놓치는 “작지만 강한 콘텐츠”를 찾을 수 있습니다.</p><p><b>활용:</b> 상위 콘텐츠의 주제·길이·첫 장면·캡션 구조를 다음 콘텐츠 제작의 레퍼런스로 사용합니다.</p></div></div>
     </div>
   </section>
 
@@ -331,6 +355,27 @@ details.auditDetails>summary::-webkit-details-marker{display:none}
     <div class="pager">
       <button id="prevBtn">이전</button><span id="pageLabel"></span><button id="nextBtn">다음</button>
     </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead">
+      <div><h2>지표·용어 사전</h2><p>대시보드에서 자주 쓰는 용어를 한 번에 확인할 수 있습니다.</p></div>
+    </div>
+    <div class="glossaryGrid">
+      <div class="glossaryCard"><strong>도달 Reach</strong><span>고유 계정 수</span><p>콘텐츠를 본 서로 다른 계정 수입니다. <b>확산 범위</b>를 보는 가장 기본적인 지표입니다.</p></div>
+      <div class="glossaryCard"><strong>조회수 Views</strong><span>총 노출·재생 횟수</span><p>한 사람이 여러 번 보면 여러 번 집계될 수 있습니다. <b>콘텐츠 소비량</b>을 봅니다.</p></div>
+      <div class="glossaryCard"><strong>상호작용 Engagement</strong><span>좋아요+댓글+저장+공유</span><p>단순히 본 것에서 끝나지 않고 실제 행동으로 이어진 정도입니다.</p></div>
+      <div class="glossaryCard"><strong>상호작용률</strong><span>상호작용 ÷ 도달</span><p>본 사람 중 몇 %가 반응했는지 보여줍니다. <b>콘텐츠 매력도</b>를 보는 데 유용합니다.</p></div>
+      <div class="glossaryCard"><strong>조회/도달 비율</strong><span>Views ÷ Reach</span><p>한 도달 계정당 평균 몇 번 소비됐는지 보는 값입니다. 1보다 높을수록 반복 소비 가능성이 큽니다.</p></div>
+      <div class="glossaryCard"><strong>공유율</strong><span>공유 ÷ 도달</span><p>본 사람이 다른 사람에게 전달한 비율입니다. <b>확산성·추천성</b>을 보는 중요한 지표입니다.</p></div>
+      <div class="glossaryCard"><strong>평균 시청시간</strong><span>Avg watch time</span><p>릴스를 평균 몇 초 봤는지입니다. 길이 대비 시청시간이 높을수록 내용 유지력이 좋습니다.</p></div>
+      <div class="glossaryCard"><strong>3초 이탈률</strong><span>Skip rate</span><p>재생 초반 3초 안에 이탈한 비율입니다. 높으면 첫 장면·후킹을 개선할 필요가 있습니다.</p></div>
+      <div class="glossaryCard"><strong>중앙값 Median</strong><span>가운데 값</span><p>일부 대박 게시물의 영향을 덜 받기 때문에 <b>평소 성과 수준</b>을 판단할 때 평균보다 유용할 수 있습니다.</p></div>
+      <div class="glossaryCard"><strong>히트맵 Heatmap</strong><span>색의 진하기로 비교</span><p>여러 조건의 성과를 한 화면에서 비교할 때 씁니다. 진한 칸일수록 값이 큽니다.</p></div>
+      <div class="glossaryCard"><strong>매트릭스 Matrix</strong><span>두 지표를 동시에 비교</span><p>도달과 상호작용률처럼 서로 다른 두 기준으로 콘텐츠를 구분해 <b>강점과 개선점</b>을 찾습니다.</p></div>
+      <div class="glossaryCard"><strong>API 조회수</strong><span>자동 수집값</span><p>Meta/Windsor를 통해 가져오는 값입니다. 앱 표시 숫자보다 늦게 갱신될 수 있어, 현재 대시보드는 <b>앱 직접 확인값을 우선</b>합니다.</p></div>
+    </div>
+    <div class="usageBox"><strong>이 대시보드를 보는 가장 쉬운 순서</strong><p>① 최근 콘텐츠 모니터에서 최신 게시물 상태 확인 → ② 도달×상호작용률 매트릭스로 성과 위치 확인 → ③ 상호작용 구성으로 반응의 질 확인 → ④ 주제×연도 히트맵과 유형별 효율로 다음 콘텐츠 방향 결정.</p></div>
   </section>
 
   <section class="section">
@@ -356,7 +401,7 @@ details.auditDetails>summary::-webkit-details-marker{display:none}
       <b>분석용 조회수는 앱 실측값을 우선</b>하고 값이 없을 때 API 조회수를 사용합니다. 2022-03-06 <b>Leg&Hip Day</b>는 앱 실측 5,230회를 반영했습니다.
     </div>
   </section>
-  <div class="footer">v5 · @ymholic Performance Studio</div>
+  <div class="footer">v6 · @ymholic Performance Studio</div>
 </div>
 
 <div class="modal" id="detailModal">
