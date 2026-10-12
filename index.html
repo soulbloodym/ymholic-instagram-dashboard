@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="color-scheme" content="light"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<title>@ymholic Performance Studio v6</title>
+<style>
+:root{
+  --bg:#f3f6fa; --card:#fff; --ink:#122033; --muted:#6e7d91; --line:#dde5ef;
+  --navy:#0a1d31; --navy2:#153d61; --blue:#2563eb; --cyan:#0891b2;
+  --green:#16803d; --amber:#b26a00; --red:#b42318; --purple:#6d3df0;
+  --shadow:0 8px 26px rgba(15,31,52,.07);
+  --shadow2:0 16px 44px rgba(15,31,52,.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:var(--blue);text-decoration:none}
+.shell{width:min(1640px,calc(100% - 34px));margin:0 auto;padding:18px 0 44px}
+
+/* top */
+.hero{
+  position:relative;overflow:hidden;color:#fff;border-radius:22px;
+  background:linear-gradient(125deg,#081a2d 0%,#12385c 56%,#0a7185 100%);
+  padding:24px 26px 20px;box-shadow:var(--shadow2)
+}
+.hero:after{content:"";position:absolute;width:360px;height:360px;border-radius:50%;right:-110px;top:-180px;background:rgba(255,255,255,.07)}
+.heroRow{position:relative;z-index:2;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.eyebrow{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:#a9d8e4;font-weight:800}
+.hero h1{margin:5px 0 4px;font-size:29px;letter-spacing:-.5px}
+.hero p{margin:0;color:#ccdae8;font-size:12px}
+.heroMeta{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.metaChip{font-size:10px;font-weight:700;background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.16);padding:7px 9px;border-radius:999px}
+.toolbar{position:relative;z-index:2;display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:17px}
+.period{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;border-radius:9px;padding:8px 10px;font-size:11px}
+.period.active{background:#fff;color:var(--navy);font-weight:800}
+.toolbar select,.toolbar input{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.09);color:white;border-radius:9px;padding:8px 10px;font-size:11px;outline:none}
+.toolbar select option{background:#fff;color:#111}
+.toolbar input{min-width:210px}
+.toolbar input::placeholder{color:#bed0dd}
+
+/* kpi */
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px 15px;box-shadow:0 3px 13px rgba(15,31,52,.04);min-height:92px}
+.kpiTop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.kpiLabel{font-size:10px;color:var(--muted);font-weight:800}
+.kpiIcon{width:25px;height:25px;border-radius:8px;background:#eef4ff;color:#315bbb;display:grid;place-items:center;font-size:12px}
+.kpiValue{font-size:25px;font-weight:850;letter-spacing:-.5px;margin-top:7px;line-height:1}
+.kpiSub{font-size:9.5px;color:var(--muted);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* section */
+.section{margin-top:18px}
+.sectionHead{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:9px}
+.sectionHead h2{margin:0;font-size:17px;letter-spacing:-.2px}
+.sectionHead p{margin:3px 0 0;color:var(--muted);font-size:10.5px}
+.sectionActions{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.lightBtn,.sectionActions select{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;padding:7px 9px;font-size:10.5px}
+.lightBtn:hover{border-color:#b7c5d8;background:#f9fbfd}
+
+/* insights */
+.insights{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.insight{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 14px;box-shadow:0 3px 13px rgba(15,31,52,.035)}
+.insightBadge{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:850;padding:4px 7px;border-radius:999px;background:#edf4ff;color:#315bbb}
+.insight strong{display:block;font-size:13px;line-height:1.4;margin-top:8px}
+.insight p{font-size:10px;line-height:1.5;color:var(--muted);margin:5px 0 0}
+
+/* feature cards */
+.featureGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.contentCard{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:.18s ease;cursor:pointer;min-width:0}
+.contentCard:hover{transform:translateY(-2px);box-shadow:var(--shadow2);border-color:#cbd7e6}
+.preview{position:relative;aspect-ratio:16/10;background:#dfe7ef;overflow:hidden}
+.preview iframe{position:absolute;top:-53px;left:0;width:calc(100% + 22px);height:660px;border:0;pointer-events:none;background:#eef2f6}
+.previewOverlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(4,17,31,.56));pointer-events:none}
+.previewTop{position:absolute;left:9px;right:9px;top:9px;display:flex;justify-content:space-between;gap:7px;pointer-events:none}
+.roleTag,.typeTag,.topicTag,.manualTag{display:inline-flex;align-items:center;font-size:9px;font-weight:850;border-radius:999px;padding:5px 7px;backdrop-filter:blur(8px)}
+.roleTag{background:rgba(10,29,49,.86);color:white}
+.typeTag{background:rgba(255,255,255,.92);color:#25405f}
+.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:43px;height:43px;border-radius:50%;background:rgba(255,255,255,.93);display:grid;place-items:center;color:#172a42;font-size:17px;box-shadow:0 5px 18px rgba(0,0,0,.18);pointer-events:none}
+.previewFoot{position:absolute;left:10px;right:10px;bottom:8px;color:#fff;font-size:9px;font-weight:750;display:flex;justify-content:space-between;gap:7px;pointer-events:none}
+.cardBody{padding:11px 12px 12px}
+.cardTitle{font-size:12.5px;font-weight:850;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cardMeta{display:flex;justify-content:space-between;gap:7px;margin-top:5px;color:var(--muted);font-size:9px}
+.metricRow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.metric{border:1px solid #edf1f6;background:#fafbfd;border-radius:9px;padding:7px 5px;text-align:center;min-width:0}
+.metric b{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.metric span{display:block;color:var(--muted);font-size:8.5px;margin-top:2px}
+.cardBottom{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-top:9px}
+.topicTag{background:#eef2ff;color:#5360a9;padding:4px 6px}
+.manualTag{background:#fff5dc;color:#956000;padding:4px 6px}
+
+/* charts */
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.chartCard{background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px 14px;box-shadow:0 3px 13px rgba(15,31,52,.035)}
+.chartHead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:9px}
+.chartHead strong{font-size:12.5px}.chartHead span{font-size:9px;color:var(--muted)}
+.barrow{display:grid;grid-template-columns:minmax(90px,170px) minmax(80px,1fr) 48px;align-items:center;gap:8px;margin:7px 0}
+.barlabel{font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track{height:8px;background:#edf2f6;border-radius:999px;overflow:hidden}
+.bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#2b62e8,#0995ab)}
+.bar.alt{background:linear-gradient(90deg,#6f4ce8,#2f7fe8)}
+.barvalue{text-align:right;font-size:9px;font-weight:800;color:#35465a}
+.chartNote{margin-top:9px;padding-top:8px;border-top:1px solid #edf1f5;font-size:9px;line-height:1.45;color:var(--muted)}
+
+/* gallery */
+.galleryGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}
+.galleryGrid .preview{aspect-ratio:16/9}
+.galleryGrid .contentCard{box-shadow:0 4px 16px rgba(15,31,52,.05)}
+.empty{grid-column:1/-1;background:#fff;border:1px dashed #cbd5e1;border-radius:14px;padding:38px;text-align:center;color:var(--muted);font-size:12px}
+.pager{display:flex;justify-content:center;align-items:center;gap:7px;margin:13px 0 0}
+.pager button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 10px;font-size:10px}
+.pager button:disabled{opacity:.45;cursor:default}
+.pager span{font-size:10px;color:var(--muted)}
+
+/* audit */
+.auditWrap{background:#fff;border:1px solid var(--line);border-radius:15px;overflow:hidden}
+.auditSummary{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line)}
+.auditSum{padding:11px 13px;border-right:1px solid var(--line)}
+.auditSum:last-child{border-right:0}.auditSum small{display:block;font-size:9px;color:var(--muted);font-weight:700}.auditSum b{display:block;font-size:15px;margin-top:4px}
+.auditTable{max-height:470px;overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:9.5px}
+th{position:sticky;top:0;background:var(--navy);color:#fff;text-align:left;padding:9px 8px;z-index:2}
+td{padding:8px;border-bottom:1px solid #edf1f5;vertical-align:middle}
+tr:hover td{background:#fafcfe}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.status{display:inline-flex;padding:4px 6px;border-radius:999px;font-size:8.5px;font-weight:850}
+.status.good{background:#eaf7ee;color:#17733a}.status.warn{background:#fff4df;color:#946200}.status.bad{background:#ffefee;color:#ae2b22}
+.manualInput{width:85px;border:1px solid #e9bc62;background:#fffaf0;border-radius:7px;padding:5px 6px;font-size:9px}
+.auditLink{font-weight:750;font-size:9px}
+details.auditDetails>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;font-size:11px;font-weight:800;background:#fff}
+details.auditDetails>summary::-webkit-details-marker{display:none}
+.chev{transition:.18s}details[open] .chev{transform:rotate(180deg)}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:1000;background:rgba(4,15,27,.68);display:none;align-items:center;justify-content:center;padding:22px}
+.modal.open{display:flex}
+.modalBox{width:min(1120px,96vw);max-height:92vh;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 28px 80px rgba(0,0,0,.34);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(320px,.7fr)}
+.modalMedia{background:#eff3f7;min-height:640px;position:relative}
+.modalMedia iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.modalSide{padding:20px;overflow:auto}
+.closeBtn{float:right;border:1px solid var(--line);background:#fff;border-radius:9px;width:32px;height:32px;font-size:17px}
+.modalRole{font-size:10px;color:var(--muted);font-weight:800;margin-top:3px}
+.modalTitle{font-size:20px;line-height:1.35;font-weight:880;margin:13px 0 6px}
+.modalMeta{font-size:10px;color:var(--muted)}
+.modalMetrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:16px}
+.modalMetric{border:1px solid var(--line);border-radius:11px;padding:11px}.modalMetric small{display:block;color:var(--muted);font-size:9px}.modalMetric b{display:block;font-size:18px;margin-top:4px}
+.caption{margin-top:15px;padding-top:14px;border-top:1px solid var(--line);font-size:10.5px;line-height:1.55;color:#4b5b6d;white-space:pre-wrap;max-height:190px;overflow:auto}
+.modalButtons{display:flex;gap:7px;margin-top:15px}.primaryBtn{border:0;background:var(--blue);color:#fff;border-radius:9px;padding:9px 12px;font-size:10px;font-weight:800}
+.secondaryBtn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 12px;font-size:10px;font-weight:800;color:var(--ink)}
+
+/* footer */
+.note{margin-top:13px;background:#fff8eb;border:1px solid #f5d7a1;color:#8d5b08;padding:11px 13px;border-radius:11px;font-size:9.5px;line-height:1.5}
+.footer{font-size:9px;color:var(--muted);text-align:right;margin-top:10px}
+
+@media(max-width:1250px){
+  .kpis{grid-template-columns:repeat(3,1fr)} .insights{grid-template-columns:repeat(2,1fr)}
+  .featureGrid,.galleryGrid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:900px){
+  .charts{grid-template-columns:1fr}.featureGrid,.galleryGrid{grid-template-columns:repeat(2,1fr)}
+  .modalBox{grid-template-columns:1fr}.modalMedia{min-height:520px}.modalSide{max-height:38vh}
+}
+@media(max-width:640px){
+  .shell{width:min(100% - 18px,1640px)}.hero{padding:20px 16px}.hero h1{font-size:24px}
+  .kpis{grid-template-columns:repeat(2,1fr)}.insights{grid-template-columns:1fr}
+  .featureGrid,.galleryGrid{grid-template-columns:1fr}.toolbar input{min-width:100%;width:100%}
+  .barrow{grid-template-columns:105px 1fr 42px}.auditSummary{grid-template-columns:1fr}.auditSum{border-right:0;border-bottom:1px solid var(--line)}
+}
+
+/* v4 deep analytics */
+.deepGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.deepCard{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:0 3px 13px rgba(15,31,52,.035);min-width:0}
+.deepCard.wide{grid-column:1/-1}
+.deepHead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px}
+.deepHead strong{font-size:12.5px}.deepHead span{font-size:9px;color:var(--muted)}
+.vizSvg{width:100%;height:auto;display:block;overflow:visible}
+.vizAxis{stroke:#d9e2ec;stroke-width:1}.vizGrid{stroke:#edf2f7;stroke-width:1}
+.vizLabel{font-size:9px;fill:#617186}.vizTiny{font-size:8px;fill:#7c8a9c}
+.legendRow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:9px;color:var(--muted)}
+.legendDot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:-1px}
+.legendDot.s1{background:var(--blue)}.legendDot.s2{background:var(--cyan)}.legendDot.s3{background:var(--purple)}.legendDot.s4{background:#d38b16}
+.mixRow{display:grid;grid-template-columns:minmax(105px,1.05fr) minmax(180px,2fr) 54px;gap:8px;align-items:center;margin:8px 0}
+.mixLabel{font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mixTrack{height:12px;border-radius:999px;background:#edf2f7;display:flex;overflow:hidden}
+.segLike{background:#566be8}.segComment{background:#8b5cf6}.segSave{background:#22a2a2}.segShare{background:#d68a16}
+.mixValue{font-size:9px;text-align:right;font-weight:800}
+.typeTable{display:grid;gap:8px}
+.typeRow{display:grid;grid-template-columns:90px 1fr 64px 64px 64px;gap:8px;align-items:center;font-size:9.5px}
+.typeRow.head{font-size:8.5px;color:var(--muted);font-weight:800;padding-bottom:5px;border-bottom:1px solid #edf1f5}
+.typeName{font-weight:800}.typeBar{height:8px;background:#edf2f7;border-radius:99px;overflow:hidden}.typeBar i{display:block;height:100%;background:linear-gradient(90deg,#2f66df,#0b96ad);border-radius:99px}
+.typeNum{text-align:right;font-variant-numeric:tabular-nums}
+.benchGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.benchCard{border:1px solid #e6ebf2;background:#fbfcfe;border-radius:13px;padding:12px}
+.benchTitle{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.benchTitle strong{font-size:12px;line-height:1.35}.benchTitle span{font-size:9px;color:var(--muted);white-space:nowrap}
+.benchMetrics{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+.benchMetric{background:#fff;border:1px solid #edf1f5;border-radius:9px;padding:8px 6px;text-align:center}.benchMetric b{display:block;font-size:12px}.benchMetric span{display:block;font-size:8px;color:var(--muted);margin-top:2px}
+.benchBar{margin-top:9px}.benchBarTop{display:flex;justify-content:space-between;font-size:8.5px;color:var(--muted);margin-bottom:4px}.benchTrack{height:7px;background:#e9eef4;border-radius:99px;overflow:hidden}.benchFill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2b62e8,#0995ab)}
+.matrixNote{font-size:9px;line-height:1.45;color:var(--muted);margin-top:8px}
+@media(max-width:900px){.deepGrid{grid-template-columns:1fr}.deepCard.wide{grid-column:auto}.benchGrid{grid-template-columns:1fr}.benchMetrics{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:640px){.typeRow{grid-template-columns:72px 1fr 52px 52px}.typeRow>*:nth-child(5){display:none}.benchMetrics{grid-template-columns:repeat(2,1fr)}}
+
+
+/* v5 executive BI */
+.versionFlag{display:inline-flex;align-items:center;gap:6px;background:#dff8ea;color:#176b3b;border:1px solid #b8e9cc;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:900}
+.versionFlag:before{content:"";width:6px;height:6px;border-radius:50%;background:#21a35b;box-shadow:0 0 0 3px rgba(33,163,91,.12)}
+.freshBar{margin-top:12px;background:#0b2137;color:#dce8f3;border-radius:13px;padding:10px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.freshBar strong{font-size:10px}.freshBar span{font-size:9px;color:#aebfd0}
+.monitorGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.monitorCard{display:grid;grid-template-columns:200px minmax(0,1fr);background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
+.monitorMedia{position:relative;min-height:250px;background:linear-gradient(145deg,#15283e,#3b5b7c);overflow:hidden}
+.monitorMedia img{width:100%;height:100%;object-fit:cover;display:block}
+.monitorFallback{position:absolute;inset:0;display:grid;place-items:center;color:#e5edf6;font-weight:850;font-size:13px;text-align:center;padding:20px}
+.monitorBadge{position:absolute;left:10px;top:10px;background:rgba(8,25,43,.88);color:#fff;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:900}
+.monitorBody{padding:16px}
+.monitorTitle{font-size:15px;font-weight:900;line-height:1.35}.monitorDate{font-size:9px;color:var(--muted);margin-top:4px}
+.monitorViews{display:flex;align-items:flex-end;gap:12px;margin-top:13px}.monitorViews .big{font-size:34px;font-weight:900;line-height:.95;letter-spacing:-1px}.monitorViews small{font-size:9px;color:var(--muted);display:block;margin-bottom:3px}
+.apiGap{margin-top:9px;border-radius:10px;background:#fff7e7;border:1px solid #f3d8a5;padding:8px 9px;font-size:9.5px;color:#865a10}
+.metricStrip{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:11px}.metricStrip div{background:#f7f9fc;border:1px solid #edf1f5;border-radius:9px;padding:7px;text-align:center}.metricStrip b{display:block;font-size:12px}.metricStrip span{display:block;font-size:8px;color:var(--muted);margin-top:2px}
+.compareBar{margin-top:10px}.compareTop{display:flex;justify-content:space-between;font-size:8px;color:var(--muted);margin-bottom:4px}.compareTrack{height:7px;background:#e8eef5;border-radius:99px;overflow:hidden}.compareFill{height:100%;background:linear-gradient(90deg,#2563eb,#0891b2);border-radius:99px}
+.execGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.execCard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 14px;position:relative;overflow:hidden}
+.execCard:after{content:"";position:absolute;right:-12px;bottom:-20px;width:70px;height:70px;border-radius:50%;background:#f2f6fb}
+.execLabel{font-size:9px;color:var(--muted);font-weight:850}.execValue{font-size:20px;font-weight:900;margin-top:6px;position:relative;z-index:1}.execSub{font-size:8.5px;color:var(--muted);margin-top:4px;position:relative;z-index:1}
+.heatWrap{overflow:auto}.heatTable{min-width:620px;display:grid;gap:5px}.heatRow{display:grid;grid-template-columns:150px repeat(5,1fr);gap:5px}.heatCell{border-radius:7px;padding:8px 6px;text-align:center;font-size:8.5px;border:1px solid #e8edf3}.heatHead{font-weight:850;background:#f6f8fb}.heatName{text-align:left;font-weight:800;background:#f9fbfd}
+.scoreTable{display:grid;gap:6px}.scoreRow{display:grid;grid-template-columns:24px minmax(150px,1.4fr) 70px 70px 70px 76px;gap:8px;align-items:center;font-size:9px;padding:7px 0;border-bottom:1px solid #edf1f5}.scoreRow.head{font-size:8px;color:var(--muted);font-weight:850}.scoreRank{font-size:11px;font-weight:900}.scoreTitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:750}.scoreNum{text-align:right;font-variant-numeric:tabular-nums}
+@media(max-width:1100px){.monitorCard{grid-template-columns:150px 1fr}.execGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.monitorGrid{grid-template-columns:1fr}.monitorCard{grid-template-columns:120px 1fr}.monitorMedia{min-height:220px}.metricStrip{grid-template-columns:repeat(2,1fr)}.execGrid{grid-template-columns:1fr}.scoreRow{grid-template-columns:22px minmax(120px,1fr) 62px 62px}.scoreRow>*:nth-child(5),.scoreRow>*:nth-child(6){display:none}}
+
+
+/* v6 explanation layer */
+.explain{margin-top:9px;padding:9px 10px;border:1px solid #e5ebf2;background:#f8fafc;border-radius:10px}
+.explain strong{display:block;font-size:9.5px;color:#26384d;margin-bottom:4px}
+.explain p{margin:2px 0;font-size:8.8px;line-height:1.5;color:#65758a}
+.explain b{color:#33475e}
+.helpTag{display:inline-flex;align-items:center;gap:4px;border:1px solid #dce5ef;background:#fff;color:#5b6b80;border-radius:999px;padding:3px 6px;font-size:8px;font-weight:800;margin-left:6px}
+.glossaryGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.glossaryCard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 12px}
+.glossaryCard strong{display:block;font-size:10.5px}
+.glossaryCard span{display:block;font-size:8.8px;color:var(--muted);margin-top:3px}
+.glossaryCard p{font-size:9px;line-height:1.48;color:#536477;margin:7px 0 0}
+.usageBox{margin-top:10px;padding:10px 12px;border-radius:11px;background:#eef6ff;border:1px solid #d7e8fb}
+.usageBox strong{font-size:9.5px}.usageBox p{margin:4px 0 0;font-size:9px;line-height:1.5;color:#526579}
+@media(max-width:900px){.glossaryGrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.glossaryGrid{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="hero">
+    <div class="heroRow">
+      <div>
+        <div class="eyebrow">Personal Content BI</div>
+        <h1>@ymholic Performance Studio v6</h1>
+        <p>콘텐츠 성과 · 릴스 조회수 보정 · 주제별 인사이트 · 게시물 상세 분석</p>
+      </div>
+      <div class="heroMeta"><span class="versionFlag">v6 GUIDE</span>
+        <span class="metaChip">Instagram Insights API</span>
+        <span class="metaChip">KST 기준</span>
+        <span class="metaChip">업데이트 2026-10-06</span>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button class="period active" data-period="all">전체</button>
+      <button class="period" data-period="30">최근 30일</button>
+      <button class="period" data-period="90">최근 90일</button>
+      <button class="period" data-period="365">최근 1년</button>
+      <select id="yearFilter"><option value="">전체 연도</option></select>
+      <select id="typeFilter"><option value="">전체 유형</option></select>
+      <select id="catFilter"><option value="">전체 주제</option></select>
+      <input id="search" placeholder="캡션 검색"/>
+    </div>
+  </header>
+  <div class="freshBar"><strong>데이터 상태 · 2026-10-06 11:00 KST</strong><span>앱 실측 조회수 우선 · API 조회수는 지연값으로 병기 · 브라우저의 오래된 수동값보다 검증값 우선</span></div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section class="section">
+    <div class="sectionHead"><div><h2>최근 콘텐츠 모니터</h2><p>앱에서 직접 확인한 조회수와 API 수치를 동시에 비교합니다.</p></div></div>
+    <div class="monitorGrid" id="latestMonitor"></div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead"><div><h2>Executive BI Summary</h2><p>현재 필터의 핵심 성과 신호를 자동 요약합니다.</p></div></div>
+    <div class="execGrid" id="execSummary"></div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead">
+      <div><h2>핵심 인사이트</h2><p>현재 필터 기준으로 자동 계산됩니다.</p></div>
+    </div>
+    <div class="insights" id="insights"></div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead">
+      <div><h2>핵심 콘텐츠</h2><p>도달 · 조회 · 상호작용 · 최신 게시물을 대표 카드로 봅니다.</p></div>
+    </div>
+    <div class="featureGrid" id="featureGrid"></div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead">
+      <div><h2>성과 분포</h2><p>절대 성과와 콘텐츠 구조를 함께 비교합니다.</p></div>
+    </div>
+    <div class="charts">
+      <div class="chartCard"><div class="chartHead"><strong>도달 Top 10 <span class="helpTag">규모</span></strong><span>Reach</span></div><div id="reachBars"></div><div class="chartNote" id="reachNote"></div><div class="explain"><p><b>도달(Reach)</b>은 해당 콘텐츠를 본 고유 계정 수입니다. “얼마나 넓게 퍼졌는가”를 보는 지표이며, 팔로워 밖으로 확장되는 콘텐츠를 찾는 데 유용합니다.</p></div></div>
+      <div class="chartCard"><div class="chartHead"><strong>릴스 조회수 Top 10 <span class="helpTag">소비량</span></strong><span>앱 실측 우선 · API 보조</span></div><div id="viewBars"></div><div class="chartNote" id="viewNote"></div><div class="explain"><p><b>조회수(Views)</b>는 재생·노출된 횟수입니다. 도달보다 조회가 훨씬 높으면 같은 사람이 반복해서 보거나 재생이 많이 발생한 콘텐츠일 가능성이 있습니다.</p></div></div>
+      <div class="chartCard"><div class="chartHead"><strong>주제별 평균 도달 <span class="helpTag">주제 선택</span></strong><span>Average Reach</span></div><div id="themeBars"></div><div class="chartNote" id="themeNote"></div><div class="explain"><p>골프·피트니스·스포츠마케팅 등 <b>어떤 주제가 평균적으로 더 넓게 퍼지는지</b> 비교합니다. 단, 표본 수(n)가 적은 주제는 과대평가될 수 있어 함께 봐야 합니다.</p></div></div>
+      <div class="chartCard"><div class="chartHead"><strong>연도별 평균 도달 <span class="helpTag">계정 추세</span></strong><span>Average Reach</span></div><div id="yearBars"></div><div class="chartNote" id="yearNote"></div><div class="explain"><p>연도별 콘텐츠 성과의 기본 체력이 어떻게 변했는지 봅니다. 콘텐츠 주제 변화나 업로드 빈도 차이의 영향을 받으므로 절대적인 성장률로만 해석하지 않습니다.</p></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead">
+      <div><h2>심층 분석</h2><p>각 차트 아래의 설명을 통해 “무엇을 보는지 · 어떻게 해석하는지 · 어디에 쓰는지”까지 확인할 수 있습니다.</p></div>
+    </div>
+    <div class="deepGrid">
+      <div class="deepCard"><div class="deepHead"><strong>최근 게시물 성과 추이 <span class="helpTag">왜 보나?</span></strong><span>최근 12개 · 도달 vs 분석 조회</span></div><div id="recentTrend"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p><b>도달</b>은 몇 명에게 닿았는지, <b>조회수</b>는 몇 번 소비됐는지를 시간 순서로 비교합니다.</p><p><b>효용:</b> 최근 콘텐츠 성과가 올라가는지 내려가는지, 조회는 늘지만 신규 도달은 정체되는지 같은 흐름을 파악할 수 있습니다.</p><p><b>활용:</b> 다음 게시물의 포맷·주제·업로드 시점을 결정할 때 최근 3~5개 흐름을 기준으로 판단합니다.</p></div></div>
+      <div class="deepCard"><div class="deepHead"><strong>도달 × 상호작용률 매트릭스 <span class="helpTag">핵심</span></strong><span>게시물 포지셔닝</span></div><div id="performanceMatrix"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p><b>가로축=도달</b>, <b>세로축=상호작용률</b>입니다. 각 점은 게시물 하나를 뜻합니다.</p><p><b>효용:</b> 단순히 많이 본 게시물과, 적게 봤어도 강하게 반응한 게시물을 구분할 수 있습니다.</p><p><b>활용:</b> 오른쪽 위 콘텐츠는 <b>확장할 핵심 포맷</b>, 왼쪽 위는 <b>도달만 키우면 잠재력이 큰 콘텐츠</b>, 오른쪽 아래는 <b>노출은 강하지만 내용 반응 개선이 필요한 콘텐츠</b>로 봅니다.</p></div></div>
+      <div class="deepCard"><div class="deepHead"><strong>상호작용 구성 <span class="helpTag">반응의 질</span></strong><span>상위 8개 · 좋아요/댓글/저장/공유</span></div><div id="interactionMix"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p>총 반응을 <b>좋아요·댓글·저장·공유</b>로 나눠 어떤 행동이 성과를 만들었는지 봅니다.</p><p><b>효용:</b> 좋아요 중심 콘텐츠인지, 저장 가치가 높은 정보형인지, 공유가 강한 확산형인지 구분할 수 있습니다.</p><p><b>활용:</b> 공유가 강하면 확산형 후킹을, 저장이 강하면 정보·체크리스트형 콘텐츠를 확대하는 식으로 다음 기획에 반영합니다.</p></div></div>
+      <div class="deepCard"><div class="deepHead"><strong>콘텐츠 유형별 효율 <span class="helpTag">포맷 선택</span></strong><span>평균·중앙값 비교</span></div><div id="typeEfficiency"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p>릴스·캐러셀·이미지 같은 <b>포맷별 평균 도달, 중앙값, 평균 반응, 평균 조회</b>를 비교합니다.</p><p><b>효용:</b> 어떤 포맷이 계정에서 실제로 효율적인지 판단할 수 있습니다.</p><p><b>활용:</b> 평균만 높고 중앙값이 낮으면 일부 대박 콘텐츠에 의존한 것이므로, <b>중앙값이 높은 포맷을 기본 포맷</b>으로 보는 것이 안전합니다.</p></div></div>
+      <div class="deepCard wide"><div class="deepHead"><strong>최신 릴스 품질 벤치마크 <span class="helpTag">릴스 품질</span></strong><span>시청시간 · 3초 이탈 · 공유 · 도달</span></div><div id="reelBenchmark"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p><b>평균 시청시간</b>은 얼마나 오래 봤는지, <b>3초 이탈률</b>은 초반에 얼마나 많이 떠났는지, <b>공유</b>는 확산 의도를 보여줍니다.</p><p><b>효용:</b> 조회수만으로는 알 수 없는 “영상 자체의 품질”을 비교할 수 있습니다.</p><p><b>활용:</b> 초반 이탈이 높으면 첫 1~3초 후킹을 개선하고, 시청시간은 긴데 도달이 약하면 썸네일·첫 장면·캡션을 개선합니다.</p></div></div>
+      <div class="deepCard"><div class="deepHead"><strong>주제 × 연도 히트맵 <span class="helpTag">장기 패턴</span></strong><span>평균 도달</span></div><div id="themeYearHeatmap"></div>
+<div class="explain"><strong>무엇을 보는 차트인가</strong><p>가로는 <b>연도</b>, 세로는 <b>콘텐츠 주제</b>이고, 색이 진할수록 해당 조합의 평균 도달이 높습니다.</p><p><b>효용:</b> “어떤 주제가 언제 강했는지”를 장기적으로 볼 수 있어 일시적인 히트와 지속 가능한 주제를 구분할 수 있습니다.</p><p><b>활용:</b> 여러 해 반복해서 강한 주제는 핵심 축으로, 특정 해만 강한 주제는 시즌성·이슈성 콘텐츠로 관리합니다.</p></div></div>
+      <div class="deepCard"><div class="deepHead"><strong>콘텐츠 효율 리더보드 <span class="helpTag">종합 성과</span></strong><span>도달 · 조회 · 상호작용률</span></div><div id="efficiencyBoard"></div>
+<div class="explain"><strong>무엇을 보는 표인가</strong><p>도달, 조회/도달 비율, 상호작용률을 함께 고려해 <b>종합적으로 효율이 좋은 콘텐츠</b>를 위에 배치합니다.</p><p><b>효용:</b> 조회수 하나만으로 순위를 정했을 때 놓치는 “작지만 강한 콘텐츠”를 찾을 수 있습니다.</p><p><b>활용:</b> 상위 콘텐츠의 주제·길이·첫 장면·캡션 구조를 다음 콘텐츠 제작의 레퍼런스로 사용합니다.</p></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead">
+      <div><h2>전체 게시물</h2><p>미디어 영역만 미리보기로 표시합니다. 카드를 클릭하면 상세 분석이 열립니다.</p></div>
+      <div class="sectionActions">
+        <select id="sortFilter">
+          <option value="latest">최신순</option>
+          <option value="reach">도달순</option>
+          <option value="views">조회순</option>
+          <option value="engagement">상호작용순</option>
+        </select>
+        <button class="lightBtn" id="csvBtn">CSV 내보내기</button>
+      </div>
+    </div>
+    <div class="galleryGrid" id="galleryGrid"></div>
+    <div class="pager">
+      <button id="prevBtn">이전</button><span id="pageLabel"></span><button id="nextBtn">다음</button>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead">
+      <div><h2>지표·용어 사전</h2><p>대시보드에서 자주 쓰는 용어를 한 번에 확인할 수 있습니다.</p></div>
+    </div>
+    <div class="glossaryGrid">
+      <div class="glossaryCard"><strong>도달 Reach</strong><span>고유 계정 수</span><p>콘텐츠를 본 서로 다른 계정 수입니다. <b>확산 범위</b>를 보는 가장 기본적인 지표입니다.</p></div>
+      <div class="glossaryCard"><strong>조회수 Views</strong><span>총 노출·재생 횟수</span><p>한 사람이 여러 번 보면 여러 번 집계될 수 있습니다. <b>콘텐츠 소비량</b>을 봅니다.</p></div>
+      <div class="glossaryCard"><strong>상호작용 Engagement</strong><span>좋아요+댓글+저장+공유</span><p>단순히 본 것에서 끝나지 않고 실제 행동으로 이어진 정도입니다.</p></div>
+      <div class="glossaryCard"><strong>상호작용률</strong><span>상호작용 ÷ 도달</span><p>본 사람 중 몇 %가 반응했는지 보여줍니다. <b>콘텐츠 매력도</b>를 보는 데 유용합니다.</p></div>
+      <div class="glossaryCard"><strong>조회/도달 비율</strong><span>Views ÷ Reach</span><p>한 도달 계정당 평균 몇 번 소비됐는지 보는 값입니다. 1보다 높을수록 반복 소비 가능성이 큽니다.</p></div>
+      <div class="glossaryCard"><strong>공유율</strong><span>공유 ÷ 도달</span><p>본 사람이 다른 사람에게 전달한 비율입니다. <b>확산성·추천성</b>을 보는 중요한 지표입니다.</p></div>
+      <div class="glossaryCard"><strong>평균 시청시간</strong><span>Avg watch time</span><p>릴스를 평균 몇 초 봤는지입니다. 길이 대비 시청시간이 높을수록 내용 유지력이 좋습니다.</p></div>
+      <div class="glossaryCard"><strong>3초 이탈률</strong><span>Skip rate</span><p>재생 초반 3초 안에 이탈한 비율입니다. 높으면 첫 장면·후킹을 개선할 필요가 있습니다.</p></div>
+      <div class="glossaryCard"><strong>중앙값 Median</strong><span>가운데 값</span><p>일부 대박 게시물의 영향을 덜 받기 때문에 <b>평소 성과 수준</b>을 판단할 때 평균보다 유용할 수 있습니다.</p></div>
+      <div class="glossaryCard"><strong>히트맵 Heatmap</strong><span>색의 진하기로 비교</span><p>여러 조건의 성과를 한 화면에서 비교할 때 씁니다. 진한 칸일수록 값이 큽니다.</p></div>
+      <div class="glossaryCard"><strong>매트릭스 Matrix</strong><span>두 지표를 동시에 비교</span><p>도달과 상호작용률처럼 서로 다른 두 기준으로 콘텐츠를 구분해 <b>강점과 개선점</b>을 찾습니다.</p></div>
+      <div class="glossaryCard"><strong>API 조회수</strong><span>자동 수집값</span><p>Meta/Windsor를 통해 가져오는 값입니다. 앱 표시 숫자보다 늦게 갱신될 수 있어, 현재 대시보드는 <b>앱 직접 확인값을 우선</b>합니다.</p></div>
+    </div>
+    <div class="usageBox"><strong>이 대시보드를 보는 가장 쉬운 순서</strong><p>① 최근 콘텐츠 모니터에서 최신 게시물 상태 확인 → ② 도달×상호작용률 매트릭스로 성과 위치 확인 → ③ 상호작용 구성으로 반응의 질 확인 → ④ 주제×연도 히트맵과 유형별 효율로 다음 콘텐츠 방향 결정.</p></div>
+  </section>
+
+  <section class="section">
+    <details class="auditDetails">
+      <summary>
+        <span>릴스 검증 테이블 · 32개 전체 확인</span><span class="chev">⌄</span>
+      </summary>
+      <div class="auditWrap">
+        <div class="auditSummary" id="auditSummary"></div>
+        <div class="auditTable">
+          <table>
+            <thead><tr>
+              <th>날짜</th><th>릴스</th><th class="num">도달</th><th class="num">API 조회</th>
+              <th>앱 실제 조회수</th><th class="num">분석 조회</th><th class="num">상호작용</th><th>상태</th><th>원본</th>
+            </tr></thead>
+            <tbody id="auditBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </details>
+    <div class="note">
+      과거 릴스의 앱 누적 재생수와 현재 API Views는 다를 수 있습니다. 앱에서 확인한 수치를 입력하면 같은 브라우저에 저장되며,
+      <b>분석용 조회수는 앱 실측값을 우선</b>하고 값이 없을 때 API 조회수를 사용합니다. 2022-03-06 <b>Leg&Hip Day</b>는 앱 실측 5,230회를 반영했습니다.
+    </div>
+  </section>
+  <div class="footer">v6 · @ymholic Performance Studio</div>
+</div>
+
+<div class="modal" id="detailModal">
+  <div class="modalBox">
+    <div class="modalMedia"><iframe id="modalIframe" loading="lazy"></iframe></div>
+    <div class="modalSide">
+      <button class="closeBtn" id="closeModal">×</button>
+      <div class="modalRole" id="modalRole"></div>
+      <div class="modalTitle" id="modalTitle"></div>
+      <div class="modalMeta" id="modalMeta"></div>
+      <div class="modalMetrics" id="modalMetrics"></div>
+      <div class="caption" id="modalCaption"></div>
+      <div class="modalButtons">
+        <a class="primaryBtn" id="modalLink" target="_blank">Instagram에서 보기 ↗</a>
+        <button class="secondaryBtn" id="modalClose2">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA={"account":"ymholic","followers":625,"totalPosts":66,"totalReels":32,"reelsWithDetail":31,"rows":[{"id":"17964304527197592","date":"2026-10-05","dateTime":"2026-10-05 14:08","year":2026,"type":"릴스","isReel":true,"category":"골프","caption":"씰룩이, 그린 green ⛳️🏌️‍♂️\n#레이크사이드CC #드라이버 #스윙 #골프","title":"씰룩이, 그린 green ⛳️🏌️‍♂️","url":"https://www.instagram.com/reel/DeGbEoHJxXm/","embed":"https://www.instagram.com/reel/DeGbEoHJxXm/embed/","likes":17,"comments":0,"reach":202,"apiViews":503,"engagement":120,"saves":0,"shares":103,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보","avgWatchMs":10337,"totalWatchMs":2739435,"skipRate":0.444,"reelInteractions":120,"thumbUrl":"https://scontent-fra5-1.cdninstagram.com/v/t51.82787-15/836570855_18635831425026471_6849626426878067798_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&ig_cache_key=NDAwMTAwNDM4NDE2ODY0NjExOA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0xJUFMuQzMifQ%3D%3D&_nc_ohc=twRCBdg_AC0Q7kNvwFUjo6U&_nc_oc=AdpK_kiLFa_D28SUIWKLZ9zMRMiAT7OteO0ztGkO_Tev-GhZHp8uPh9nV4HknpGhDlg&_nc_zt=23&_nc_ht=scontent-fra5-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=SQdjJ_8PKdFnNoeNlp3QbQ&_nc_tpa=Q5bMBQKDfDsEqm3Bn-u3USBBt0IDsk2EuSJyJDgvE12aTmte2PZk9U9q0S8nJAcazS-Y87qGAabZPFHEXQ&oh=00_AQN3tSWw9QjB0FsMS9tL4aQSLeBK5yKHI3y4lluxKiiWeQ&oe=6ACA401E"},{"id":"18489300184106376","date":"2026-09-28","dateTime":"2026-09-28 23:23","year":2026,"type":"릴스","isReel":true,"category":"골프","caption":"🏌️‍♂️⛳️\n#실크밸리cc #골프 #드라이버 #스윙 #티샷","title":"🏌️‍♂️⛳️","url":"https://www.instagram.com/reel/Dd1YQLYp8wS/","embed":"https://www.instagram.com/reel/Dd1YQLYp8wS/embed/","likes":8,"comments":0,"reach":281,"apiViews":315,"engagement":8,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보","avgWatchMs":3225,"totalWatchMs":896678,"skipRate":0.3,"reelInteractions":8,"thumbUrl":"https://scontent-fra5-1.cdninstagram.com/v/t15.5256-10/829334436_1584715916465793_5626369467675932348_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ig_cache_key=Mzk5NjIwNjkwOTIxMzg4NzUwNg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0xJUFMuQzMifQ%3D%3D&_nc_ohc=THywHlk5C8MQ7kNvwG4mRtJ&_nc_oc=AdoGe2ERdfSsWMlffAdA6L1lgxDH4r3xizBrMZl3An-CcwXX91xxhpgzfvjyOVdIPI0&_nc_zt=23&_nc_ht=scontent-fra5-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=SQdjJ_8PKdFnNoeNlp3QbQ&_nc_tpa=Q5bMBQIgdeCZscghjmRPR9Q3Hi2WqeS1rg2nOnaxIABqsmYNB7H0J2fUVu7g7p99eNIHlEzLh2qbE9sNUA&oh=00_AQMDpVYfpCO6kLdTrDynDmIcLqDJLNzPdNo-zT3KOojnKQ&oe=6ACA2B7C"},{"id":"17869029651538817","date":"2026-01-25","dateTime":"2026-01-25 02:03","year":2026,"type":"캐러셀","isReel":false,"category":"프로스포츠/스포츠마케팅","caption":"25-26시즌 V리그 \n수원 한국전력빅스톰 프로배구단 스포츠마케팅 MOU\n#한국전력빅스톰 #신영석 #서재덕 #스포츠마케팅","title":"25-26시즌 V리그 ","url":"https://www.instagram.com/p/DT5q_FGidNH/","embed":"https://www.instagram.com/p/DT5q_FGidNH/embed/","likes":13,"comments":0,"reach":163,"apiViews":415,"engagement":13,"saves":0,"shares":0,"profileVisits":14,"follows":0,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra5-1.cdninstagram.com/v/t51.82787-15/620813835_18556058128026471_2244403540681172089_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=100&ig_cache_key=MzgxNzI3MTAxMDM2MjIwMjExOQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0FST1VTRUxfSVRFTS5DMyJ9&_nc_ohc=efXWfIu1Nw8Q7kNvwF5sSIn&_nc_oc=AdptaDuQgk4mfnZArh9gedUIPgUm_m-6sTB4pIdeQXek_QI2JTEtBz_j9wlw7Hkb5J4&_nc_zt=23&_nc_ht=scontent-fra5-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=8yjBgACEeqCABn7hOMF5ww&_nc_tpa=Q5bMBQIwXy-KhGuEZD3uF-u--DSTDrtE4c202_9vktDEO5d_iP0997gRb1EQJPzlq1QIcaN7-sanSjQIfw&oh=00_AQOITDHt-3eV41S31w1BCq6BgenRD6nA6Nko5or5T8b4cg&oe=6ACA246D"},{"id":"18072886739117736","date":"2025-09-10","dateTime":"2025-09-10 23:47","year":2025,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"제주도 MOU\n#제주도지사 #한국인터넷진흥원장 #제주전통시장 \n#탄소중립 #전자영수증","title":"제주도 MOU","url":"https://www.instagram.com/p/DObPVN1iTpK/","embed":"https://www.instagram.com/p/DObPVN1iTpK/embed/","likes":9,"comments":0,"reach":230,"apiViews":1204,"engagement":9,"saves":0,"shares":0,"profileVisits":1,"follows":0,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra3-2.cdninstagram.com/v/t51.82787-15/544130771_18528682141026471_2057872912234289180_n.heic?stp=dst-jpg_e35_tt6&_nc_cat=107&ig_cache_key=MzcxODYzMzM0NTk4Nzk4Mzk0Ng%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uRkVFRC5DMyJ9&_nc_ohc=bMb8Pp8zPQMQ7kNvwGXG8T3&_nc_oc=AdpHrYfloXGXBqnoqAg4zxokN4WDyevmZwUkkEmSssJLr6V10PGBSok5KpuEY6-sxgI&_nc_zt=23&_nc_ht=scontent-fra3-2.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=j85DxFHFhSEUa7wHHAEDpg&_nc_tpa=Q5bMBQLyilSELPwKBgeObnfDFqGY71rn2TxKKXha3AP59lQ8vuxoVR7HkdOSVF7w1ip35Vz09qWc9uJv9A&oh=00_AQOUCbCKed7NKihyH5psLDkrMZ6PmGOya2RpsnOAdNnxFA&oe=6ACA1623"},{"id":"18308441797173565","date":"2025-08-16","dateTime":"2025-08-16 23:56","year":2025,"type":"릴스","isReel":true,"category":"골프","caption":"여름골프, 태양을 피하고 싶다\n#푸른솔cc #구십돌이 #백돌이 그 사이 어딘가","title":"여름골프, 태양을 피하고 싶다","url":"https://www.instagram.com/reel/DNa4BLupGGb/","embed":"https://www.instagram.com/reel/DNa4BLupGGb/embed/","likes":15,"comments":0,"reach":320,"apiViews":613,"engagement":15,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra3-1.cdninstagram.com/v/t51.82787-15/534327651_18523874824026471_7487459561658941588_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=105&ig_cache_key=MzcwMDUxNjQxNTc1NjA2NzIyNw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0xJUFMuQzMifQ%3D%3D&_nc_ohc=P8ohhEnTWjIQ7kNvwGqkj-R&_nc_oc=AdriwuZgE3bBF1ejgtdq2wyTYbd4cKluO-UpNsoPXhtKc3j9b8Fp5Th0vtmof4fUQs8&_nc_zt=23&_nc_ht=scontent-fra3-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=6ip-bzQZlr6eLCQCAromEg&_nc_tpa=Q5bMBQJwayowWbzyNADIzDGY_MC2cTfcf0WDpAkayf5CkUjwQqOnTiJR9kiIh9cEzX0f9EtzDHq05-l_Xg&oh=00_AQOICeGYDmkR_r6ar12H7ir_-DACi-lcb6J5dvlGSBXj_Q&oe=6ACA1E94"},{"id":"18066163640023574","date":"2025-07-01","dateTime":"2025-07-01 00:13","year":2025,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"서울시 & KISA MOU\n#탄소중립 #전자영수증","title":"서울시 & KISA MOU","url":"https://www.instagram.com/p/DLh5F8ept2O/","embed":"https://www.instagram.com/p/DLh5F8ept2O/embed/","likes":12,"comments":0,"reach":278,"apiViews":1540,"engagement":12,"saves":0,"shares":0,"profileVisits":5,"follows":0,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra5-1.cdninstagram.com/v/t51.82787-15/627143948_18087938252023574_4239490245972761030_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ig_cache_key=MzY2NjQ2MjY2ODg0MzU3MjYyMg%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uRkVFRC5DMyJ9&_nc_ohc=IluJgHs-MTcQ7kNvwHPm0VO&_nc_oc=AdrFBrcRc7CiPqMSzJDtqWoECzU950U38yBGN0vW4Vkf9GInDXJXEFD2652BZnLR57s&_nc_zt=23&_nc_ht=scontent-fra5-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=Ur62OcVk3sRTD7CwHgPdWA&_nc_tpa=Q5bMBQKVG9U36sRqdw-lASTJ9xtfhahpM7ZNr8K6qeaTfUUuza6QNF4t9CDwwhSZYFUdGxQkBHqm_dLURg&oh=00_AQPh79yN-14ltgVsBPpBpm2PDMok3cUxpXErcE8y4othew&oe=6ACA11A6"},{"id":"18066357710291097","date":"2025-06-03","dateTime":"2025-06-03 15:41","year":2025,"type":"릴스","isReel":true,"category":"골프","caption":"이영mint 민트\n#오너스GC #드라이버 #구십돌이 #백돌이 그 사이 어딘가","title":"이영mint 민트","url":"https://www.instagram.com/reel/DKbcq4UuOaI/","embed":"https://www.instagram.com/reel/DKbcq4UuOaI/embed/","likes":15,"comments":0,"reach":435,"apiViews":736,"engagement":16,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra5-1.cdninstagram.com/v/t51.75761-15/501927865_18510014575026471_3026770425212717366_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=108&ig_cache_key=MzY0NjYzNDQxNTI4NDA4NjQwOA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0xJUFMuQzMifQ%3D%3D&_nc_ohc=GJ-hB2nn6KEQ7kNvwGW2JWS&_nc_oc=Adp_0o0ju-IkkpMtkSYv8woGNY73tN9YTzFHL4SnNKG58shN5Sc_sFfmjIvn8rgRyjU&_nc_zt=23&_nc_ht=scontent-fra5-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=yb6ALg5O7ScydRnA0b1q7Q&_nc_tpa=Q5bMBQIC_AXWryxMRvwg-NnTWuGkHYBtPJ0GxMIlk7ZrLjyD-5VX9wIPeUCIPoIGYscGrBAg9BCkNW9c_Q&oh=00_AQN4ohcKf2exAXYujv_gUFMZb1xLH5ssdk85uKr6PM8BwA&oe=6ACA19F0"},{"id":"18068028247950969","date":"2025-05-24","dateTime":"2025-05-24 22:38","year":2025,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"한국은행 MOU \"프로젝트 한강\"\n#디지털화폐 #CBDC #한강","title":"한국은행 MOU \"프로젝트 한강\"","url":"https://www.instagram.com/p/DKCcxGZJ40J/","embed":"https://www.instagram.com/p/DKCcxGZJ40J/embed/","likes":19,"comments":2,"reach":279,"apiViews":1202,"engagement":21,"saves":0,"shares":0,"profileVisits":4,"follows":0,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra3-1.cdninstagram.com/v/t51.82787-15/654666194_18106679119798404_6098860113114795449_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=105&ig_cache_key=MzYzOTU5Nzk2MTcxMzI2Mzg0NQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0FST1VTRUxfSVRFTS5DMyJ9&_nc_ohc=tthnpbSqEMcQ7kNvwFXbe23&_nc_oc=Adp9n0YA5nz5ONXVpN-XISm588jqJRfzBroOp_2vJF5daM8XYFkR1ebEDr4SjVtcGgw&_nc_zt=23&_nc_ht=scontent-fra3-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=yb6ALg5O7ScydRnA0b1q7Q&_nc_tpa=Q5bMBQL_TPfvjMoW1bybd246QdprvXBBBizwQPyJazWqIwv7GlTCa59A8NhPsHEBy_GAds9spjQxfIuvEA&oh=00_AQNjn4lzcsTL3872L8CDLDh4-lFfeiyZE2cuUllGAl8l4g&oe=6ACA1411"},{"id":"18068900029787874","date":"2025-05-03","dateTime":"2025-05-03 23:53","year":2025,"type":"릴스","isReel":true,"category":"골프","caption":"봄 골프\n#포천힐스 #아이언 #90돌이 #백돌이 그 사이 어딘가","title":"봄 골프","url":"https://www.instagram.com/reel/DJMgYE-zQVl/","embed":"https://www.instagram.com/reel/DJMgYE-zQVl/embed/","likes":17,"comments":0,"reach":450,"apiViews":618,"engagement":17,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra5-1.cdninstagram.com/v/t51.71878-15/494578742_1580034629342582_5449230414919612490_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=100&ig_cache_key=MzYyNDQxNDE5MjIzMDc5NDU5Nw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0xJUFMuQzMifQ%3D%3D&_nc_ohc=vGa2ntGdqQYQ7kNvwG8sqKt&_nc_oc=AdrmaTMzjY-CKTjqFQ0Bw31ibG_JNVdm4ZHV1vE7YbxYxDF15s2d4LITb9jkV72HRsI&_nc_zt=23&_nc_ht=scontent-fra5-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=qe_zQGUKP6eAmrnfZ9Xt2g&_nc_tpa=Q5bMBQIk0_MIN2BXnmAIek1AGU9_ijfUcW0TsL6dvk4lxCvefkAc_Koa4cnOeYtkiGCWjlkQIH18OYW68Q&oh=00_AQM_-CA9Ww6h9tfL-ajuvdvuaJUaatxhKbpEaazRg-_Ttw&oe=6ACA31AB"},{"id":"18080026123590850","date":"2025-03-23","dateTime":"2025-03-23 23:10","year":2025,"type":"릴스","isReel":true,"category":"골프","caption":"봄골프\n#더크로스비cc  #드라이버 #90돌이 #백돌이 그 어디쯤","title":"봄골프","url":"https://www.instagram.com/reel/DHi3AIDTViZ/","embed":"https://www.instagram.com/reel/DHi3AIDTViZ/embed/","likes":12,"comments":0,"reach":387,"apiViews":556,"engagement":12,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra3-1.cdninstagram.com/v/t51.71878-15/502956697_1430657524788547_9194478779852529315_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=103&ig_cache_key=MzU5NDY3NzM1Mzc5ODUyMzAzMw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0xJUFMuQzMifQ%3D%3D&_nc_ohc=Ro9A28zo2GAQ7kNvwG0izNX&_nc_oc=AdroaelEG7-udbaO9e6QiTmN4aMHgKIWjMObVjG0v9Fs0AQ0sAVePoJ9CKBm3KO_bxA&_nc_zt=23&_nc_ht=scontent-fra3-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=kx1XTaF82h2mpLvWE4WsZg&_nc_tpa=Q5bMBQJUa_5SwocmopyRzhW_pObv29xopVGHIm41EQfFG7xfYNE0VqDwR2oFBp40nKLT_xcbHWNdXY056Q&oh=00_AQPDWc4ypajPUSyasIHrslJTfDlLCZtA5_NuibE3SI2_CQ&oe=6ACA2BF8"},{"id":"17937669863955608","date":"2025-01-07","dateTime":"2025-01-07 22:44","year":2025,"type":"캐러셀","isReel":false,"category":"프로스포츠/스포츠마케팅","caption":"24-25시즌 V리그 AI페퍼스 프로배구단 MOU\n#스포츠마케팅 #AI페퍼스 #박정아 #이한비 #장위 #테일러프리카노","title":"24-25시즌 V리그 AI페퍼스 프로배구단 MOU","url":"https://www.instagram.com/p/DEhsjOBzS8-/","embed":"https://www.instagram.com/p/DEhsjOBzS8-/embed/","likes":21,"comments":0,"reach":529,"apiViews":1363,"engagement":21,"saves":0,"shares":0,"profileVisits":12,"follows":1,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra5-1.cdninstagram.com/v/t51.82787-15/655552296_18082533014580774_8542896782419979265_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=110&ig_cache_key=MzU0MDMwNjcwNDAwNzUyMjY1NQ%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0FST1VTRUxfSVRFTS5DMyJ9&_nc_ohc=daNNlrKFGZcQ7kNvwGJS3EP&_nc_oc=Adp590E2Mox9rfs2HDaqgRwm4EXdSO52oHnXPK1lFDMpe48sYJF_QOniX6jRtZ3wh78&_nc_zt=23&_nc_ht=scontent-fra5-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=A9qHukv_X04ebUzRzAlzzQ&_nc_tpa=Q5bMBQKtxKcw9zL6WYYZm59hesLkr_UCVLKkBtLSGl5qKbgT2yivb5yCQItN1W8jD1tXzWZBrqC6BcRswQ&oh=00_AQOX9hcV4c5mI_qUhs_nR55g9IzfwRVbLYhu2G9n2TXSiA&oe=6ACA2343"},{"id":"18365248696141855","date":"2024-11-16","dateTime":"2024-11-16 03:00","year":2024,"type":"캐러셀","isReel":false,"category":"프로스포츠/스포츠마케팅","caption":"24-25시즌 V리그 한국전력빅스톰 프로배구단 MOU\n#스포츠마케팅 #임성진 #신영석 #구교혁 #luiselianestrada","title":"24-25시즌 V리그 한국전력빅스톰 프로배구단 MOU","url":"https://www.instagram.com/p/DCZrxBuTPwY/","embed":"https://www.instagram.com/p/DCZrxBuTPwY/embed/","likes":35,"comments":0,"reach":809,"apiViews":2071,"engagement":39,"saves":3,"shares":1,"profileVisits":33,"follows":0,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra3-2.cdninstagram.com/v/t51.82787-15/659487540_18107373808849061_5869319539562872580_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=111&ig_cache_key=MzUwMjAyMjY2MDk1ODcwNjM5Ng%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0FST1VTRUxfSVRFTS5DMyJ9&_nc_ohc=vgkTwOjKeSAQ7kNvwH9wpuI&_nc_oc=AdoWzM6RYH-JA3UKpDnJFjYyBx1NT8jUXlma8KtRIu0jj8TRA1fjJQM_DgNLC7IvV1Y&_nc_zt=23&_nc_ht=scontent-fra3-2.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=T_UjfuSqxttCeSNGTO4ldA&_nc_tpa=Q5bMBQLcF2zpdSIgZ1xrT2-eqyRrKmmiC2drhGFN8d0BNQPB4kE559IoCaGIlScvqdtTUvmUjSJdjOxKHw&oh=00_AQNM49OXP44RjFogVn2QAbwlGShiFeGKoLDCrUZbl4kY_w&oe=6ACA1746"},{"id":"18049559290976749","date":"2024-11-10","dateTime":"2024-11-10 01:04","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"가을골프 🍂🍁\n#해솔리아cc","title":"가을골프 🍂🍁","url":"https://www.instagram.com/reel/DCKBbqLKINY/","embed":"https://www.instagram.com/reel/DCKBbqLKINY/embed/","likes":12,"comments":0,"reach":492,"apiViews":620,"engagement":13,"saves":0,"shares":1,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra3-1.cdninstagram.com/v/t51.71878-15/502762132_4139370669632595_7835887991965260297_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=106&ig_cache_key=MzQ5NzYxNDM1OTM2MzM1NTQ4MA%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0xJUFMuQzMifQ%3D%3D&_nc_ohc=gicEkKDg934Q7kNvwGX1E-B&_nc_oc=AdogfkPkycbiszOkTQrMAEd8IH5lUVsW4k27uduzzoSzQGXcje2sP7FEm10zwYhh45U&_nc_zt=23&_nc_ht=scontent-fra3-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=T_UjfuSqxttCeSNGTO4ldA&_nc_tpa=Q5bMBQKkrnVVD04iaJkGZ0BYFoCaGNeMxEuTac9OlslpBpHYAYX9jzLWUoPob413ZTUlamyvJidtZpqyOQ&oh=00_AQOorGkJRRoWgnejWgIOOHQUeRZrqMgaF40loTD0gtADLQ&oe=6ACA3852"},{"id":"17970596168659941","date":"2024-10-27","dateTime":"2024-10-27 12:48","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"OOTD 그레이&카키 ⛳️🏌️‍♂️\n#라데나cc #드라이버 #백돌이","title":"OOTD 그레이&카키 ⛳️🏌️‍♂️","url":"https://www.instagram.com/reel/DBnOzpzquFZ/","embed":"https://www.instagram.com/reel/DBnOzpzquFZ/embed/","likes":22,"comments":2,"reach":167,"apiViews":518,"engagement":24,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보","thumbUrl":"https://scontent-fra5-1.cdninstagram.com/v/t51.71878-15/505136656_4063005450636966_9070021028745920431_n.jpg?stp=dst-jpg_e35_tt6&_nc_cat=102&ig_cache_key=MzQ4NzgyMTU1ODY1NjQ1OTA5Nw%3D%3D.3-ccb7-5&ccb=7-5&_nc_sid=a54f6b&efg=eyJlZmdfdGFnIjoiYmVzdF9pbWFnZV91cmxnZW4uQ0xJUFMuQzMifQ%3D%3D&_nc_ohc=wgKeoZR7dSUQ7kNvwHKRpYp&_nc_oc=AdoaD-rlUHOVQPSYMabNkqKY3E5DqHIGl0Pb1KAJO2KmGUouObGdElwwOL9n1cZYe7Y&_nc_zt=23&_nc_ht=scontent-fra5-1.cdninstagram.com&edm=ANo9K5cEAAAA&_nc_gid=fo5pkh_1nFrFrZ_M0XUTGw&_nc_tpa=Q5bMBQKS86dzlZ5AH6RpcEDG-x-D5JID9kedxwrZ5vD_pfWu27k6NTFTRe9YrR5TbG7Jcp247AfLmERvZw&oh=00_AQOZffxvHOuJBCSKNwiiTWtpVjW-CxUkQUSJt5pG-ia7Sw&oe=6ACA3D3E"},{"id":"17944063673836423","date":"2024-08-03","dateTime":"2024-08-03 23:46","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"OOTD 그린&그레이\n#더반cc #드라이버 #골프","title":"OOTD 그린&그레이","url":"https://www.instagram.com/reel/C-NiuqvqJ59/","embed":"https://www.instagram.com/reel/C-NiuqvqJ59/embed/","likes":20,"comments":0,"reach":174,"apiViews":579,"engagement":20,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18018666701170133","date":"2024-07-31","dateTime":"2024-07-31 01:33","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"OOTD 화이트&그레이 l 컨트롤샷\n#리베라cc","title":"OOTD 화이트&그레이 l 컨트롤샷","url":"https://www.instagram.com/reel/C-DaoshqQQv/","embed":"https://www.instagram.com/reel/C-DaoshqQQv/embed/","likes":18,"comments":0,"reach":124,"apiViews":578,"engagement":18,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18019186133127225","date":"2024-07-21","dateTime":"2024-07-21 01:59","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"OOTD 올블랙\n#오렌지듄스 #라베","title":"OOTD 올블랙","url":"https://www.instagram.com/reel/C9pugKwy8oq/","embed":"https://www.instagram.com/reel/C9pugKwy8oq/embed/","likes":26,"comments":0,"reach":115,"apiViews":523,"engagement":26,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18025618124232514","date":"2024-06-29","dateTime":"2024-06-29 22:38","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"푸릇푸릇\n#비에이비스타cc #드라이버 #라베","title":"푸릇푸릇","url":"https://www.instagram.com/reel/C8zS-C3yIJz/","embed":"https://www.instagram.com/reel/C8zS-C3yIJz/embed/","likes":16,"comments":0,"reach":116,"apiViews":430,"engagement":16,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18008399168432363","date":"2024-05-19","dateTime":"2024-05-19 21:07","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"시원해 봄골프🏌️‍♀️⛳️\n#베어즈베스트청라 #드라이버","title":"시원해 봄골프🏌️‍♀️⛳️","url":"https://www.instagram.com/reel/C7JkEudS2Nq/","embed":"https://www.instagram.com/reel/C7JkEudS2Nq/embed/","likes":22,"comments":0,"reach":123,"apiViews":541,"engagement":22,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17856840171139590","date":"2024-04-06","dateTime":"2024-04-06 01:09","year":2024,"type":"릴스","isReel":true,"category":"골프","caption":"봄골프, 오잘공, 성악발성\n#한라봉골프티덕분이야 #골프 #드라이버 #세현cc","title":"봄골프, 오잘공, 성악발성","url":"https://www.instagram.com/reel/C5YsZjmyfgW/","embed":"https://www.instagram.com/reel/C5YsZjmyfgW/embed/","likes":16,"comments":0,"reach":160,"apiViews":652,"engagement":16,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18327752278104310","date":"2024-01-06","dateTime":"2024-01-06 22:18","year":2024,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"잘했어!!🙋‍♂️\n#스마트앱어워드 대상 #ICT어워드 대상\n#이디야멤버스APP","title":"잘했어!!🙋‍♂️","url":"https://www.instagram.com/p/C1wp0ceLWKf/","embed":"https://www.instagram.com/p/C1wp0ceLWKf/embed/","likes":27,"comments":0,"reach":160,"apiViews":0,"engagement":27,"saves":0,"shares":0,"profileVisits":1,"follows":0,"detailStatus":"상세값 확보"},{"id":"17860003410036916","date":"2023-12-17","dateTime":"2023-12-17 21:28","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"캐디님이 다했따 ㅋㅋ\n#레이크사이드cc #골프 #드라이버","title":"캐디님이 다했따 ㅋㅋ","url":"https://www.instagram.com/reel/C09EGeZLQJZ/","embed":"https://www.instagram.com/reel/C09EGeZLQJZ/embed/","likes":27,"comments":1,"reach":162,"apiViews":727,"engagement":28,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17974366280469001","date":"2023-11-11","dateTime":"2023-11-11 22:57","year":2023,"type":"릴스","isReel":true,"category":"피트니스/농구","caption":"농구는 엉덩이 Power\n#농구 #슬램덩크 #조던","title":"농구는 엉덩이 Power","url":"https://www.instagram.com/reel/CzghuR7vftG/","embed":"https://www.instagram.com/reel/CzghuR7vftG/embed/","likes":25,"comments":0,"reach":79,"apiViews":883,"engagement":25,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18014133106747477","date":"2023-10-15","dateTime":"2023-10-15 03:05","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"새소리 풀소리 벌레소리 좋았다\n바지 터지기 일보 직전\n#가을골프 #드라이버 #깨백 #신라cc","title":"새소리 풀소리 벌레소리 좋았다","url":"https://www.instagram.com/reel/CyY3h5kSBoP/","embed":"https://www.instagram.com/reel/CyY3h5kSBoP/embed/","likes":28,"comments":0,"reach":72,"apiViews":678,"engagement":28,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18200245708282917","date":"2023-10-01","dateTime":"2023-10-01 23:38","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"남자는 핑쿠🍑\n날씨가 다했따\n181cm 85kg\n#골린이 #백돌이 #드라이버 #신라cc","title":"남자는 핑쿠🍑","url":"https://www.instagram.com/reel/Cx3BmB8vB1d/","embed":"https://www.instagram.com/reel/Cx3BmB8vB1d/embed/","likes":32,"comments":2,"reach":263,"apiViews":626,"engagement":34,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17898547208857456","date":"2023-09-19","dateTime":"2023-09-19 23:56","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"민초파\n#골프 #드라이버 #백돌이 #깨백 #가평베네스트","title":"민초파","url":"https://www.instagram.com/reel/CxYKAAjS36k/","embed":"https://www.instagram.com/reel/CxYKAAjS36k/embed/","likes":33,"comments":0,"reach":302,"apiViews":1636,"engagement":34,"saves":1,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17992273796486733","date":"2023-09-03","dateTime":"2023-09-03 19:36","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"씰룩 엉덩이, 촤라락 잔디, 시원한 구름\n#Хорошо #милый #백돌이 #골린이 #한림광릉","title":"씰룩 엉덩이, 촤라락 잔디, 시원한 구름","url":"https://www.instagram.com/reel/Cwuf5ZrLuEt/","embed":"https://www.instagram.com/reel/Cwuf5ZrLuEt/embed/","likes":25,"comments":0,"reach":75,"apiViews":371,"engagement":25,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17986907633239647","date":"2023-07-23","dateTime":"2023-07-23 22:40","year":2023,"type":"캐러셀","isReel":false,"category":"피트니스/농구","caption":"B컷, 쇼파\n#라이크미 #바프 #B컷","title":"B컷, 쇼파","url":"https://www.instagram.com/p/CvCrmWkPJBQ/","embed":"https://www.instagram.com/p/CvCrmWkPJBQ/embed/","likes":33,"comments":0,"reach":412,"apiViews":0,"engagement":33,"saves":0,"shares":0,"profileVisits":2,"follows":0,"detailStatus":"상세값 확보"},{"id":"17884119683887797","date":"2023-07-07","dateTime":"2023-07-07 22:27","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"안정적인 백돌이\n날씨 무엇\n안성베네스트GC\n#골린이 #골프 #드라이브 #베네스트GC","title":"안정적인 백돌이","url":"https://www.instagram.com/reel/CuZc4QdMXRf/","embed":"https://www.instagram.com/reel/CuZc4QdMXRf/embed/","likes":31,"comments":0,"reach":120,"apiViews":2070,"engagement":32,"saves":0,"shares":1,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18021258799527632","date":"2023-07-04","dateTime":"2023-07-04 01:00","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"달밤 드라이버\n#백돌이 #골프 #오운완 #드라이버","title":"달밤 드라이버","url":"https://www.instagram.com/reel/CuPbW_OMkhS/","embed":"https://www.instagram.com/reel/CuPbW_OMkhS/embed/","likes":22,"comments":0,"reach":83,"apiViews":492,"engagement":22,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17986849934159266","date":"2023-06-28","dateTime":"2023-06-28 01:00","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"안정적인 백돌이\n짜세 잡혀간다\n#골린이 #백돌이 #골프 # 오운완 #나이키 #한성cc","title":"안정적인 백돌이","url":"https://www.instagram.com/reel/Ct_-6WBtIQ5/","embed":"https://www.instagram.com/reel/Ct_-6WBtIQ5/embed/","likes":20,"comments":0,"reach":71,"apiViews":279,"engagement":20,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18000886069878837","date":"2023-06-08","dateTime":"2023-06-08 21:54","year":2023,"type":"릴스","isReel":true,"category":"피트니스/농구","caption":"내 앞에서 안돼!\n나와라 가제트 팔\n#오운완 #농구 #강철체력","title":"내 앞에서 안돼!","url":"https://www.instagram.com/reel/CtOuGJuA1tg/","embed":"https://www.instagram.com/reel/CtOuGJuA1tg/embed/","likes":19,"comments":0,"reach":279,"apiViews":1388,"engagement":19,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18066645355384754","date":"2023-06-01","dateTime":"2023-06-01 00:02","year":2023,"type":"캐러셀","isReel":false,"category":"피트니스/농구","caption":"D-24\n체지방율 11%\n백인이라 태닝 시작\n어깨좀 키워죠\n#8kg감량 #오운완 #배고팡","title":"D-24","url":"https://www.instagram.com/p/Cs6W5tsvbAs/","embed":"https://www.instagram.com/p/Cs6W5tsvbAs/embed/","likes":23,"comments":0,"reach":384,"apiViews":0,"engagement":24,"saves":0,"shares":1,"profileVisits":1,"follows":0,"detailStatus":"상세값 확보"},{"id":"17967047846253874","date":"2023-05-20","dateTime":"2023-05-20 17:12","year":2023,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"팀 영민, 나의 에너지\n결국 무엇이든 잘 해내는 최고들\n#성장 #태도 #배려 #겸손 #진심 #감사","title":"팀 영민, 나의 에너지","url":"https://www.instagram.com/p/CsdTMOLOITY/","embed":"https://www.instagram.com/p/CsdTMOLOITY/embed/","likes":23,"comments":4,"reach":385,"apiViews":0,"engagement":27,"saves":0,"shares":0,"profileVisits":1,"follows":0,"detailStatus":"상세값 확보"},{"id":"17864958902927187","date":"2023-05-14","dateTime":"2023-05-14 04:03","year":2023,"type":"릴스","isReel":true,"category":"피트니스/농구","caption":"52주만에 하는 농구\n마음은 조던\n#농구 #슬램덩크 #NBA #KBL #오운완 #십자인대완파환자","title":"52주만에 하는 농구","url":"https://www.instagram.com/reel/CsMbbxJN5Z5/","embed":"https://www.instagram.com/reel/CsMbbxJN5Z5/embed/","likes":16,"comments":0,"reach":237,"apiViews":558,"engagement":17,"saves":1,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18005803789710084","date":"2023-05-07","dateTime":"2023-05-07 02:04","year":2023,"type":"릴스","isReel":true,"category":"골프","caption":"23년 첫 라운딩\n라베했지만 백돌이\n한림광릉cc\n#골린이 #백돌이 #골프 #나이키 #한링광릉cc","title":"23년 첫 라운딩","url":"https://www.instagram.com/reel/Cr6Mm7yuFfH/","embed":"https://www.instagram.com/reel/Cr6Mm7yuFfH/embed/","likes":24,"comments":0,"reach":108,"apiViews":984,"engagement":24,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18007729393716653","date":"2023-05-01","dateTime":"2023-05-01 01:13","year":2023,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"서로 찍는 생파\n서로 아껴주는 팀원들\n고마워잉\n2024년 사업계획 준비하자\n#생파","title":"서로 찍는 생파","url":"https://www.instagram.com/p/CrqqSaaPYft/","embed":"https://www.instagram.com/p/CrqqSaaPYft/embed/","likes":19,"comments":0,"reach":111,"apiViews":0,"engagement":19,"saves":0,"shares":0,"profileVisits":1,"follows":0,"detailStatus":"상세값 확보"},{"id":"17926315625678468","date":"2023-04-20","dateTime":"2023-04-20 01:31","year":2023,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"승진했어요, 이차장\n#승진 #보너스 #감사합니다","title":"승진했어요, 이차장","url":"https://www.instagram.com/p/CrOXrrPvgfb/","embed":"https://www.instagram.com/p/CrOXrrPvgfb/embed/","likes":24,"comments":0,"reach":145,"apiViews":0,"engagement":24,"saves":0,"shares":0,"profileVisits":3,"follows":0,"detailStatus":"상세값 확보"},{"id":"17993078710857452","date":"2023-04-10","dateTime":"2023-04-10 22:35","year":2023,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"콜라보 팝업스토어 4.8~5.7\n오픈 첫날 3천명 방문\n부산 폭발, 경찰 출동\n많은 기획을 했지만\n잊지못할 콜라보.\n#부산 #부산달맞이 #이디야 #콜라보 #모코코 #로스트아크 #팝업스토어","title":"콜라보 팝업스토어 4.8~5.7","url":"https://www.instagram.com/p/Cq24aQjPab9/","embed":"https://www.instagram.com/p/Cq24aQjPab9/embed/","likes":19,"comments":4,"reach":263,"apiViews":0,"engagement":24,"saves":1,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17939797868504113","date":"2023-03-16","dateTime":"2023-03-16 00:35","year":2023,"type":"이미지","isReel":false,"category":"피트니스/농구","caption":"여름 온당  D-94\n#1일1운동 #오운완 #바프","title":"여름 온당  D-94","url":"https://www.instagram.com/p/Cp0Jc5PPGza/","embed":"https://www.instagram.com/p/Cp0Jc5PPGza/embed/","likes":25,"comments":3,"reach":268,"apiViews":0,"engagement":28,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17945896517352572","date":"2023-02-03","dateTime":"2023-02-03 18:20","year":2023,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"메타버스 업무 협약\n#이디야 #제프 #mou","title":"메타버스 업무 협약","url":"https://www.instagram.com/p/CoMesb7PVVk/","embed":"https://www.instagram.com/p/CoMesb7PVVk/embed/","likes":5,"comments":0,"reach":239,"apiViews":0,"engagement":6,"saves":1,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"18048953977369015","date":"2023-01-28","dateTime":"2023-01-28 23:59","year":2023,"type":"캐러셀","isReel":false,"category":"일상/여행/기타","caption":"오사카 고베\n#일본 #오사카 #워크샵","title":"오사카 고베","url":"https://www.instagram.com/p/Cn9oxYov9wV/","embed":"https://www.instagram.com/p/Cn9oxYov9wV/embed/","likes":8,"comments":0,"reach":140,"apiViews":0,"engagement":8,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17968621094116398","date":"2023-01-17","dateTime":"2023-01-17 23:19","year":2023,"type":"캐러셀","isReel":false,"category":"피트니스/농구","caption":"무조건 봐야되는 슬덩\n농구하구 싶다 내 무릎아\n#슬램덩크","title":"무조건 봐야되는 슬덩","url":"https://www.instagram.com/p/CnhPYXIPi_f/","embed":"https://www.instagram.com/p/CnhPYXIPi_f/embed/","likes":9,"comments":0,"reach":76,"apiViews":0,"engagement":9,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17939580149582233","date":"2023-01-09","dateTime":"2023-01-09 13:50","year":2023,"type":"캐러셀","isReel":false,"category":"골프","caption":"2년간 기획한 \n이디야 전용 신용카드가 출시 되었습니다!\n#이디야 #이디야커피 #plcc #신용카드","title":"2년간 기획한 ","url":"https://www.instagram.com/p/CnLn7OiPeif/","embed":"https://www.instagram.com/p/CnLn7OiPeif/embed/","likes":10,"comments":1,"reach":64,"apiViews":0,"engagement":11,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"18231396061084053","date":"2023-01-09","dateTime":"2023-01-09 13:31","year":2023,"type":"릴스","isReel":true,"category":"업무/마케팅","caption":"2년간 기획한 \n이디야 전용 신용카드가 출시되었습니다!","title":"2년간 기획한 ","url":"https://www.instagram.com/reel/CnLllk9Knur/","embed":"https://www.instagram.com/reel/CnLllk9Knur/embed/","likes":2,"comments":0,"reach":58,"apiViews":374,"engagement":2,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17970938708072119","date":"2023-01-04","dateTime":"2023-01-04 18:24","year":2023,"type":"릴스","isReel":true,"category":"일상/여행/기타","caption":"정동진 일출\n#정동진 #일출 #해돋이 #겨울바다 #힐링","title":"정동진 일출","url":"https://www.instagram.com/reel/Cm_PKuBKaMs/","embed":"https://www.instagram.com/reel/Cm_PKuBKaMs/embed/","likes":7,"comments":0,"reach":100,"apiViews":535,"engagement":7,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17980020994742261","date":"2023-01-02","dateTime":"2023-01-02 01:26","year":2023,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"플랫폼사업팀\n#인생네컷 #고생했어2022 #잘해보자2023","title":"플랫폼사업팀","url":"https://www.instagram.com/p/Cm4RNrnP4YQ/","embed":"https://www.instagram.com/p/Cm4RNrnP4YQ/embed/","likes":8,"comments":0,"reach":119,"apiViews":0,"engagement":8,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17953829855482971","date":"2022-12-10","dateTime":"2022-12-10 00:28","year":2022,"type":"이미지","isReel":false,"category":"피트니스/농구","caption":"오운완\n#오운완 #스쾃 #웨이트","title":"오운완","url":"https://www.instagram.com/p/Cl88RX-PelI/","embed":"https://www.instagram.com/p/Cl88RX-PelI/embed/","likes":15,"comments":0,"reach":151,"apiViews":0,"engagement":15,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17953524374132002","date":"2022-12-07","dateTime":"2022-12-07 19:09","year":2022,"type":"캐러셀","isReel":false,"category":"일상/여행/기타","caption":"삼성산 등산&하이킹\n#삼성산 #등산 #하이킹","title":"삼성산 등산&하이킹","url":"https://www.instagram.com/p/Cl3OOnZvqwx/","embed":"https://www.instagram.com/p/Cl3OOnZvqwx/embed/","likes":13,"comments":1,"reach":122,"apiViews":0,"engagement":14,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17987204296641285","date":"2022-11-19","dateTime":"2022-11-19 20:24","year":2022,"type":"캐러셀","isReel":false,"category":"골프","caption":"오골완\n#드라이버 #아이언 #연습","title":"오골완","url":"https://www.instagram.com/p/ClJAcQXPMZI/","embed":"https://www.instagram.com/p/ClJAcQXPMZI/embed/","likes":7,"comments":0,"reach":114,"apiViews":0,"engagement":7,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17951173199115965","date":"2022-11-12","dateTime":"2022-11-12 23:26","year":2022,"type":"캐러셀","isReel":false,"category":"일상/여행/기타","caption":"제 1회 산악회 관악산\n#관악산 #가을산 #가을냄새 #내무릎","title":"제 1회 산악회 관악산","url":"https://www.instagram.com/p/Ck3Ts7EP1C5/","embed":"https://www.instagram.com/p/Ck3Ts7EP1C5/embed/","likes":7,"comments":0,"reach":51,"apiViews":0,"engagement":7,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17924384228607328","date":"2022-10-28","dateTime":"2022-10-28 00:15","year":2022,"type":"릴스","isReel":true,"category":"골프","caption":"피융\n#가을골프 #드라이버 #큐로CC","title":"피융","url":"https://www.instagram.com/reel/CkOMg2sDolC/","embed":"https://www.instagram.com/reel/CkOMg2sDolC/embed/","likes":13,"comments":0,"reach":58,"apiViews":190,"engagement":13,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17959163117021733","date":"2022-09-30","dateTime":"2022-09-30 00:26","year":2022,"type":"이미지","isReel":false,"category":"골프","caption":"2년동안 기획한 PLCC가 곧 나옵니당\n#하나카드 #PLCC #MOU","title":"2년동안 기획한 PLCC가 곧 나옵니당","url":"https://www.instagram.com/p/CjGHnC3PcU-/","embed":"https://www.instagram.com/p/CjGHnC3PcU-/embed/","likes":6,"comments":0,"reach":91,"apiViews":0,"engagement":7,"saves":1,"shares":0,"profileVisits":2,"follows":0,"detailStatus":"상세값 확보"},{"id":"17924417489452151","date":"2022-06-22","dateTime":"2022-06-22 08:24","year":2022,"type":"캐러셀","isReel":false,"category":"골프","caption":"BC카드 부서장 워크샵\n#한림용인cc #BC카드","title":"BC카드 부서장 워크샵","url":"https://www.instagram.com/p/CfFe2XUPJnf/","embed":"https://www.instagram.com/p/CfFe2XUPJnf/embed/","likes":7,"comments":0,"reach":115,"apiViews":0,"engagement":7,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17967371614716880","date":"2022-06-10","dateTime":"2022-06-10 17:29","year":2022,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"이디야-티몬 마케팅 MOU\n#이디야 #티몬","title":"이디야-티몬 마케팅 MOU","url":"https://www.instagram.com/p/Cenjtg3vJST/","embed":"https://www.instagram.com/p/Cenjtg3vJST/embed/","likes":7,"comments":0,"reach":89,"apiViews":0,"engagement":8,"saves":1,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17842834481794505","date":"2022-06-08","dateTime":"2022-06-08 21:57","year":2022,"type":"캐러셀","isReel":false,"category":"업무/마케팅","caption":"마케팅 기획 특강\n#알럽마케팅","title":"마케팅 기획 특강","url":"https://www.instagram.com/p/Cei4w0Yvpf7/","embed":"https://www.instagram.com/p/Cei4w0Yvpf7/embed/","likes":5,"comments":0,"reach":71,"apiViews":0,"engagement":5,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17984749663476737","date":"2022-06-05","dateTime":"2022-06-05 02:54","year":2022,"type":"릴스","isReel":true,"category":"골프","caption":"드라이버\n#골반아돌아라","title":"드라이버","url":"https://www.instagram.com/reel/CeZHjPVjL6f/","embed":"https://www.instagram.com/reel/CeZHjPVjL6f/embed/","likes":8,"comments":1,"reach":52,"apiViews":221,"engagement":9,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17972267218597035","date":"2022-06-05","dateTime":"2022-06-05 01:24","year":2022,"type":"캐러셀","isReel":false,"category":"골프","caption":"골프존안성W 야간라운딩\n#조던1 #스누피","title":"골프존안성W 야간라운딩","url":"https://www.instagram.com/p/CeY9Q-1Pxju/","embed":"https://www.instagram.com/p/CeY9Q-1Pxju/embed/","likes":11,"comments":0,"reach":45,"apiViews":0,"engagement":11,"saves":0,"shares":0,"profileVisits":0,"follows":0,"detailStatus":"상세값 확보"},{"id":"17932710452236834","date":"2022-05-26","dateTime":"2022-05-26 00:47","year":2022,"type":"릴스","isReel":true,"category":"피트니스/농구","caption":"내 앞에서 안돼\n#새벽농구 \n#조던과함께라면\n#십자인대없어요","title":"내 앞에서 안돼","url":"https://www.instagram.com/reel/Cd_I_UVjfv3/","embed":"https://www.instagram.com/reel/Cd_I_UVjfv3/embed/","likes":6,"comments":1,"reach":61,"apiViews":329,"engagement":7,"saves":0,"shares":0,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"18058341583312048","date":"2022-05-12","dateTime":"2022-05-12 19:26","year":2022,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"마케팅 기획 특강 TOP10 선정\n#멘토링 #강연 #마케팅","title":"마케팅 기획 특강 TOP10 선정","url":"https://www.instagram.com/p/CddGDHgvxn_/","embed":"https://www.instagram.com/p/CddGDHgvxn_/embed/","likes":5,"comments":2,"reach":58,"apiViews":0,"engagement":7,"saves":0,"shares":0,"profileVisits":2,"follows":0,"detailStatus":"상세값 확보"},{"id":"17933328479143260","date":"2022-04-30","dateTime":"2022-04-30 21:55","year":2022,"type":"캐러셀","isReel":false,"category":"골프","caption":"베뉴지cc 화창해\nWITH JORDAN\n#베뉴지 #드라이버 #골프 #조던","title":"베뉴지cc 화창해","url":"https://www.instagram.com/p/Cc-dfoEPYyV/","embed":"https://www.instagram.com/p/Cc-dfoEPYyV/embed/","likes":12,"comments":0,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17953272961745083","date":"2022-04-17","dateTime":"2022-04-17 01:45","year":2022,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"다날 MOU","title":"다날 MOU","url":"https://www.instagram.com/p/Cca0vbEP7i5/","embed":"https://www.instagram.com/p/Cca0vbEP7i5/embed/","likes":4,"comments":1,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17923869446207720","date":"2022-03-18","dateTime":"2022-03-18 01:18","year":2022,"type":"이미지","isReel":false,"category":"일상/여행/기타","caption":"상\n#상","title":"상","url":"https://www.instagram.com/p/CbNh1ixvj78/","embed":"https://www.instagram.com/p/CbNh1ixvj78/embed/","likes":4,"comments":2,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17914321826507461","date":"2022-03-06","dateTime":"2022-03-06 18:49","year":2022,"type":"릴스","isReel":true,"category":"피트니스/농구","caption":"Leg&Hip Day\n\n#십자인대없어요 #하체는반스 #반스\n#1일1운동","title":"Leg&Hip Day","url":"https://www.instagram.com/reel/CawgEEIjRsa/","embed":"https://www.instagram.com/reel/CawgEEIjRsa/embed/","likes":56,"comments":2,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"과거 상세 인사이트 미반환"},{"id":"17924355890064366","date":"2022-03-05","dateTime":"2022-03-05 20:45","year":2022,"type":"이미지","isReel":false,"category":"업무/마케팅","caption":"삼성카드 MOU\n\n#삼성카드 #내가젤어려요","title":"삼성카드 MOU","url":"https://www.instagram.com/p/CauI9apv7k1/","embed":"https://www.instagram.com/p/CauI9apv7k1/embed/","likes":3,"comments":0,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"},{"id":"17922075398223119","date":"2022-02-28","dateTime":"2022-02-28 23:36","year":2022,"type":"이미지","isReel":false,"category":"피트니스/농구","caption":"#1일1운동 #바디프로필 #바프","title":"#1일1운동 #바디프로필 #바프","url":"https://www.instagram.com/p/Cahkj7wPFuR/","embed":"https://www.instagram.com/p/Cahkj7wPFuR/embed/","likes":18,"comments":2,"reach":null,"apiViews":null,"engagement":null,"saves":null,"shares":null,"profileVisits":null,"follows":null,"detailStatus":"상세값 확보"}],"updated":"2026-10-06 11:00 KST"};
+const SEEDED_MANUAL={"17914321826507461":5230,"17964304527197592":773,"18489300184106376":536};
+const TODAY=new Date("2026-10-06T23:59:59+09:00");
+let currentPeriod="all", page=1;
+const PAGE_SIZE=12;
+
+const fmt=v=>v===null||v===undefined||v===""?"-":Math.round(Number(v)).toLocaleString("ko-KR");
+const avg=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:0;
+const manualKey=id=>"ymholic_manual_views_"+id;
+
+function getManual(id){
+  const savedRaw=localStorage.getItem(manualKey(id));
+  const saved=(savedRaw!==null&&savedRaw!=="")?Number(savedRaw):null;
+  const seeded=Object.prototype.hasOwnProperty.call(SEEDED_MANUAL,id)?Number(SEEDED_MANUAL[id]):null;
+  if(seeded!==null && saved!==null) return Math.max(seeded,saved);
+  if(seeded!==null) return seeded;
+  return saved;
+}
+function effectiveViews(x){const m=getManual(x.id); return m!==null?m:(x.apiViews??0)}
+function hasManual(x){return getManual(x.id)!==null}
+function detailOkay(x){return x.reach!==null&&x.apiViews!==null&&x.engagement!==null}
+
+function initOptions(){
+  const years=[...new Set(DATA.rows.map(x=>x.year))].sort((a,b)=>b-a);
+  yearFilter.innerHTML='<option value="">전체 연도</option>'+years.map(x=>`<option>${x}</option>`).join("");
+  const types=[...new Set(DATA.rows.map(x=>x.type))];
+  typeFilter.innerHTML='<option value="">전체 유형</option>'+types.map(x=>`<option>${x}</option>`).join("");
+  const cats=[...new Set(DATA.rows.map(x=>x.category))];
+  catFilter.innerHTML='<option value="">전체 주제</option>'+cats.map(x=>`<option>${x}</option>`).join("");
+}
+
+function filtered(){
+  const y=yearFilter.value,t=typeFilter.value,c=catFilter.value,q=search.value.trim().toLowerCase();
+  let r=DATA.rows.filter(x=>{
+    if(currentPeriod!=="all"){
+      const cutoff=new Date(TODAY.getTime()-Number(currentPeriod)*86400000);
+      if(new Date(x.date+"T00:00:00+09:00")<cutoff) return false;
+    }
+    if(y&&String(x.year)!==y) return false;
+    if(t&&x.type!==t) return false;
+    if(c&&x.category!==c) return false;
+    if(q&&!(x.caption||"").toLowerCase().includes(q)) return false;
+    return true;
+  });
+  switch(sortFilter.value){
+    case "reach": r.sort((a,b)=>(b.reach??-1)-(a.reach??-1)); break;
+    case "views": r.sort((a,b)=>effectiveViews(b)-effectiveViews(a)); break;
+    case "engagement": r.sort((a,b)=>(b.engagement??-1)-(a.engagement??-1)); break;
+    default: r.sort((a,b)=>b.dateTime.localeCompare(a.dateTime));
+  }
+  return r;
+}
+
+function kpiCard(label,value,sub,icon){
+  return `<div class="kpi"><div class="kpiTop"><div class="kpiLabel">${label}</div><div class="kpiIcon">${icon}</div></div><div class="kpiValue">${value}</div><div class="kpiSub">${sub}</div></div>`;
+}
+function renderKPIs(){
+  const r=filtered(), reach=r.filter(x=>x.reach!==null), reels=r.filter(x=>x.isReel);
+  const topReach=[...reach].sort((a,b)=>b.reach-a.reach)[0];
+  const topView=[...reels].sort((a,b)=>effectiveViews(b)-effectiveViews(a))[0];
+  const complete=reels.filter(detailOkay).length;
+  kpis.innerHTML=[
+    kpiCard("게시물",fmt(r.length),`전체 ${DATA.totalPosts}개`,"▦"),
+    kpiCard("릴스",fmt(reels.length),`전체 ${DATA.totalReels}개`,"▶"),
+    kpiCard("평균 도달",fmt(avg(reach.map(x=>x.reach))),`${reach.length}개 게시물 기준`,"◎"),
+    kpiCard("도달 1위",topReach?fmt(topReach.reach):"-",topReach?topReach.title:"","↑"),
+    kpiCard("릴스 조회수 1위",topView?fmt(effectiveViews(topView)):"-",topView?topView.title:"","◉"),
+    kpiCard("인사이트 확보율",reels.length?`${complete}/${reels.length}`:"-",reels.length?`${reels.length-complete}개 상세값 미반환`:"","✓")
+  ].join("");
+}
+
+
+function renderLatestMonitor(){
+  const ids=["17964304527197592","18489300184106376"];
+  const labels={"17964304527197592":"레이크사이드CC · NEW","18489300184106376":"실크밸리CC"};
+  const rows=ids.map(id=>DATA.rows.find(x=>x.id===id)).filter(Boolean);
+  latestMonitor.innerHTML=rows.map(x=>{
+    const app=effectiveViews(x),api=x.apiViews||0,gap=app-api,gapPct=api>0?gap/api*100:0;
+    const shareRate=x.reach>0?(x.shares||0)/x.reach*100:0;
+    const watch=x.avgWatchMs?(x.avgWatchMs/1000):null;
+    const img=x.thumbUrl?'<img src="'+x.thumbUrl+'" alt="'+escapeAttr(x.title)+'" onerror="this.style.display=\'none\'">':'';
+    return '<article class="monitorCard"><div class="monitorMedia">'+img+'<div class="monitorFallback">'+escapeHtml(x.title)+'</div><span class="monitorBadge">'+labels[x.id]+'</span></div>'+
+    '<div class="monitorBody"><div class="monitorTitle">'+escapeHtml(x.title)+'</div><div class="monitorDate">'+x.date+' · '+x.category+'</div>'+
+    '<div class="monitorViews"><div><small>앱 확인 조회수</small><div class="big">'+fmt(app)+'</div></div><div><small>API 조회수</small><b>'+fmt(api)+'</b></div></div>'+
+    '<div class="apiGap">API 대비 앱 실측 <b>+'+fmt(gap)+'</b> · '+gapPct.toFixed(1)+'% 높음</div>'+
+    '<div class="metricStrip"><div><b>'+fmt(x.reach)+'</b><span>도달</span></div><div><b>'+fmt(x.shares)+'</b><span>공유</span></div><div><b>'+(watch!==null?watch.toFixed(1)+'초':'-')+'</b><span>평균 시청</span></div><div><b>'+(x.skipRate!=null?(x.skipRate*100).toFixed(1)+'%':'-')+'</b><span>3초 이탈</span></div></div>'+
+    '<div class="compareBar"><div class="compareTop"><span>공유/도달</span><span>'+shareRate.toFixed(1)+'%</span></div><div class="compareTrack"><div class="compareFill" style="width:'+Math.min(100,shareRate).toFixed(1)+'%"></div></div></div></div></article>';
+  }).join("");
+}
+function renderExecSummary(){
+  const r=filtered(),reach=r.filter(x=>x.reach>0),eng=r.filter(x=>x.reach>0&&x.engagement!=null),shares=r.filter(x=>x.reach>0);
+  const topReach=[...reach].sort((a,b)=>b.reach-a.reach)[0];
+  const topER=[...eng].sort((a,b)=>(b.engagement/b.reach)-(a.engagement/a.reach))[0];
+  const topShare=[...shares].sort((a,b)=>((b.shares||0)/b.reach)-((a.shares||0)/a.reach))[0];
+  const topVR=[...reach].sort((a,b)=>(effectiveViews(b)/b.reach)-(effectiveViews(a)/a.reach))[0];
+  const card=(l,v,s)=>'<div class="execCard"><div class="execLabel">'+l+'</div><div class="execValue">'+v+'</div><div class="execSub">'+escapeHtml(s||"")+'</div></div>';
+  execSummary.innerHTML=[
+    card("최고 도달",topReach?fmt(topReach.reach):"-",topReach?.title),
+    card("최고 상호작용률",topER?(topER.engagement/topER.reach*100).toFixed(1)+"%":"-",topER?.title),
+    card("최고 공유율",topShare?((topShare.shares||0)/topShare.reach*100).toFixed(1)+"%":"-",topShare?.title),
+    card("조회/도달 최고",topVR?(effectiveViews(topVR)/topVR.reach).toFixed(2)+"×":"-",topVR?.title)
+  ].join("");
+}
+function renderThemeYearHeatmap(){
+  const r=filtered().filter(x=>x.reach!=null), years=[2022,2023,2024,2025,2026];
+  const cats=[...new Set(r.map(x=>x.category))];
+  let vals=[]; const matrix=cats.map(cat=>years.map(y=>{const a=r.filter(x=>x.category===cat&&x.year===y);const v=a.length?avg(a.map(x=>x.reach)):0;if(v)vals.push(v);return{v,n:a.length}}));
+  const mx=Math.max(...vals,1);
+  const shade=v=>{if(!v)return "#f7f9fc";const a=.12+.68*(v/mx);return "rgba(37,99,235,"+a.toFixed(2)+")"};
+  themeYearHeatmap.innerHTML='<div class="heatWrap"><div class="heatTable"><div class="heatRow"><div class="heatCell heatHead">주제</div>'+years.map(y=>'<div class="heatCell heatHead">'+y+'</div>').join("")+'</div>'+
+    cats.map((cat,i)=>'<div class="heatRow"><div class="heatCell heatName">'+escapeHtml(cat)+'</div>'+matrix[i].map(o=>'<div class="heatCell" style="background:'+shade(o.v)+';color:'+(o.v/mx>.55?"#fff":"#23364c")+'">'+(o.n?fmt(o.v):"-")+(o.n?'<small style="display:block;font-size:7px;opacity:.75">n='+o.n+'</small>':"")+'</div>').join("")+'</div>').join("")+'</div></div>';
+}
+function renderEfficiencyBoard(){
+  const r=filtered().filter(x=>x.reach>0).map(x=>({...x,er:(x.engagement||0)/x.reach*100,vr:effectiveViews(x)/x.reach}));
+  r.sort((a,b)=>(b.er*0.55+b.vr*12+b.reach/200)-(a.er*0.55+a.vr*12+a.reach/200));
+  const top=r.slice(0,8);
+  efficiencyBoard.innerHTML='<div class="scoreTable"><div class="scoreRow head"><span>#</span><span>콘텐츠</span><span>도달</span><span>조회</span><span>반응률</span><span>조회/도달</span></div>'+
+    top.map((x,i)=>'<div class="scoreRow"><span class="scoreRank">'+(i+1)+'</span><span class="scoreTitle" title="'+escapeAttr(x.title)+'">'+escapeHtml(x.title)+'</span><span class="scoreNum">'+fmt(x.reach)+'</span><span class="scoreNum">'+fmt(effectiveViews(x))+'</span><span class="scoreNum">'+x.er.toFixed(1)+'%</span><span class="scoreNum">'+x.vr.toFixed(2)+'×</span></div>').join("")+'</div>';
+}
+function renderInsights(){
+  const r=filtered(), reach=r.filter(x=>x.reach!==null), reels=r.filter(x=>x.isReel);
+  const cats=[...new Set(reach.map(x=>x.category))].map(name=>{
+    const a=reach.filter(x=>x.category===name);
+    return {name,n:a.length,val:avg(a.map(x=>x.reach))};
+  }).filter(x=>x.n>0).sort((a,b)=>b.val-a.val);
+  const years=[...new Set(reach.map(x=>x.year))].map(year=>{
+    const a=reach.filter(x=>x.year===year);
+    return {year,n:a.length,val:avg(a.map(x=>x.reach))};
+  }).sort((a,b)=>b.val-a.val);
+  const bestCat=cats[0],bestYear=years[0],topReel=[...reels].sort((a,b)=>effectiveViews(b)-effectiveViews(a))[0];
+  const manualCount=reels.filter(hasManual).length;
+  insights.innerHTML=[
+    `<div class="insight"><span class="insightBadge">주제 효율</span><strong>${bestCat?bestCat.name:"-"}</strong><p>${bestCat?`평균 도달 ${fmt(bestCat.val)} · 표본 ${bestCat.n}개`:"도달 데이터 없음"}</p></div>`,
+    `<div class="insight"><span class="insightBadge">연도 추세</span><strong>${bestYear?bestYear.year+"년 평균 도달 최고":"-"}</strong><p>${bestYear?`평균 ${fmt(bestYear.val)} · 표본 ${bestYear.n}개`:"도달 데이터 없음"}</p></div>`,
+    `<div class="insight"><span class="insightBadge">릴스 히트</span><strong>${topReel?topReel.title:"-"}</strong><p>${topReel?`분석 조회 ${fmt(effectiveViews(topReel))}${hasManual(topReel)?" · 앱 실측 반영":""}`:"릴스 없음"}</p></div>`,
+    `<div class="insight"><span class="insightBadge">데이터 품질</span><strong>릴스 ${reels.filter(detailOkay).length}/${reels.length} 상세 인사이트 확보</strong><p>앱 실측값 ${manualCount}개 보정 · 미반환 항목은 별도 표시</p></div>`
+  ].join("");
+}
+
+function uniqueFeatures(r){
+  const reach=[...r].filter(x=>x.reach!==null).sort((a,b)=>b.reach-a.reach)[0];
+  const view=[...r].filter(x=>x.isReel).sort((a,b)=>effectiveViews(b)-effectiveViews(a))[0];
+  const engagement=[...r].filter(x=>x.engagement!==null).sort((a,b)=>b.engagement-a.engagement)[0];
+  const latest=[...r].sort((a,b)=>b.dateTime.localeCompare(a.dateTime))[0];
+  const roles=[[reach,"도달 1위"],[view,"릴스 조회 1위"],[engagement,"상호작용 1위"],[latest,"최신 게시물"]];
+  const out=[];
+  for(const [x,role] of roles){
+    if(!x) continue;
+    const found=out.find(o=>o.item.id===x.id);
+    if(found) found.role+=" · "+role;
+    else out.push({item:x,role});
+  }
+  return out.slice(0,4);
+}
+
+function previewCard(x,role="",gallery=false){
+  const manual=hasManual(x);
+  return `<article class="contentCard" data-id="${x.id}">
+    <div class="preview">
+      ${x.thumbUrl?`<img src="${x.thumbUrl}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">`:`<iframe loading="lazy" src="${x.embed}" tabindex="-1" aria-hidden="true"></iframe>`}
+      <div class="previewOverlay"></div>
+      <div class="previewTop">
+        <span class="roleTag">${role||x.category}</span>
+        <span class="typeTag">${x.type}</span>
+      </div>
+      ${x.isReel?'<div class="play">▶</div>':""}
+      <div class="previewFoot"><span>${x.date}</span><span>클릭 상세보기</span></div>
+    </div>
+    <div class="cardBody">
+      <div class="cardTitle">${escapeHtml(x.title)}</div>
+      <div class="cardMeta"><span>${x.category}</span><span>${x.type}</span></div>
+      <div class="metricRow">
+        <div class="metric"><b>${fmt(x.reach)}</b><span>도달</span></div>
+        <div class="metric"><b>${fmt(effectiveViews(x))}</b><span>${x.isReel?"조회수":"API 조회"}</span></div>
+        <div class="metric"><b>${fmt(x.engagement)}</b><span>상호작용</span></div>
+      </div>
+      <div class="cardBottom">
+        <span class="topicTag">${x.category}</span>
+        ${manual?`<span class="manualTag">앱 실측 ${fmt(getManual(x.id))}</span>`:`<span class="muted">${fmt(x.likes)} 좋아요</span>`}
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderFeatures(){
+  const r=filtered();
+  featureGrid.innerHTML=uniqueFeatures(r).map(o=>previewCard(o.item,o.role)).join("") || '<div class="empty">표시할 콘텐츠가 없습니다.</div>';
+  bindCards(featureGrid);
+}
+
+function bars(el,arr,get,label,alt=false){
+  const max=Math.max(...arr.map(x=>Number(get(x)||0)),1);
+  document.getElementById(el).innerHTML=arr.map(x=>
+    `<div class="barrow"><div class="barlabel" title="${escapeAttr(label(x))}">${escapeHtml(label(x))}</div>
+    <div class="track"><div class="bar ${alt?"alt":""}" style="width:${Math.max(2,Number(get(x)||0)/max*100).toFixed(1)}%"></div></div>
+    <div class="barvalue">${fmt(get(x))}</div></div>`
+  ).join("");
+}
+
+function renderCharts(){
+  const r=filtered();
+  const reach=[...r].filter(x=>x.reach!==null).sort((a,b)=>b.reach-a.reach).slice(0,10);
+  const reels=[...r].filter(x=>x.isReel).sort((a,b)=>effectiveViews(b)-effectiveViews(a)).slice(0,10);
+  bars("reachBars",reach,x=>x.reach,x=>x.title);
+  bars("viewBars",reels,x=>effectiveViews(x),x=>x.title,true);
+
+  const cats=[...new Set(r.map(x=>x.category))].map(name=>{
+    const a=r.filter(x=>x.category===name&&x.reach!==null);
+    return {name,n:a.length,val:avg(a.map(x=>x.reach))};
+  }).filter(x=>x.n).sort((a,b)=>b.val-a.val);
+  bars("themeBars",cats,x=>x.val,x=>`${x.name} (n=${x.n})`);
+
+  const yrs=[...new Set(r.map(x=>x.year))].sort();
+  const yd=yrs.map(year=>{
+    const a=r.filter(x=>x.year===year&&x.reach!==null);
+    return {year,n:a.length,val:avg(a.map(x=>x.reach))};
+  }).filter(x=>x.n);
+  bars("yearBars",yd,x=>x.val,x=>`${x.year} (n=${x.n})`,true);
+
+  reachNote.textContent=reach[0]?`도달 1위는 ${reach[0].title} · ${fmt(reach[0].reach)}입니다.`:"도달 데이터가 없습니다.";
+  viewNote.textContent=reels[0]?`${reels[0].title}가 분석 조회 ${fmt(effectiveViews(reels[0]))}로 1위입니다.${hasManual(reels[0])?" 앱 실측값을 반영했습니다.":""}`:"릴스가 없습니다.";
+  themeNote.textContent=cats[0]?`${cats[0].name}의 평균 도달이 ${fmt(cats[0].val)}로 가장 높습니다. 표본 ${cats[0].n}개 기준입니다.`:"주제 데이터가 없습니다.";
+  const bestYear=[...yd].sort((a,b)=>b.val-a.val)[0];
+  yearNote.textContent=bestYear?`${bestYear.year}년 평균 도달 ${fmt(bestYear.val)} · 표본 ${bestYear.n}개로 필터 구간 내 최고입니다.`:"연도 데이터가 없습니다.";
+}
+
+function renderGallery(){
+  const r=filtered();
+  const pages=Math.max(1,Math.ceil(r.length/PAGE_SIZE));
+  if(page>pages) page=pages;
+  const chunk=r.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+  galleryGrid.innerHTML=chunk.length?chunk.map(x=>previewCard(x,"",true)).join(""):'<div class="empty">필터 조건에 맞는 게시물이 없습니다.</div>';
+  pageLabel.textContent=`${page} / ${pages} · ${r.length}개`;
+  prevBtn.disabled=page<=1; nextBtn.disabled=page>=pages;
+  bindCards(galleryGrid);
+}
+
+
+function median(vals){
+  const a=vals.filter(v=>v!==null&&v!==undefined&&Number.isFinite(Number(v))).map(Number).sort((a,b)=>a-b);
+  if(!a.length) return 0; const m=Math.floor(a.length/2); return a.length%2?a[m]:(a[m-1]+a[m])/2;
+}
+function escXml(s){return escapeHtml(String(s??""))}
+function renderRecentTrend(){
+  const r=[...filtered()].sort((a,b)=>a.dateTime.localeCompare(b.dateTime)).slice(-12);
+  if(!r.length){recentTrend.innerHTML='<div class="empty">데이터가 없습니다.</div>';return;}
+  const W=620,H=240,L=42,R=18,T=18,B=42,iw=W-L-R,ih=H-T-B;
+  const vals=r.flatMap(x=>[x.reach||0,effectiveViews(x)||0]); const mx=Math.max(...vals,1);
+  const sx=i=>L+(r.length===1?iw/2:i*iw/(r.length-1)); const sy=v=>T+ih-(v/mx)*ih;
+  const line=(getter)=>r.map((x,i)=>`${sx(i).toFixed(1)},${sy(getter(x)||0).toFixed(1)}`).join(" ");
+  const grid=[0,.25,.5,.75,1].map(p=>{const y=T+ih*(1-p);return `<line class="vizGrid" x1="${L}" y1="${y}" x2="${W-R}" y2="${y}"/><text class="vizTiny" x="${L-6}" y="${y+3}" text-anchor="end">${fmt(mx*p)}</text>`}).join("");
+  const labels=r.map((x,i)=>i%2===0||i===r.length-1?`<text class="vizTiny" x="${sx(i)}" y="${H-18}" text-anchor="middle">${x.date.slice(5)}</text>`:"").join("");
+  recentTrend.innerHTML=`<svg class="vizSvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="최근 게시물 도달 및 조회 추이">${grid}
+    <polyline fill="none" stroke="#2563eb" stroke-width="2.5" points="${line(x=>x.reach)}"/>
+    <polyline fill="none" stroke="#0891b2" stroke-width="2.5" points="${line(x=>effectiveViews(x))}"/>
+    ${r.map((x,i)=>`<circle cx="${sx(i)}" cy="${sy(x.reach||0)}" r="3" fill="#2563eb"><title>${escXml(x.title)} · 도달 ${fmt(x.reach)}</title></circle><circle cx="${sx(i)}" cy="${sy(effectiveViews(x)||0)}" r="3" fill="#0891b2"><title>${escXml(x.title)} · 조회 ${fmt(effectiveViews(x))}</title></circle>`).join("")}
+    ${labels}</svg><div class="legendRow"><span><i class="legendDot s1"></i>도달</span><span><i class="legendDot s2"></i>분석 조회</span></div>`;
+}
+function renderPerformanceMatrix(){
+  const r=filtered().filter(x=>x.reach>0&&x.engagement!==null);
+  if(!r.length){performanceMatrix.innerHTML='<div class="empty">데이터가 없습니다.</div>';return;}
+  const W=620,H=240,L=44,R=18,T=18,B=36,iw=W-L-R,ih=H-T-B;
+  const rates=r.map(x=>x.engagement/x.reach*100); const xMed=median(r.map(x=>x.reach)), yMed=median(rates);
+  const xMax=Math.max(...r.map(x=>x.reach),1)*1.08, yMax=Math.max(...rates,1)*1.08;
+  const sx=v=>L+(v/xMax)*iw, sy=v=>T+ih-(v/yMax)*ih;
+  const colors={"골프":"#2563eb","프로스포츠/스포츠마케팅":"#7c3aed","피트니스/농구":"#0891b2","업무/마케팅":"#d38b16","일상/여행/기타":"#708090"};
+  const points=r.map(x=>{const rate=x.engagement/x.reach*100;const rr=Math.min(7,3+Math.sqrt(Math.max(effectiveViews(x),0))/35);return `<circle cx="${sx(x.reach)}" cy="${sy(rate)}" r="${rr.toFixed(1)}" fill="${colors[x.category]||"#708090"}" fill-opacity=".72"><title>${escXml(x.title)} · 도달 ${fmt(x.reach)} · 상호작용률 ${rate.toFixed(1)}%</title></circle>`}).join("");
+  performanceMatrix.innerHTML=`<svg class="vizSvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="도달과 상호작용률 매트릭스">
+    <line class="vizGrid" x1="${sx(xMed)}" y1="${T}" x2="${sx(xMed)}" y2="${T+ih}"/><line class="vizGrid" x1="${L}" y1="${sy(yMed)}" x2="${L+iw}" y2="${sy(yMed)}"/>
+    <text class="vizTiny" x="${L+6}" y="${T+12}">고반응·저도달</text><text class="vizTiny" x="${L+iw-6}" y="${T+12}" text-anchor="end">고반응·고도달</text>
+    <text class="vizTiny" x="${L+6}" y="${T+ih-7}">저반응·저도달</text><text class="vizTiny" x="${L+iw-6}" y="${T+ih-7}" text-anchor="end">저반응·고도달</text>
+    ${points}<text class="vizTiny" x="${L+iw/2}" y="${H-7}" text-anchor="middle">도달 →</text><text class="vizTiny" x="9" y="${T+ih/2}" transform="rotate(-90 9 ${T+ih/2})" text-anchor="middle">상호작용률 →</text>
+  </svg><div class="matrixNote">중앙선은 현재 필터의 중앙값입니다. 오른쪽 위에 가까울수록 ‘많이 보고, 많이 반응한’ 콘텐츠입니다.</div>`;
+}
+function renderInteractionMix(){
+  const r=[...filtered()].filter(x=>x.engagement>0).sort((a,b)=>b.engagement-a.engagement).slice(0,8);
+  if(!r.length){interactionMix.innerHTML='<div class="empty">데이터가 없습니다.</div>';return;}
+  interactionMix.innerHTML=r.map(x=>{const total=Math.max((x.likes||0)+(x.comments||0)+(x.saves||0)+(x.shares||0),1);const seg=(v,cls)=>`<i class="${cls}" style="width:${(Math.max(v||0,0)/total*100).toFixed(1)}%"></i>`;return `<div class="mixRow"><div class="mixLabel" title="${escapeAttr(x.title)}">${escapeHtml(x.title)}</div><div class="mixTrack">${seg(x.likes,"segLike")}${seg(x.comments,"segComment")}${seg(x.saves,"segSave")}${seg(x.shares,"segShare")}</div><div class="mixValue">${fmt(x.engagement)}</div></div>`}).join("")+
+  '<div class="legendRow"><span><i class="legendDot s1"></i>좋아요</span><span><i class="legendDot s3"></i>댓글</span><span><i class="legendDot s2"></i>저장</span><span><i class="legendDot s4"></i>공유</span></div>';
+}
+function renderTypeEfficiency(){
+  const r=filtered(); const types=[...new Set(r.map(x=>x.type))].map(name=>{const a=r.filter(x=>x.type===name);const rr=a.filter(x=>x.reach!==null);return{name,n:a.length,avgReach:avg(rr.map(x=>x.reach)),medReach:median(rr.map(x=>x.reach)),avgEng:avg(a.filter(x=>x.engagement!==null).map(x=>x.engagement)),avgViews:avg(a.map(x=>effectiveViews(x)).filter(v=>v>0))}}).sort((a,b)=>b.avgReach-a.avgReach);
+  const mx=Math.max(...types.map(x=>x.avgReach),1);
+  typeEfficiency.innerHTML='<div class="typeTable"><div class="typeRow head"><span>유형</span><span>평균 도달</span><span>중앙값</span><span>평균 반응</span><span>평균 조회</span></div>'+types.map(x=>`<div class="typeRow"><span class="typeName">${x.name} <small>(n=${x.n})</small></span><span class="typeBar"><i style="width:${(x.avgReach/mx*100).toFixed(1)}%"></i></span><span class="typeNum">${fmt(x.medReach)}</span><span class="typeNum">${fmt(x.avgEng)}</span><span class="typeNum">${fmt(x.avgViews)}</span></div>`).join("")+'</div>';
+}
+function renderReelBenchmark(){
+  const reels=[...DATA.rows].filter(x=>x.isReel&&x.avgWatchMs).sort((a,b)=>b.dateTime.localeCompare(a.dateTime)).slice(0,2);
+  if(!reels.length){reelBenchmark.innerHTML='<div class="empty">시청 품질 데이터가 없습니다.</div>';return;}
+  const maxWatch=Math.max(...reels.map(x=>x.avgWatchMs),1), maxShare=Math.max(...reels.map(x=>x.shares||0),1);
+  reelBenchmark.innerHTML='<div class="benchGrid">'+reels.map(x=>`<div class="benchCard"><div class="benchTitle"><strong>${escapeHtml(x.title)}</strong><span>${x.date}</span></div>
+    <div class="benchMetrics"><div class="benchMetric"><b>${fmt(effectiveViews(x))}</b><span>앱/분석 조회</span></div><div class="benchMetric"><b>${fmt(x.reach)}</b><span>도달</span></div><div class="benchMetric"><b>${(x.avgWatchMs/1000).toFixed(1)}초</b><span>평균 시청</span></div><div class="benchMetric"><b>${(x.skipRate*100).toFixed(1)}%</b><span>3초 이탈</span></div><div class="benchMetric"><b>${fmt(x.shares)}</b><span>공유</span></div></div>
+    <div class="benchBar"><div class="benchBarTop"><span>평균 시청시간</span><span>${(x.avgWatchMs/1000).toFixed(1)}초</span></div><div class="benchTrack"><div class="benchFill" style="width:${(x.avgWatchMs/maxWatch*100).toFixed(1)}%"></div></div></div>
+    <div class="benchBar"><div class="benchBarTop"><span>공유 강도</span><span>${fmt(x.shares)}</span></div><div class="benchTrack"><div class="benchFill" style="width:${((x.shares||0)/maxShare*100).toFixed(1)}%"></div></div></div>
+  </div>`).join("")+'</div>';
+}
+function renderDeepAnalytics(){renderRecentTrend();renderPerformanceMatrix();renderInteractionMix();renderTypeEfficiency();renderReelBenchmark();renderThemeYearHeatmap();renderEfficiencyBoard()}
+
+function renderAudit(){
+  const reels=DATA.rows.filter(x=>x.isReel).sort((a,b)=>b.dateTime.localeCompare(a.dateTime));
+  const complete=reels.filter(detailOkay).length;
+  const manualCount=reels.filter(hasManual).length;
+  const missing=reels.length-complete;
+  auditSummary.innerHTML=[
+    `<div class="auditSum"><small>릴스 전체</small><b>${reels.length}개</b></div>`,
+    `<div class="auditSum"><small>상세 인사이트 확보</small><b>${complete}/${reels.length}</b></div>`,
+    `<div class="auditSum"><small>앱 실측 보정</small><b>${manualCount}개 · 미반환 ${missing}개</b></div>`
+  ].join("");
+  auditBody.innerHTML=reels.map(x=>{
+    const m=getManual(x.id), ok=detailOkay(x);
+    const status=m!==null?"앱 실측 보정":ok?"인사이트 확보":"상세값 미반환";
+    const cls=m!==null?"warn":ok?"good":"bad";
+    return `<tr>
+      <td>${x.date}</td>
+      <td title="${escapeAttr(x.title)}">${escapeHtml(x.title)}</td>
+      <td class="num">${fmt(x.reach)}</td>
+      <td class="num">${fmt(x.apiViews)}</td>
+      <td><input class="manualInput" data-id="${x.id}" type="number" min="0" value="${m??""}" placeholder="직접 입력"></td>
+      <td class="num"><b>${fmt(effectiveViews(x))}</b></td>
+      <td class="num">${fmt(x.engagement)}</td>
+      <td><span class="status ${cls}">${status}</span></td>
+      <td><a class="auditLink" target="_blank" href="${x.url}">열기 ↗</a></td>
+    </tr>`;
+  }).join("");
+  document.querySelectorAll(".manualInput").forEach(inp=>inp.addEventListener("change",e=>{
+    const id=e.target.dataset.id,v=e.target.value.trim();
+    if(v===""){
+      localStorage.removeItem(manualKey(id));
+    }else{
+      localStorage.setItem(manualKey(id),String(Number(v)));
+    }
+    page=1; renderAll();
+  }));
+}
+
+function bindCards(root){
+  root.querySelectorAll(".contentCard").forEach(card=>card.addEventListener("click",()=>{
+    const x=DATA.rows.find(r=>r.id===card.dataset.id); if(x) openModal(x);
+  }));
+}
+function openModal(x){
+  modalIframe.src=x.embed;
+  modalRole.textContent=`${x.type} · ${x.category}${hasManual(x)?" · 앱 실측 조회수 반영":""}`;
+  modalTitle.textContent=x.title;
+  modalMeta.textContent=`${x.date} · ${detailOkay(x)?"상세 인사이트 확보":"일부 상세값 미반환"}`;
+  modalMetrics.innerHTML=[
+    ["도달",fmt(x.reach)],["분석 조회수",fmt(effectiveViews(x))],
+    ["상호작용",fmt(x.engagement)],["좋아요",fmt(x.likes)],
+    ["댓글",fmt(x.comments)],["저장",fmt(x.saves)]
+  ].map(([l,v])=>`<div class="modalMetric"><small>${l}</small><b>${v}</b></div>`).join("");
+  modalCaption.textContent=x.caption||"";
+  modalLink.href=x.url;
+  detailModal.classList.add("open");
+  document.body.style.overflow="hidden";
+}
+function closeModalFn(){
+  detailModal.classList.remove("open");
+  modalIframe.src="about:blank";
+  document.body.style.overflow="";
+}
+
+function exportCSV(){
+  const rows=filtered();
+  const headers=["date","type","category","title","reach","analysis_views","api_views","engagement","likes","comments","saves","shares","instagram_url"];
+  const q=v=>`"${String(v??"").replaceAll('"','""')}"`;
+  const csv=[headers.join(","),...rows.map(x=>[
+    x.date,x.type,x.category,x.title,x.reach,effectiveViews(x),x.apiViews,x.engagement,x.likes,x.comments,x.saves,x.shares,x.url
+  ].map(q).join(","))].join("\n");
+  const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ymholic_instagram_filtered.csv";a.click();URL.revokeObjectURL(a.href);
+}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function escapeAttr(s){return escapeHtml(s)}
+
+function renderAll(){renderKPIs();renderLatestMonitor();renderExecSummary();renderInsights();renderFeatures();renderCharts();renderDeepAnalytics();renderGallery();renderAudit()}
+
+document.querySelectorAll("[data-period]").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("[data-period]").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");currentPeriod=b.dataset.period;page=1;renderAll();
+}));
+[yearFilter,typeFilter,catFilter,search,sortFilter].forEach(x=>x.addEventListener("input",()=>{page=1;renderAll()}));
+prevBtn.addEventListener("click",()=>{if(page>1){page--;renderGallery()}});
+nextBtn.addEventListener("click",()=>{page++;renderGallery()});
+csvBtn.addEventListener("click",exportCSV);
+closeModal.addEventListener("click",closeModalFn);
+modalClose2.addEventListener("click",closeModalFn);
+detailModal.addEventListener("click",e=>{if(e.target===detailModal)closeModalFn()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModalFn()});
+
+initOptions();renderAll();
+</script>
+</body>
+</html>

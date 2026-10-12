@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="이디야커피 공식 인스타그램 공개 게시물 비교: 한글날 캠페인 성과와 댓글 인사이트">
+<title>EDIYA INSIGHT | 한글날 캠페인 성과 대시보드</title>
+<style>
+:root{--blue:#153eab;--deep:#0b2564;--sky:#ebf1ff;--ink:#182337;--muted:#66768d;--line:#e1e7ef;--bg:#f5f7fb;--w:#fff;--green:#11755c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Pretendard","Apple SD Gothic Neo","Noto Sans KR",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}button,select,input{font:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #7aa6ff;outline-offset:2px}
+.wrap{max-width:1220px;margin:0 auto;padding:0 25px}
+header{background:var(--w);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+header .wrap{display:flex;justify-content:space-between;align-items:center;height:66px;gap:20px}
+.brand{font-size:19px;color:#1b408f;font-weight:900;letter-spacing:-.6px}.brand small{color:var(--muted);font-size:11px;font-weight:600;letter-spacing:1.2px;margin-left:12px}
+nav{display:flex;gap:22px;color:#43516b;font-size:13px;font-weight:650}nav a{text-decoration:none}nav a:hover{color:var(--blue)}
+.hero{background:linear-gradient(118deg,#081a4d 0%,#1545b5 65%,#3e6edf 100%);color:white;overflow:hidden;position:relative;padding:56px 0 55px}
+.hero:after{content:"한글";font-size:240px;font-weight:900;position:absolute;right:-26px;top:-40px;opacity:.055;transform:rotate(-12deg);pointer-events:none}
+.eyebrow{font-size:12px;letter-spacing:1.8px;font-weight:700;color:#aaccff;margin-bottom:17px}
+.hero h1{font-size:clamp(30px,4.2vw,51px);margin:0 0 15px;letter-spacing:-2px;line-height:1.22}
+.hero h1 em{font-style:normal;color:#d7e3ff}.hero p{max-width:730px;margin:0;color:#d3def7;line-height:1.8;font-size:15px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:25px}.pill{border:1px solid #7797e4;color:#e7efff;border-radius:30px;padding:8px 12px;font-size:11px}
+main{padding-bottom:80px}.sect{margin-top:38px;scroll-margin-top:88px}.sect h2{font-size:23px;margin:0 0 8px;letter-spacing:-.6px}.intro{color:var(--muted);font-size:13px;line-height:1.7;margin:0 0 20px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.kpi{background:white;border:1px solid var(--line);border-radius:14px;padding:22px 22px 18px;box-shadow:0 4px 16px #0e2a5706}
+.kpi .lab{color:var(--muted);font-size:12px;font-weight:650}.kpi .num{font-size:30px;font-weight:850;letter-spacing:-1px;margin:12px 0 7px;font-variant-numeric:tabular-nums}.kpi .hint{font-size:11px;color:var(--muted);line-height:1.5}
+.panels{display:grid;grid-template-columns:1.07fr .93fr;gap:15px}.card{background:var(--w);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:0 4px 16px #0e2a5705;min-width:0}.card h3{font-size:17px;letter-spacing:-.4px;margin:0 0 5px}.card .sub{color:var(--muted);font-size:12px;line-height:1.65;margin:0 0 15px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 15px;align-items:center}.filters label{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px}.filters select,.filters input{border:1px solid #d5ddea;border-radius:9px;background:white;color:#23314a;padding:9px 10px;font-size:12px;min-width:104px}
+.btn{border:1px solid #ccd7e8;background:white;border-radius:9px;color:#31507d;padding:9px 12px;font-size:12px;font-weight:700}
+.btn.active,.btn.primary{background:var(--blue);color:white;border-color:var(--blue)}.btn:hover{border-color:var(--blue)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}.seg button{padding:7px 12px}
+.compare{display:grid;gap:25px;margin-top:24px}.c-row{display:grid;grid-template-columns:105px 1fr 76px;align-items:center;gap:13px;font-size:12px;font-weight:650}.bar{height:20px;border-radius:5px;background:#eef1f8;overflow:hidden}.bar span{display:block;height:100%;border-radius:5px;transition:width .35s}.bar .h{background:#204fce}.bar .b{background:#a0b4d8}.c-val{text-align:right;font-size:15px;font-weight:850;font-variant-numeric:tabular-nums}
+.delta{background:#edf3ff;color:#1d449f;padding:13px 14px;border-radius:10px;font-weight:700;font-size:13px;line-height:1.65;margin-top:22px}
+.legend{display:flex;gap:17px;font-size:11px;color:var(--muted);margin-bottom:10px;flex-wrap:wrap}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle}.dot.h{background:#204fce}.dot.b{background:#adbcd5}
+.plot{overflow:hidden;width:100%;min-height:275px}.plot svg{display:block;width:100%;height:auto}
+.post-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.post{background:white;border:1px solid var(--line);border-radius:13px;padding:17px;min-height:192px;display:flex;flex-direction:column;gap:11px}.post .n{font-size:11px;color:#48629c;font-weight:700}.post h3{font-size:17px;margin:0;line-height:1.35}.post small{color:var(--muted);font-size:11px}.numbers{display:flex;gap:17px;margin-top:auto}.numbers span{font-size:11px;color:var(--muted)}.numbers b{display:block;color:#142954;font-size:18px;padding-top:5px}.post a{font-size:12px;color:#2451b7;font-weight:700;text-decoration:none}
+.inline{display:inline-block;background:var(--sky);color:var(--blue);border-radius:7px;padding:5px 8px;font-size:10px;font-weight:750}
+.table-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.table-scroll{overflow-x:auto}.data-table{width:100%;border-collapse:collapse;min-width:760px;font-size:12px}.data-table th{text-align:left;background:#f1f4fa;color:#63718a;padding:12px 10px;font-weight:750;white-space:nowrap}.data-table td{border-bottom:1px solid #edf0f5;padding:11px 10px;vertical-align:middle}.data-table tr:hover{background:#f7faff}.data-table a{color:#1b46ad;font-weight:650;text-decoration:none}.data-table a:hover{text-decoration:underline}.data-table .rank{font-weight:750;color:#536a90}.data-table .metric{text-align:right;font-variant-numeric:tabular-nums;font-weight:750}.data-table .tag{border-radius:5px;background:#f3f6fb;padding:4px 7px;font-size:10px;white-space:nowrap}.data-table .tag.key{background:#e9f1ff;color:#1d4abc}
+.paging{display:flex;justify-content:center;align-items:center;gap:13px;margin-top:16px;font-size:12px;color:var(--muted)}
+.quote-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.quote-card{background:white;border:1px solid var(--line);border-radius:13px;padding:22px}.quote-card .qhead{display:flex;justify-content:space-between;gap:9px;align-items:center}.quote-card h3{margin:0;font-size:16px}.quote-card blockquote{margin:17px 0 12px;padding-left:13px;border-left:3px solid #2354cb;font-size:14px;line-height:1.8;font-weight:650;color:#223657}.quote-card p{margin:0;font-size:12px;line-height:1.75;color:var(--muted)}
+.takeaways{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.take{background:linear-gradient(155deg,#fff,#f2f6ff);border:1px solid var(--line);border-radius:13px;padding:23px}.take h3{font-size:16px;margin:10px 0}.take p{font-size:12px;color:#61718d;line-height:1.8;margin:0}.take .big{font-size:30px;color:var(--blue);font-weight:850}
+.note{font-size:12px;color:#66768d;line-height:1.85;background:#eef2f8;padding:17px;border-radius:10px;margin-top:18px}
+.status{padding:18px;background:white;border:1px solid var(--line);border-radius:12px;color:var(--muted)}
+.footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:11px;line-height:1.9}
+@media(max-width:900px){.panels{grid-template-columns:1fr}.post-grid{grid-template-columns:repeat(2,1fr)}.takeaways{grid-template-columns:1fr}nav{display:none}}
+@media(max-width:560px){.wrap{padding:0 16px}header .wrap{height:58px}.brand{font-size:16px}.brand small{display:none}.hero{padding:42px 0}.hero h1{letter-spacing:-1px}.kpis{grid-template-columns:repeat(2,1fr)}.kpi{padding:16px}.kpi .num{font-size:25px}.card{padding:16px}.post-grid,.quote-grid{grid-template-columns:1fr}.sect{margin-top:28px}.c-row{grid-template-columns:82px 1fr 64px;gap:7px}.filters label{flex-grow:1}.filters select{max-width:155px}.quote-card{padding:17px}}
+@media print{header,.filters,.paging,.table-head button{display:none!important}body{background:#fff}.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}.sect{break-inside:avoid}.card,.kpi,.quote-card{box-shadow:none}.table-scroll{overflow:visible}}
+
+/* Executive and deeper analytics */
+.nav-toggle{font-size:12px;padding:8px 12px;border-radius:9px;background:transparent;border:1px solid #c6d4ed;color:#31507d;font-weight:750}
+.nav-toggle.active{background:#1c49b2;color:white;border-color:#1c49b2}
+.view-hide{display:none!important}
+.switchbar{margin:24px auto 8px;display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:14px}
+.switch-buttons{display:flex;gap:5px;background:#e9edf6;border-radius:11px;padding:5px}
+.switch-buttons button{border:0;background:transparent;border-radius:8px;padding:11px 18px;font-size:13px;color:#546581;font-weight:800}
+.switch-buttons button.active{background:#fff;color:#173d9b;box-shadow:0 2px 7px #142b5518}
+.tools{display:flex;gap:8px;flex-wrap:wrap}.tools .btn{padding:10px 13px}
+.exec-hero{background:#fff;border:1px solid var(--line);border-radius:17px;padding:27px 32px;margin:13px 0 20px;display:grid;grid-template-columns:1fr auto;gap:22px;align-items:start}
+.exec-hero h2{font-size:clamp(20px,2.4vw,30px);line-height:1.45;margin:10px 0;letter-spacing:-.8px}
+.exec-hero .lead{line-height:1.9;color:#52647f;font-size:14px;max-width:830px;margin:0}
+.exec-note{font-size:11px;background:#e9f0ff;color:#1c439c;border-radius:30px;padding:9px 13px;font-weight:850;white-space:nowrap}
+.exec-tagline{font-size:11px;letter-spacing:1px;color:#1d4bae;font-weight:850}
+.exec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.exec-metric{border:1px solid var(--line);border-radius:13px;background:white;padding:19px 20px}
+.exec-metric .label{color:#697994;font-size:11px;font-weight:700}.exec-metric .value{font-weight:850;color:#153f9c;font-size:30px;margin:11px 0 5px;letter-spacing:-1px}
+.exec-metric .detail{color:#77849c;font-size:11px;line-height:1.5}
+.exec-split{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+.exec-findings{display:grid;gap:11px}.exec-finding{display:grid;grid-template-columns:39px 1fr;gap:12px;align-items:start;border-bottom:1px solid #edf0f6;padding:11px 0}
+.exec-finding:last-child{border-bottom:0}.exec-n{font-size:22px;font-weight:900;color:#274fa7}.exec-finding h4{font-size:15px;margin:0 0 5px}.exec-finding p{margin:0;color:#63738d;font-size:12px;line-height:1.8}
+.exec-list{display:grid;gap:11px}.evidence{background:#f6f8fc;border-left:3px solid #2955b1;padding:14px 15px;border-radius:7px}
+.evidence h4{font-size:12px;color:#3154a1;margin:0 0 5px}.evidence p{margin:0;font-size:12px;color:#5c6d87;line-height:1.8}
+.year-chart{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:8px;align-items:end;min-height:220px;padding:15px 4px 2px;border-bottom:1px solid #e6eaf2}
+.year-col{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.year-col .v{font-size:10px;font-weight:800;color:#5d7092;font-variant-numeric:tabular-nums}
+.year-col .bar-area{height:142px;width:100%;display:flex;align-items:end;justify-content:center}
+.year-col .yb{background:#a5b8d9;border-radius:5px 5px 0 0;width:72%;min-height:3px}
+.year-col.recent .yb{background:#1a4ebd}.year-col .yy{font-size:10px;color:#60708b}.year-col .nn{font-size:9px;color:#99a4b6}
+.cohort{width:100%;border-collapse:collapse;font-size:12px}
+.cohort th{background:#f1f5fb;text-align:left;color:#5a7091;font-weight:750;padding:11px 10px}
+.cohort td{padding:12px 10px;border-bottom:1px solid #e9edf4;line-height:1.6}
+.cohort td b{color:#153c98}.cohort small{display:block;color:#8a97ab;margin-top:2px}
+.pairgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.pair{border:1px solid var(--line);border-radius:12px;padding:18px}
+.pair .p-title{font-size:12px;font-weight:800;color:#47608f}.pair strong{font-size:25px;color:#183e99;display:block;margin:12px 0 6px}
+.pair p{font-size:12px;color:#71809a;margin:0;line-height:1.7}
+.exec-table{width:100%;border-collapse:collapse}.exec-table th{background:#f0f4fa;color:#617391;text-align:left;font-size:11px;padding:11px 12px}.exec-table td{font-size:12px;padding:11px 12px;border-bottom:1px solid #edf0f6;vertical-align:top;line-height:1.7}.exec-table .tdtitle{font-weight:800;color:#1b3777}
+.decision{border-left:4px solid #2856bf;padding:14px 17px;background:#edf3ff;border-radius:6px;color:#25447f;font-size:13px;line-height:1.8}
+.method{display:flex;gap:7px;flex-wrap:wrap}.method span{font-size:11px;font-weight:700;color:#516886;background:#edf1f8;border-radius:50px;padding:6px 10px}
+@media(max-width:950px){.exec-grid{grid-template-columns:repeat(2,1fr)}.exec-split,.pairgrid{grid-template-columns:1fr}.exec-hero{grid-template-columns:1fr}.year-chart{gap:5px}}
+@media(max-width:560px){.exec-grid{grid-template-columns:repeat(2,1fr)}.exec-metric{padding:13px}.exec-metric .value{font-size:24px}.switch-buttons{width:100%}.switch-buttons button{flex:1}.exec-hero{padding:20px}.year-chart{gap:2px}.year-col .v{font-size:8px}.year-col .yy{font-size:9px}.year-col .nn{display:none}.exec-table{display:block;overflow-x:auto;white-space:nowrap}.cohort{display:block;overflow-x:auto;white-space:nowrap}}
+@media print{.switchbar,.tools,.nav-toggle{display:none!important}#executivePanel{display:block!important}#analystPanel{display:none!important}.hero{padding:15px 0}.hero h1{font-size:24px}.hero p,.pills{display:none}.exec-hero{padding:12px 16px;margin:7px 0}.exec-hero h2{font-size:19px}.exec-metric{padding:9px 13px}.exec-metric .value{font-size:22px}.sect{margin-top:20px}.exec-split{grid-template-columns:1fr 1fr}.card{padding:14px}.footer{padding:12px 0}#executivePanel .sect{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand">EDIYA COFFEE <small>MARKETING INSIGHT</small></div><nav><button type="button" class="nav-toggle active" id="navExec">성과 요약</button><button type="button" class="nav-toggle" id="navAnalyst">상세 분석</button></nav></div></header>
+<section class="hero"><div class="wrap"><div class="eyebrow">2026 HANGEUL DAY · PUBLIC INSTAGRAM ANALYSIS</div><h1>한글날, 이디야의 말이<br><em>브랜드 콘텐츠가 되다.</em></h1><p>이디야커피 공식 계정의 과거 공개 게시물과 한글날 캠페인을 함께 비교합니다. 숫자의 크기뿐 아니라 고객이 어떤 이유로 이디야를 좋아했는지 살펴보는 팀 공유용 분석 화면입니다.</p><div class="pills"><span class="pill" id="capture">공개 데이터 수집 기준</span><span class="pill">@ediya.coffee</span><span class="pill">광고·도달·저장 데이터 제외</span></div></div></section>
+
+<div class="wrap switchbar">
+  <div class="switch-buttons" role="tablist" aria-label="대시보드 보기 방식"><button id="modeExec" class="active" aria-selected="true" type="button">성과 요약</button><button id="modeAnalyst" aria-selected="false" type="button">상세 분석</button></div>
+  <div class="tools"><button class="btn" type="button" id="copyBrief">성과 요약 복사</button><button class="btn" type="button" id="printBrief">PDF 저장·인쇄</button></div>
+</div>
+<div class="wrap" id="executivePanel">
+  <div class="exec-hero">
+    <div><div class="exec-tagline">CAMPAIGN SUMMARY · 2026 한글날 캠페인</div><h2>한글을 입힌 이디야의 자체 디자인이<br>역대 상위권 고객 반응을 만들었습니다.</h2><p class="lead">굿즈·매장 공간·고객 참여 콘텐츠에서 긍정적인 초기 신호를 확인했습니다. 다만 경품 이벤트와 실제 구매·브랜드 선호도 변화는 구분해서 판단해야 합니다.</p></div>
+    <div class="exec-note">권고 · 조건부 추진</div>
+  </div>
+  <div class="exec-grid">
+    <div class="exec-metric"><div class="label">공개 게시물 확보</div><div class="value" id="exCoverage">—</div><div class="detail" id="exCoverageSub">공식 프로필 대비</div></div>
+    <div class="exec-metric"><div class="label">한글 굿즈 역대 좋아요 순위</div><div class="value" id="exAllRank">—</div><div class="detail" id="exAllRankSub">전체 수집 게시물 중</div></div>
+    <div class="exec-metric"><div class="label">한글 굿즈 2026년 순위</div><div class="value" id="exYearRank">—</div><div class="detail" id="exYearRankSub">동일 연도 게시물 중</div></div>
+    <div class="exec-metric"><div class="label">한글날 경품 게시물 평균 좋아요</div><div class="value" id="exEventLift">—</div><div class="detail" id="exEventLiftSub">2026년 다른 이벤트 대비</div></div>
+  </div>
+  <section class="sect"><h2>01. 핵심 판단과 경영 시사점</h2><p class="intro">확인된 사실, 정성적 해석, 향후 검증 필요 사항을 분리했습니다.</p>
+  <div class="exec-split"><div class="card"><h3>무엇이 확인됐나</h3><p class="sub">공개 수치와 실제 댓글에서 확인한 세 가지 신호</p>
+    <div class="exec-findings"><div class="exec-finding"><div class="exec-n">01</div><div><h4>굿즈가 콘텐츠 성과를 견인</h4><p id="exGood">2026년 역대 비교 데이터를 불러오는 중입니다.</p></div></div>
+    <div class="exec-finding"><div class="exec-n">02</div><div><h4>고객이 디자인을 브랜드와 연결</h4><p>한글 텀블러의 미감·소장가치뿐 아니라 이디야의 정체성과 새로운 매장 디자인에 대한 언급이 있었습니다. 단, 정성 표본이며 경품 응모 영향을 받습니다.</p></div></div>
+    <div class="exec-finding"><div class="exec-n">03</div><div><h4>댓글 수를 넘는 참여 방식 실험</h4><p>우리말 작명소에서는 고객이 실제 음료의 새 이름을 만들어 참여했습니다. 표본 15건 중 12건에서 작명 내용을 확인했습니다.</p></div></div></div>
+  </div>
+  <div class="card"><h3>성과를 해석할 때 구분할 내용</h3><p class="sub">수치의 의미와 아직 입증되지 않은 부분</p>
+    <div class="exec-list"><div class="evidence"><h4>확인 사실 · 공개 SNS 수치</h4><p>게시물별 좋아요·댓글·게시일·유형·상대 순위를 확인했습니다. 한글날 4개 게시물 중 3개는 경품 이벤트입니다.</p></div>
+    <div class="evidence"><h4>해석 · 자체 브랜드 자산 가능성</h4><p>외부 캐릭터 없이 이디야 고유의 한글 디자인과 이야기로 고객 반응을 유도할 가능성이 보입니다. 이벤트 효과와 디자인 자체의 효과는 아직 분리되지 않았습니다.</p></div>
+    <div class="evidence"><h4>미검증 · 매출과 팬 형성</h4><p>도달·광고 집행·저장·공유, 굿즈 실제 판매, 신논현역점 방문·매출, 브랜드 선호도·재구매 개선은 공개 데이터만으로 판단할 수 없습니다.</p></div></div>
+  </div></div></section>
+  <section class="sect"><h2>02. 동시기·동일 조건에서 얼마나 좋았나</h2><p class="intro">역대 통합 평균보다 2026년의 비교군을 우선합니다. 경품 여부와 게시물 형식을 나눠 표본 수를 함께 표시합니다.</p>
+  <div class="card"><div class="pairgrid"><div class="pair"><div class="p-title">2026년 한글날 경품 게시물</div><strong id="exEventH">—</strong><p id="exEventHN">—</p></div><div class="pair"><div class="p-title">2026년 그 외 경품 게시물</div><strong id="exEventO">—</strong><p id="exEventON">—</p></div></div>
+  <div class="note" id="exEventNote">집계 대기 중</div>
+  <h3 style="margin:23px 0 7px">콘텐츠별 동일 조건 비교</h3><p class="sub">2026년의 동일 형식·동일 이벤트 여부를 기준으로 비교한 좋아요 순위. 작은 비교군은 주의가 필요합니다.</p>
+  <div class="table-scroll"><table class="cohort"><thead><tr><th>한글날 콘텐츠</th><th>좋아요</th><th>2026 동일 조건 상대 위치</th><th>비교군 중앙값</th><th>참고</th></tr></thead><tbody id="exCohort"></tbody></table></div></div></section>
+  <section class="sect"><h2>03. 무엇을 다음 캠페인에 남길 것인가</h2><p class="intro">이번 성과를 일회성 반응으로 끝내지 않기 위한 의사결정 제안입니다.</p>
+  <div class="card"><table class="exec-table"><thead><tr><th>과제</th><th>권고</th><th>필요한 검증</th></tr></thead><tbody>
+  <tr><td class="tdtitle">한글 기반 브랜드 디자인 콘텐츠</td><td><strong>적극 추진</strong><small>시리즈·반복 노출 시험</small></td><td>경품 없는 게시물의 저장·공유 및 브랜드 연관 댓글</td></tr>
+  <tr><td class="tdtitle">한글 굿즈 및 소장 경험</td><td><strong>조건부 추진</strong><small>한정 수량·채널별 실험</small></td><td>실판매·소진율·마진·재구매 및 가맹점 재고 부담</td></tr>
+  <tr><td class="tdtitle">신논현역점 BI·SI 확장</td><td><strong>소규모 시험 운영</strong><small>전국 확산은 보류</small></td><td>현장 시인성·고객 선호도·방문 증감·가맹점 시공비</td></tr>
+  <tr><td class="tdtitle">고객 참여형 우리말 콘텐츠</td><td><strong>조건부 추진</strong><small>비경품 시험 병행</small></td><td>자발적 참여량·콘텐츠 공유·실제 제품 인식도</td></tr>
+  </tbody></table><div class="decision"><strong>다음 단계 제안</strong> · 한글을 활용한 디자인과 고객 참여 콘텐츠는 다음 시즌까지 연속 시험합니다. 전국 BI·SI 확대 및 굿즈 상시화는 SNS 호평만으로 확정하지 않고, 직영 매장·매출·선호도 검증 결과로 판단합니다.</div></div>
+  <div class="note"><strong>보고 유의사항</strong> · 2,112건은 2026년 10월 12일 수집 시점의 공개 게시물 스냅샷입니다. 계정 프로필 표시 2,119건 대비 수집 누락 7건의 원인은 미확인입니다. 연도별 성과에 광고 집행, 운영 당시 팔로워 규모, 유료 도달을 반영하지 못했습니다. 경품 여부는 캡션 문구 기반 자동 판정으로 일부 오분류될 수 있습니다. 댓글 인사이트는 최근 댓글 중심 134건 정성 표본으로 전체 여론을 대표하지 않습니다.</div></section>
+</div>
+<main class="wrap view-hide" id="analystPanel">
+<section id="summary" class="sect"><h2>01. 성과 한눈에 보기</h2><p class="intro">전체 공개 게시물 중 실제 수집된 자료만 집계합니다. 인스타그램의 표시 게시물 수와 수집 건수가 다르면 차이를 별도 명시합니다.</p><div class="kpis"><div class="kpi"><div class="lab">수집한 전체 게시물</div><div class="num" id="kCount">—</div><div class="hint" id="kCoverage">수집 중</div></div><div class="kpi"><div class="lab">한글날 캠페인 좋아요 합계</div><div class="num" id="kLikes">—</div><div class="hint">해당 4개 게시물 누적</div></div><div class="kpi"><div class="lab">한글날 캠페인 댓글 합계</div><div class="num" id="kComments">—</div><div class="hint">3건은 경품 이벤트 포함</div></div><div class="kpi"><div class="lab">한글날 좋아요 상위 순위</div><div class="num" id="kRank">—</div><div class="hint">전체 수집 게시물 기준</div></div></div></section>
+<section id="compare" class="sect"><h2>02. 비슷한 조건에서 비교하기</h2><p class="intro">비교 기간·이벤트 여부·게시물 유형을 직접 변경하면 집계 기준이 달라집니다. 경품 이벤트와 비이벤트 콘텐츠를 혼합하지 않는 것이 핵심입니다.</p><div class="card"><div class="filters"><label>기간 <select id="period"><option value="all">전체 수집 기간</option><option value="2026">2026년</option><option value="2025">2025년</option><option value="2024">2024년</option><option value="recent">최근 90일</option></select></label><label>참여 조건 <select id="event"><option value="all">전체 콘텐츠</option><option value="yes">경품 이벤트만</option><option value="no">비이벤트만</option></select></label><label>유형 <select id="type"><option value="all">전체 유형</option><option value="Image">단일 이미지</option><option value="Sidecar">여러 장 게시물</option><option value="Video">영상·릴스</option></select></label><label>통계 <select id="stat"><option value="mean">평균</option><option value="median">중앙값</option></select></label><label>지표 <select id="metric"><option value="likes">좋아요</option><option value="comments">댓글</option></select></label></div><div class="panels"><div><h3>한글날 vs 다른 게시물</h3><p class="sub">각 조건에 해당하는 게시물만 비교하며, 수집 건수와 통계 기준을 함께 표시합니다.</p><div class="compare"><div class="c-row"><span id="labA">한글날</span><div class="bar"><span class="h" id="barA"></span></div><span class="c-val" id="valA">—</span></div><div class="c-row"><span id="labB">기타</span><div class="bar"><span class="b" id="barB"></span></div><span class="c-val" id="valB">—</span></div></div><div class="delta" id="delta">데이터를 준비하고 있습니다.</div></div><div><h3>반응 분포도</h3><p class="sub">가로축: 좋아요 · 세로축: 댓글. 오른쪽 위일수록 공개 반응 수치가 높은 게시물입니다.</p><div class="legend"><span><i class="dot h"></i>한글날</span><span><i class="dot b"></i>그 외 게시물</span></div><div class="plot" id="plot"></div></div></div><div class="note">주의: 게시 시점, 팔로워 규모, 광고 집행, 게시물 노출 기간, 콘텐츠 형식이 서로 다릅니다. 반응 수치는 브랜드 선호도 상승률이나 구매 전환율이 아닙니다. 이벤트 분류는 캡션 문구에 대한 자동 판정으로 일부 오분류될 수 있습니다.</div></div></section>
+<section class="sect"><h2>03. 한글날 캠페인 4개 콘텐츠</h2><p class="intro">전체 수집 게시물 속에서 캠페인 콘텐츠의 상대적 위치를 살펴봅니다.</p><div class="post-grid" id="hPosts"></div></section>
+<section id="ranking" class="sect"><h2>04. 전체 게시물 순위와 탐색</h2><p class="intro">과거 게시물까지 조회하고 키워드·주제·이벤트 여부로 비교할 수 있습니다. 오른쪽 링크에서 원본 게시물을 확인할 수 있습니다.</p><div class="card"><div class="table-head"><div class="filters" style="margin:0"><label>검색 <input id="search" placeholder="예: 한글, 산리오, 아메리카노"></label><label>연도 <select id="year"><option value="all">전체 연도</option></select></label><label>주제 <select id="theme"><option value="all">전체 주제</option><option value="h">한글날</option><option value="sanrio">산리오</option><option value="bukang">부캉이</option><option value="other">기타</option></select></label><label>정렬 <select id="sort"><option value="likes">좋아요 높은 순</option><option value="comments">댓글 높은 순</option><option value="date">최신 게시일 순</option></select></label></div><button class="btn" id="csv">검색 결과 CSV 받기</button></div><div class="table-scroll"><table class="data-table"><thead><tr><th>#</th><th>게시일</th><th>주제</th><th>캡션 앞부분 / 게시물 원본</th><th style="text-align:right">좋아요</th><th style="text-align:right">댓글</th><th>유형</th><th>이벤트</th></tr></thead><tbody id="rows"><tr><td colspan="8">게시물 데이터를 읽는 중입니다...</td></tr></tbody></table></div><div class="paging"><button class="btn" id="prev">이전</button><span id="pageLabel">—</span><button class="btn" id="next">다음</button></div></div></section>
+<section id="comments" class="sect"><h2>05. 댓글 속 고객 반응</h2><p class="intro">공개 댓글 10개 게시물 134건(한글날 53건)을 별도로 읽고 주제를 분류한 <strong>정성 표본 분석</strong>입니다. 전체 댓글의 긍정 비율을 뜻하지 않으며, 직접 확인된 댓글은 익명으로 표시합니다.</p><div class="quote-grid"><div class="quote-card"><div class="qhead"><h3>한글 굿즈 · 디자인</h3><span class="inline">소장 욕구</span></div><blockquote>“영어로만 되어 있는 타브랜드 커피 텀블러나 유명 텀블러보다 훨씬 이쁘고 소장하면 뿌듯할 것 같아요”</blockquote><p>한글을 의미 있는 장식이자 일상에서 사용하고 싶은 디자인으로 받아들이는 반응입니다. 경품 응모 조건이 디자인 호평을 유도한 점은 감안해야 합니다.</p></div><div class="quote-card"><div class="qhead"><h3>한글 매장 · 공간</h3><span class="inline">브랜드 변화</span></div><blockquote>“그냥 이걸로 아예 리브랜딩하는게 나을지도... 지금은 이미지가 너무 구닥다리 됨...”</blockquote><p>매장 디자인을 보고 고객 스스로 리브랜딩과 연결한 단일 의견입니다. 전국 BI·SI 수용성 검증을 대신할 수는 없습니다.</p></div><div class="quote-card"><div class="qhead"><h3>우리말 작명소</h3><span class="inline">능동적 참여</span></div><blockquote>“바닐라라떼는 달보드레 우유차! 약간 달큼하고 부드럽다는 순우리말 달보드레처럼...”</blockquote><p>단순 친구 태그가 아니라 고객이 메뉴를 새롭게 해석하고 직접 창작했습니다. 최신 표본 15건 중 12건에서 작명 제안을 확인했습니다.</p></div><div class="quote-card"><div class="qhead"><h3>비교 사례 · 부캉이</h3><span class="inline">자발적 호감</span></div><blockquote>“이디야 영업 잘해 ㅎㅎㅎ”</blockquote><p>경품이 없는 이슈 대응에서도 직접적인 칭찬과 현장 방문 경험이 나왔습니다. 한글날 이벤트 댓글과 다른 유형의 자연 반응입니다.</p></div><div class="quote-card"><div class="qhead"><h3>비교 사례 · 산리오</h3><span class="inline">외부 팬덤</span></div><blockquote>“이디야 X 산리오캐릭터즈 한복 콜라보!! ... 콜라보 굿즈 나올 때마다 챙겨왔는데...”</blockquote><p>팬덤 기반 소장·구매 동기가 뚜렷합니다. 한글날 캠페인은 이디야 자체 시각 자산에 대한 관심이라는 차별점이 있습니다.</p></div><div class="quote-card"><div class="qhead"><h3>비교 사례 · 일반 이벤트</h3><span class="inline">응모 중심</span></div><blockquote>“엄마 생신 축하드려요”</blockquote><p>가나 이벤트는 댓글 참여를 만들었지만, 상당수는 가족·친구 축하 메시지로서 제품·브랜드 평가와는 구분해야 합니다.</p></div></div></section>
+<section id="action" class="sect"><h2>06. 다음 캠페인에 남길 것</h2><p class="intro">성과는 정확하게 인정하되, 확인되지 않은 변화까지 주장하지 않습니다.</p><div class="takeaways"><div class="take"><div class="big">01</div><h3>자체 브랜드 자산</h3><p>외부 캐릭터 없이도 한글과 이디야 디자인의 조합에 고객이 반응했습니다. 한글을 굿즈·컵·공간에서 지속 활용할 수 있는지 검증합니다.</p></div><div class="take"><div class="big">02</div><h3>고객 참여의 질</h3><p>경품 댓글 숫자와 고객이 직접 창작한 참여는 다릅니다. 향후에는 댓글의 수와 함께 브랜드 연관 참여 비율을 별도로 관리합니다.</p></div><div class="take"><div class="big">03</div><h3>매출·방문 연결</h3><p>실제 굿즈 판매량·소진율, 신논현역점 방문객·매출 변화, 신규 BI 선호도까지 측정해야 장기 확장 여부를 판단할 수 있습니다.</p></div></div><div class="note"><strong>분석 한계</strong> · 공개 인스타그램 자료 기반의 특정 시점 스냅샷입니다. 전체 계정 프로필에 표시된 게시물 수와 실제 수집 건수는 다를 수 있으며, 게시일·노출 기간·광고 유무·도달·저장·공유·판매는 통제하지 않았습니다. 이 화면의 '이벤트'는 캡션 문자열을 활용한 자동 분류입니다. 댓글은 정성 표본으로 전체 고객 의견을 대표하지 않습니다.</div></section>
+</main><footer class="footer"><div class="wrap"><strong>EDIYA COFFEE · MARKETING INSIGHT</strong><div id="footerMeta">공개 게시물 아카이브 분석 · 데이터 로딩 중</div><div>본 대시보드는 이디야커피 공식 계정의 공개 게시물 및 익명화된 공개 댓글 사례를 분석용으로 재구성한 비공식 내부 기획 참고 도구입니다. 공개 링크에서는 누구나 볼 수 있습니다.</div></div></footer>
+<script>
+(function(){
+'use strict';
+var H=['Dd4_723iRtr','Dd_OoZij3TW','DeOXMsnD8Rs','DeQR3uRgWVa'];
+var names={'Dd4_723iRtr':'한글날 브랜드 영상','Dd_OoZij3TW':'한글 굿즈·부자재','DeOXMsnD8Rs':'신논현역점 한글 공간','DeQR3uRgWVa':'우리말 작명소'};
+var posts=[],meta={},page=0,per=30;
+var $=function(id){return document.getElementById(id)};
+var num=function(n){return Number(n||0).toLocaleString('ko-KR')};
+function escape(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function classify(p){return H.includes(p.id)?'h':/산리오|쿠로미|시나모롤|포차코|마이멜로디|헬로키티/i.test(p.cap)?'sanrio':/부캉이|부캉점|죠스점|부산.*상어/i.test(p.cap)?'bukang':'other'}
+function eventFlag(s){return /#EVENT|#댓글나눔잔치|#이벤트|경품|추첨|당첨자|이벤트 참여|댓글.*선물/i.test(s||'')}
+function parse(raw){meta=raw.meta||{};posts=(raw.rows||[]).map(function(r){var x={date:r[0],id:r[1],likes:r[2]||0,comments:r[3]||0,type:r[4]||'Image',cap:r[5]||''};x.event=eventFlag(x.cap);x.theme=classify(x);x.url='https://www.instagram.com/p/'+x.id+'/';return x}).filter(function(x){return !!x.id});}
+function metricVal(p,k){return p[k]||0}
+function agg(a,m,mode){if(!a.length)return null;var v=a.map(function(x){return metricVal(x,m)}).sort(function(a,b){return a-b});return mode==='median'?(v.length%2?v[(v.length-1)/2]:(v[v.length/2-1]+v[v.length/2])/2):v.reduce(function(s,x){return s+x},0)/v.length}
+function keyFilter(){var f=$('period').value,e=$('event').value,t=$('type').value;var latest=posts[0]?posts[0].date:'2026-10-12';var cut=new Date(latest+'T00:00:00Z');cut.setUTCDate(cut.getUTCDate()-90);var min=cut.toISOString().slice(0,10);return posts.filter(function(p){if(f==='recent'&&p.date<min)return false;if(/^\d{4}$/.test(f)&&p.date.slice(0,4)!==f)return false;if(e==='yes'&&!p.event)return false;if(e==='no'&&p.event)return false;if(t!=='all'&&p.type!==t)return false;return true})}
+function renderCompare(){var s=keyFilter(),a=s.filter(function(p){return p.theme==='h'}),b=s.filter(function(p){return p.theme!=='h'}),m=$('metric').value,st=$('stat').value,av=agg(a,m,st),bv=agg(b,m,st),max=Math.max(av||0,bv||0,1);
+$('labA').textContent='한글날 '+a.length+'건';$('labB').textContent='기타 '+b.length+'건';
+$('valA').textContent=av===null?'표본 없음':num(Math.round(av));$('valB').textContent=bv===null?'표본 없음':num(Math.round(bv));
+$('barA').style.width=(av===null?0:av/max*100)+'%';$('barB').style.width=(bv===null?0:bv/max*100)+'%';
+var name=m==='likes'?'좋아요':'댓글',method=st==='mean'?'평균':'중앙값';
+$('delta').textContent=av===null||bv===null||bv===0?'해당 비교 조건의 한글날 또는 기준 게시물이 부족합니다.':'한글날의 '+name+' '+method+'은 '+num(Math.round(av))+'개, 기타 게시물은 '+num(Math.round(bv))+'개입니다. 차이는 '+((av/bv-1)*100>=0?'+':'')+((av/bv-1)*100).toFixed(1)+'%입니다. 인과적 캠페인 효과를 뜻하지는 않습니다.';
+renderPlot(s);
+}
+function renderPlot(a){var w=510,h=278,pad={l:39,r:18,t:15,b:34};var ww=w-pad.l-pad.r,hh=h-pad.t-pad.b;var sorted=a.slice().sort(function(a,b){return b.likes-a.likes});var maxX=Math.max(1,...sorted.map(function(p){return p.likes})),maxY=Math.max(1,...sorted.map(function(p){return p.comments}));var svg='<svg viewBox="0 0 '+w+' '+h+'" role="img" aria-label="좋아요와 댓글 산점도"><rect width="'+w+'" height="'+h+'" fill="white"/>';
+for(var i=0;i<=4;i++){var x=pad.l+i*ww/4,y=pad.t+hh-i*hh/4;svg+='<line x1="'+pad.l+'" y1="'+y+'" x2="'+(pad.l+ww)+'" y2="'+y+'" stroke="#e9edf5"/><text x="'+(pad.l-5)+'" y="'+(y+3)+'" text-anchor="end" font-size="9" fill="#8c98ab">'+num(Math.round(maxY*i/4))+'</text><text x="'+x+'" y="'+(h-12)+'" text-anchor="middle" font-size="9" fill="#8c98ab">'+num(Math.round(maxX*i/4))+'</text>';}
+var dots=sorted.slice(0,1800).sort(function(a,b){return (a.theme==='h'?1:0)-(b.theme==='h'?1:0)});
+dots.forEach(function(p){var x=pad.l+p.likes/maxX*ww,y=pad.t+hh-p.comments/maxY*hh;svg+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(p.theme==='h'?5:2.5)+'" fill="'+(p.theme==='h'?'#1548c9':'#adc0d9')+'" opacity="'+(p.theme==='h'?'1':'.6')+'"><title>'+escape(p.date+' 좋아요 '+num(p.likes)+' 댓글 '+num(p.comments))+'</title></circle>'});
+svg+='</svg>';$('plot').innerHTML=svg}
+function renderHead(){var hs=posts.filter(function(p){return p.theme==='h'}),ct=meta.profilePosts||'—',top=posts.slice().sort(function(a,b){return b.likes-a.likes}),hi=top.findIndex(function(p){return p.id==='Dd_OoZij3TW'})+1;
+$('kCount').textContent=num(posts.length);$('kCoverage').textContent='프로필 표시 '+num(ct)+'건 · 확보율 '+(typeof ct==='number'&&ct?Math.round(posts.length/ct*1000)/10+'%':'미확인');
+$('kLikes').textContent=num(hs.reduce(function(a,x){return a+x.likes},0));
+$('kComments').textContent=num(hs.reduce(function(a,x){return a+x.comments},0));
+$('kRank').textContent=hi?hi+'위':'—';$('capture').textContent=(meta.capturedAt||'2026-10-12')+' 수집 기준';
+$('footerMeta').textContent='수집 '+num(posts.length)+'건 · 프로필 표시 '+num(ct)+'건 · '+(meta.minDate||'')+' ~ '+(meta.maxDate||'')+' · '+(meta.capturedAt||'2026-10-12');
+$('hPosts').innerHTML=H.map(function(id,i){var p=posts.find(function(x){return x.id===id});if(!p)return '';var rank=top.findIndex(function(x){return x.id===id})+1;return '<article class="post"><span class="n">0'+(i+1)+' · '+p.date+'</span><span class="inline">'+(p.event?'경품 이벤트':'비이벤트')+'</span><h3>'+names[id]+'</h3><small>좋아요 기준 전체 '+num(rank)+'위 / '+num(posts.length)+'건</small><div class="numbers"><span>좋아요<b>'+num(p.likes)+'</b></span><span>댓글<b>'+num(p.comments)+'</b></span></div><a href="'+p.url+'" target="_blank" rel="noopener noreferrer">게시물 확인 ↗</a></article>'}).join('');
+var years=[...new Set(posts.map(function(p){return p.date.slice(0,4)}))].sort().reverse();$('year').innerHTML='<option value="all">전체 연도</option>'+years.map(function(y){return '<option value="'+y+'">'+y+'년</option>'}).join('');}
+function filtered(){var q=$('search').value.toLowerCase(),y=$('year').value,t=$('theme').value,sort=$('sort').value;var a=posts.filter(function(p){return(y==='all'||p.date.slice(0,4)===y)&&(t==='all'||p.theme===t)&&(!q||p.cap.toLowerCase().includes(q)||p.id.toLowerCase().includes(q))});a.sort(function(a,b){return sort==='comments'?b.comments-a.comments:sort==='date'?b.date.localeCompare(a.date):b.likes-a.likes});return a}
+function renderTable(){var a=filtered(),max=Math.max(1,Math.ceil(a.length/per));page=Math.max(0,Math.min(page,max-1));var out=a.slice(page*per,(page+1)*per);var themeName={h:'한글날',sanrio:'산리오',bukang:'부캉이',other:'일반·기타'};
+$('rows').innerHTML=out.map(function(p,i){return '<tr><td class="rank">'+num(page*per+i+1)+'</td><td>'+p.date+'</td><td><span class="tag '+(p.theme==='h'?'key':'')+'">'+themeName[p.theme]+'</span></td><td><a href="'+p.url+'" target="_blank" rel="noopener noreferrer">'+escape((names[p.id]||p.cap||'캡션 없음').slice(0,66))+'</a></td><td class="metric">'+num(p.likes)+'</td><td class="metric">'+num(p.comments)+'</td><td>'+({Image:'사진',Sidecar:'여러 장',Video:'영상'}[p.type]||'기타')+'</td><td>'+(p.event?'이벤트':'—')+'</td></tr>'}).join('')||'<tr><td colspan="8">해당 조건에 맞는 게시물이 없습니다.</td></tr>';
+$('pageLabel').textContent=num(a.length)+'건 · '+(page+1)+' / '+max+'쪽';$('prev').disabled=page===0;$('next').disabled=page>=max-1}
+function exportCSV(){var a=filtered();var lines=[['날짜','게시물ID','좋아요','댓글','유형','이벤트_자동분류','게시물URL','캡션요약'].join(',')];a.forEach(function(p){lines.push([p.date,p.id,p.likes,p.comments,p.type,p.event?'이벤트':'일반',p.url,p.cap].map(function(x){return '"'+String(x).replace(/"/g,'""')+'"'}).join(','))});var blob=new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),l=document.createElement('a');l.href=url;l.download='ediya_public_posts_'+(meta.capturedAt||'snapshot')+'.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(function(){URL.revokeObjectURL(url)},500);}
+
+/* Executive analytics */
+function setMode(v){var exec=v==='exec';$('executivePanel').classList.toggle('view-hide',!exec);$('analystPanel').classList.toggle('view-hide',exec);['modeExec','navExec'].forEach(function(k){$(k).classList.toggle('active',exec)});['modeAnalyst','navAnalyst'].forEach(function(k){$(k).classList.toggle('active',!exec)});$('modeExec').setAttribute('aria-selected',String(exec));$('modeAnalyst').setAttribute('aria-selected',String(!exec));window.scrollTo({top:0,behavior:'smooth'});}
+$('modeExec').addEventListener('click',function(){setMode('exec')});$('modeAnalyst').addEventListener('click',function(){setMode('analyst')});$('navExec').addEventListener('click',function(){setMode('exec')});$('navAnalyst').addEventListener('click',function(){setMode('analyst')});
+$('printBrief').addEventListener('click',function(){window.print()});
+function statsList(a,k,mode){if(!a.length)return null;var nums=a.map(function(x){return x[k]||0}).sort(function(a,b){return a-b});return mode==='mean'?nums.reduce(function(a,b){return a+b},0)/nums.length:(nums.length%2?nums[(nums.length-1)/2]:(nums[nums.length/2-1]+nums[nums.length/2])/2);}
+function rankOf(arr,item){return arr.slice().sort(function(a,b){return b.likes-a.likes}).findIndex(function(z){return z.id===item.id})+1}
+function renderExecutive(){var p2026=posts.filter(function(p){return p.date.slice(0,4)==='2026'}),h=posts.filter(function(p){return p.theme==='h'}),hEv=h.filter(function(p){return p.event}),oEv=p2026.filter(function(p){return p.theme!=='h'&&p.event}),goods=h.find(function(p){return p.id==='Dd_OoZij3TW'});if(!goods)return;
+var rAll=rankOf(posts,goods),rYear=rankOf(p2026,goods),allPct=100*rAll/posts.length,yearPct=100*rYear/p2026.length,rate=posts.length/(meta.profilePosts||posts.length)*100;
+$('exCoverage').textContent=rate.toFixed(1)+'%';$('exCoverageSub').textContent=num(posts.length)+'건 / '+num(meta.profilePosts||posts.length)+'건';
+$('exAllRank').textContent=num(rAll)+'위';$('exAllRankSub').textContent='전체 '+num(posts.length)+'건 중 상위 '+allPct.toFixed(1)+'%';
+$('exYearRank').textContent=rYear+'위';$('exYearRankSub').textContent='2026년 '+p2026.length+'건 중 상위 '+yearPct.toFixed(1)+'%';
+$('exGood').textContent='한글 굿즈 게시물은 누적 좋아요 '+num(goods.likes)+'개로 전체 수집 게시물 '+num(posts.length)+'건 중 '+num(rAll)+'위, 2026년 '+p2026.length+'건 중 '+rYear+'위입니다. 댓글 '+num(goods.comments)+'개에는 경품 응모가 포함됩니다.';
+var ha=statsList(hEv,'likes','mean'),oa=statsList(oEv,'likes','mean'),lift=oa>0?(ha/oa-1)*100:null;
+$('exEventLift').textContent=lift===null?'—':(lift>=0?'+':'')+lift.toFixed(1)+'%';
+$('exEventLiftSub').textContent='한글날 '+hEv.length+'건 vs 다른 경품 '+oEv.length+'건 · 평균';
+$('exEventH').textContent=ha===null?'—':num(Math.round(ha))+'개';$('exEventO').textContent=oa===null?'—':num(Math.round(oa))+'개';
+$('exEventHN').textContent='좋아요 평균 / '+hEv.length+'건 · 댓글 평균 '+num(Math.round(statsList(hEv,'comments','mean')||0))+'개';
+$('exEventON').textContent='좋아요 평균 / '+oEv.length+'건 · 댓글 평균 '+num(Math.round(statsList(oEv,'comments','mean')||0))+'개';
+$('exEventNote').textContent='한글날 경품 게시물의 좋아요 평균이 '+(lift>=0?'+':'')+lift.toFixed(1)+'% 높습니다. 다만 게시 유형, 경품 가치, 광고 집행, 노출 일수와 팔로워 변화가 통제되지 않아 순수 캠페인 효과로 해석할 수 없습니다. 이벤트 자동 분류 기준: 캡션의 표시 문구.';
+var cohort=H.map(function(id){var p=h.find(function(z){return z.id===id});if(!p)return null;var peers=p2026.filter(function(z){return z.type===p.type&&z.event===p.event&&z.theme!=='h'});var rank=1+peers.filter(function(z){return z.likes>p.likes}).length,n=peers.length+1;return '<tr><td><b>'+escape(names[p.id])+'</b><small>'+p.type+' / '+(p.event?'이벤트':'비이벤트')+'</small></td><td>'+num(p.likes)+'</td><td><b>'+rank+' / '+n+'위</b><small>상위 '+(100*rank/n).toFixed(1)+'%</small></td><td>'+num(Math.round(statsList(peers,'likes','median')||0))+'개</td><td>비교 게시물 '+peers.length+'건</td></tr>'}).filter(Boolean).join('');
+$('exCohort').innerHTML=cohort;
+}
+$('copyBrief').addEventListener('click',function(){if(!posts.length)return;var goods=posts.find(function(p){return p.id==='Dd_OoZij3TW'}),h=posts.filter(function(p){return p.theme==='h'}),n=posts.length,r=rankOf(posts,goods),y=posts.filter(function(p){return p.date.startsWith('2026')}),yr=rankOf(y,goods);var brief=['[이디야커피 2026 한글날 캠페인 SNS 성과 요약]','공개 게시물 '+num(n)+'건 확보 / 프로필 '+num(meta.profilePosts||0)+'건','한글 굿즈 '+num(goods.likes)+' 좋아요 · 전체 '+r+'위(상위 '+(r/n*100).toFixed(1)+'%) · 2026년 '+yr+'/'+y.length+'위','한글날 4건 합계 '+num(h.reduce(function(s,p){return s+p.likes},0))+' 좋아요, '+num(h.reduce(function(s,p){return s+p.comments},0))+' 댓글','해석: 자체 한글 디자인·굿즈·공간·작명 참여에 대한 긍정적 초기 반응','한계: 3개 경품 이벤트 / 광고·도달·매출 미확인 / 댓글 정성 표본','권고: 한글 콘텐츠 확대 시험, 굿즈·BI/SI 전국 확산은 현장 판매 및 고객검증 후 판단','공개 자료 기준: '+(meta.capturedAt||'2026-10-12')].join('\n');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(brief).then(function(){$('copyBrief').textContent='복사 완료';setTimeout(function(){$('copyBrief').textContent='성과 요약 복사'},2500)}).catch(function(){window.prompt('요약 내용을 복사하세요',brief)})}else{window.prompt('요약 내용을 복사하세요',brief)}});
+
+['period','event','type','stat','metric'].forEach(function(id){$(id).addEventListener('change',renderCompare)});
+['search','year','theme','sort'].forEach(function(id){$(id).addEventListener(id==='search'?'input':'change',function(){page=0;renderTable()})});
+$('prev').addEventListener('click',function(){page--;renderTable()});$('next').addEventListener('click',function(){page++;renderTable()});$('csv').addEventListener('click',exportCSV);
+fetch('./data.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(d){parse(d);renderHead();renderCompare();renderTable();renderExecutive()}).catch(function(e){$('kCount').textContent='—';$('rows').innerHTML='<tr><td colspan="8">데이터 파일을 읽지 못했습니다. 웹에 배포된 페이지에서 다시 확인해주세요.</td></tr>';$('delta').textContent='data.json 연결 실패: '+e.message;});
+})();
+</script>
+</body>
+</html>
